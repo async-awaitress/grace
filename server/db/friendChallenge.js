@@ -32,7 +32,7 @@ const FriendChallenge = db.define("friendChallenge", {
   },
   totalPointsToWin: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    default: 0,
   },
 });
 

@@ -16,7 +16,7 @@ const PersonalChallenge = db.define("personalChallenge", {
   },
   totalPointsToWin: {
     type: Sequelize.INTEGER,
-    allowNull: false,
+    feafualt: 0,
   },
 });
 

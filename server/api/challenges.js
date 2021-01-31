@@ -11,15 +11,4 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/add/:challengeId", async (req, res, next) => {
-  try {
-    const player = await User.findByPk(req.user.id);
-    const challenge = await Challenge.findOne(req.params.id);
-    const addedChallenge = await player.addChallenge(challenge);
-    res.send(addedChallenge);
-  } catch (error) {
-    next(error);
-  }
-});
-
 module.exports = router;
