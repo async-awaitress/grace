@@ -69,7 +69,7 @@ export const gotChallenges = (challenges) => ({
 export const getChallengesThunk = () => async (dispatch) => {
   try {
     // let token = await firebase.auth().currentUser.getIdToken();
-    const { data } = await axios.get("/api/challenges");
+    const { data } = await axios.get("/api/challenges/allChallenges");
     dispatch(gotChallenges(data));
     // ", { token }" after the url
   } catch (error) {
