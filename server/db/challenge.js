@@ -14,7 +14,7 @@ const Challenge = db.define("challenge", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  points: {
+  pointsPerDay: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
@@ -22,7 +22,10 @@ const Challenge = db.define("challenge", {
     type: Sequelize.BLOB,
   },
   type: {
-    type: Sequelize.ENUM("personal", "friend", "community"),
+    type: Sequelize.ENUM("personal", "friend"),
+  },
+  description: {
+    type: Sequelize.TEXT,
   },
 });
 
