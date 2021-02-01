@@ -13,7 +13,7 @@ router.post("/add/:challengeId", async (req, res, next) => {
     res.send(personalChallenge);
   } catch (error) {
     next(error);
-  }
+  }git rest
 });
 
 module.exports = router;
