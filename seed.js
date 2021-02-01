@@ -34,6 +34,8 @@ const challenges = [
     category: "water",
     duration: 7,
     pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/water",
     description: "Take shower for less than 5 minutes",
   },
   {
@@ -41,6 +43,8 @@ const challenges = [
     category: "waste",
     duration: 5,
     pointsPerDay: 1,
+    type: "personal",
+    badge: "./assets/apple",
     description:
       "Don't use disposable or single use containers, bottles, utensils",
   },
@@ -49,6 +53,8 @@ const challenges = [
     category: "transportation",
     duration: 14,
     pointsPerDay: 2,
+    type: "friend",
+    badge: "./assets/cycle",
     description:
       "Instead of taking a car - walk, bike or take public transportation",
   },
