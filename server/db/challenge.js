@@ -18,6 +18,12 @@ const Challenge = db.define("challenge", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  badge: {
+    type: Sequelize.BLOB,
+  },
+  type: {
+    type: Sequelize.ENUM("personal", "friend", "community"),
+  },
 });
 
 module.exports = Challenge;
