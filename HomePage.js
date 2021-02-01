@@ -9,49 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 
-export default function HomePage() {
-  const personalChallengesData = [
-    {
-      id: 1,
-      challengeName: "Shower less than 5 min",
-      challengeType: "Personal",
-    },
-    {
-      id: 2,
-      challengeName: "Recycle",
-      challengeType: "Personal",
-    },
-    {
-      id: 3,
-      challengeName: "Unplug Unused Devices",
-      challengeType: "Personal",
-    },
-    { id: 4, challengeName: "Compost", challengeType: "Personal" },
-  ];
-
-  const friendChallengesData = [
-    {
-      id: 1,
-      challengeName: "Close Your Windows",
-      challengeType: "Friend",
-    },
-    {
-      id: 2,
-      challengeName: "Sustainably Packaged Products",
-      challengeType: "Friend",
-    },
-    {
-      id: 3,
-      challengeName: "Turn Off Faucet While Brushing Teeth",
-      challengeType: "Friend",
-    },
-    {
-      id: 4,
-      challengeName: "Switch To LED",
-      challengeType: "Friend",
-    },
-  ];
-
+export default function HomePage({navigation}) {
   const challenges = [
     {
       id: 1,
@@ -97,7 +55,6 @@ export default function HomePage() {
                   <Text style={styles.challengeText}>
                     {challengeData.item.title}
                   </Text>
-                  {/* <Text>{challengeData.item.challengeType}</Text> */}
                   <Button title="Complete" />
                 </View>
               )}
@@ -109,18 +66,26 @@ export default function HomePage() {
                   <Text style={styles.challengeText}>
                     {challengeData.item.title}
                   </Text>
-                  {/* <Text>{challengeData.item.challengeType}</Text> */}
-                  <Button title="Complete" />
+                  <Button
+                    title="Complete"
+                    onPress={() => navigation.push("MockChallenges")}
+                  />
                 </View>
               )}
             />
           </ScrollView>
         </View>
         <View>
-
+          <Button
+            title="View Personal Challenges"
+            onPress={() => navigation.push("MockChallenges")}
+          />
         </View>
         <View>
-
+          <Button
+            title="View Friend Challenges"
+            onPress={() => navigation.push("MockChallenges")}
+          />
         </View>
         <StatusBar style="auto" />
       </ScrollView>
