@@ -1,21 +1,28 @@
+import "react-native-gesture-handler";
+import ChallengeDetailsScreen from "./src/screens/ChallengeDetailsScreen";
+import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import HomePage from './HomePage';
-import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack'
 import MockChallenges from './MockChallenges';
 
-const HomeStack = createStackNavigator();
 
+const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <HomeStack.Navigator>
-        <HomeStack.Screen name="HomePage" component={HomePage} />
-        <HomeStack.Screen name="MockChallenges" component={MockChallenges} />
-      </HomeStack.Navigator>
+      <Stack.Navigator>
+        {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
+            <Stack.Screen name="HomePage" component={HomePage} />
+     <Stack.Screen name="MockChallenges" component={MockChallenges} />
+        <Stack.Screen
+          name="Challenge Details"
+          component={ChallengeDetailsScreen}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
@@ -23,8 +30,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#ffff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

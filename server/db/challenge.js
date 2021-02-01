@@ -7,7 +7,7 @@ const Challenge = db.define("challenge", {
     allowNull: false,
   },
   category: {
-    type: Sequelize.ENUM("water", "waste", "transportation"),
+    type: Sequelize.ENUM("water", "waste", "transportation", "energy", "food"),
     allowNull: false,
   },
   duration: {
