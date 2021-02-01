@@ -13,21 +13,92 @@ export default function HomePage() {
   const activeChallengesData = [
     {
       id: 1,
-      challengeName: "Take Public Transit To Work",
+      title: "Take Public Transit To Work",
       challengeType: "Personal",
     },
     {
       id: 2,
-      challengeName: "Refill Your Reusable Water Bottle",
+      title: "Refill Your Reusable Water Bottle",
       challengeType: "Personal",
     },
     {
       id: 3,
-      challengeName: "Turn Off The Light Switch",
+      title: "Turn Off The Light Switch",
       challengeType: "Friend",
     },
-    { id: 4, challengeName: "Cook A Meal At Home", challengeType: "Friend" },
+    { id: 4, title: "Cook A Meal At Home", challengeType: "Friend" },
   ];
+
+    const personalChallengesData = [
+      {
+        id: 1,
+        challengeName: "Shower less than 5 min",
+        challengeType: "Personal",
+      },
+      {
+        id: 2,
+        challengeName: "Recycle",
+        challengeType: "Personal",
+      },
+      {
+        id: 3,
+        challengeName: "Unplug Unused Devices",
+        challengeType: "Personal",
+      },
+      { id: 4, challengeName: "Compost", challengeType: "Personal" },
+    ];
+
+      const friendChallengesData = [
+        {
+          id: 1,
+          challengeName: "Close Your Windows",
+          challengeType: "Friend",
+        },
+        {
+          id: 2,
+          challengeName: "Sustainably Packaged Products",
+          challengeType: "Friend",
+        },
+        {
+          id: 3,
+          challengeName: "Turn Off Faucet While Brushing Teeth",
+          challengeType: "Friend",
+        },
+        {
+          id: 4,
+          challengeName: "Switch To LED",
+          challengeType: "Friend",
+        },
+      ];
+
+      const challenges = [
+        {
+          id: 1,
+          title: "Water Warrior",
+          category: "water",
+          duration: 7,
+          pointsPerDay: 2,
+          description: "Take shower for less than 5 minutes",
+        },
+        {
+          id: 2,
+          title: "Waste Warrior",
+          category: "waste",
+          duration: 5,
+          pointsPerDay: 1,
+          description:
+            "Don't use disposable or single use containers, bottles, utensils",
+        },
+        {
+          id: 3,
+          title: "Transit Warrior",
+          category: "transportation",
+          duration: 14,
+          pointsPerDay: 2,
+          description:
+            "Instead of taking a car - walk, bike or take public transportation",
+        },
+      ];
 
   return (
     <View style={styles.container}>
@@ -37,42 +108,62 @@ export default function HomePage() {
       <ScrollView>
         <View style={styles.activeChalengesContainer}>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
-          <FlatList
-            data={activeChallengesData}
-            renderItem={(challengeData) => (
-              <View style={styles.activeChallengeInfo}>
-                <Text style={styles.challengeItem}>
-                  {challengeData.item.challengeName}
-                </Text>
-                {/* <Text>{challengeData.item.challengeType}</Text> */}
-                <Button title="Complete" />
-              </View>
-            )}
-          />
+          <ScrollView horizontal={true}>
+            <FlatList
+              data={activeChallengesData}
+              renderItem={(challengeData) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>
+                    {challengeData.item.title}
+                  </Text>
+                  {/* <Text>{challengeData.item.challengeType}</Text> */}
+                  <Button title="Complete" />
+                </View>
+              )}
+            />
+            <FlatList
+              data={activeChallengesData}
+              renderItem={(challengeData) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>
+                    {challengeData.item.title}
+                  </Text>
+                  {/* <Text>{challengeData.item.challengeType}</Text> */}
+                  <Button title="Complete" />
+                </View>
+              )}
+            />
+          </ScrollView>
         </View>
         <View>
           <Text style={styles.activeChallengesHeader}>Personal Challenges</Text>
-          <FlatList
-            data={activeChallengesData}
-            renderItem={(challengeData) => (
-              <View style={styles.activeChallengeInfo}>
-                <Text>{challengeData.item.challengeName}</Text>
-                {/* <Text>{challengeData.item.challengeType}</Text> */}
-              </View>
-            )}
-          />
+          <ScrollView horizontal={true}>
+            <FlatList
+              data={personalChallengesData}
+              renderItem={(challengeData) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>
+                    {challengeData.item.challengeName}
+                  </Text>
+                </View>
+              )}
+            />
+          </ScrollView>
         </View>
         <View>
           <Text style={styles.activeChallengesHeader}>Friend Challenges</Text>
-          <FlatList
-            data={activeChallengesData}
-            renderItem={(challengeData) => (
-              <View style={styles.activeChallengeInfo}>
-                <Text>{challengeData.item.challengeName}</Text>
-                {/* <Text>{challengeData.item.challengeType}</Text> */}
-              </View>
-            )}
-          />
+          <ScrollView horizontal={true}>
+            <FlatList
+              data={friendChallengesData}
+              renderItem={(challengeData) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>
+                    {challengeData.item.challengeName}
+                  </Text>
+                </View>
+              )}
+            />
+          </ScrollView>
         </View>
         <StatusBar style="auto" />
       </ScrollView>
@@ -101,7 +192,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   activeChallengesHeader: {
-    fontSize: 20,
+    fontSize: 30,
   },
   activeChallengeInfo: {
     flexDirection: "row",
@@ -109,5 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgray",
     justifyContent: "space-between",
   },
-  challengeItem: {},
+  challengeText: {
+    fontSize: 20
+  }
 });
