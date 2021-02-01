@@ -7,9 +7,10 @@ import {
   FlatList,
   Button,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 
-export default function HomePage({navigation}) {
+export default function HomePage({ navigation }) {
   const challenges = [
     {
       id: 1,
@@ -48,6 +49,7 @@ export default function HomePage({navigation}) {
         <View style={styles.activeChalengesContainer}>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
           <ScrollView horizontal={true}>
+            {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
               renderItem={(challengeData) => (
@@ -55,7 +57,9 @@ export default function HomePage({navigation}) {
                   <Text style={styles.challengeText}>
                     {challengeData.item.title}
                   </Text>
-                  <Button title="Complete" />
+                  <TouchableOpacity style={styles.completeButtonView}>
+                    <Text>Complete</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             />
@@ -66,26 +70,36 @@ export default function HomePage({navigation}) {
                   <Text style={styles.challengeText}>
                     {challengeData.item.title}
                   </Text>
-                  <Button
-                    title="Complete"
-                    onPress={() => navigation.push("MockChallenges")}
-                  />
+                  <TouchableOpacity style={styles.completeButtonView}>
+                    <Text>Complete</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+            <FlatList
+              data={challenges}
+              renderItem={(challengeData) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>
+                    {challengeData.item.title}
+                  </Text>
+                  <TouchableOpacity style={styles.completeButtonView}>
+                    <Text>Complete</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             />
           </ScrollView>
         </View>
-        <View>
-          <Button
-            title="View Personal Challenges"
-            onPress={() => navigation.push("MockChallenges")}
-          />
+        <View style={styles.linkView}>
+          <TouchableOpacity onPress={() => navigation.push("MockChallenges")}>
+            <Text>View Friend Challenges</Text>
+          </TouchableOpacity>
         </View>
-        <View>
-          <Button
-            title="View Friend Challenges"
-            onPress={() => navigation.push("MockChallenges")}
-          />
+        <View style={styles.linkView}>
+          <TouchableOpacity onPress={() => navigation.push("MockChallenges")}>
+            <Text>View Friend Challenges</Text>
+          </TouchableOpacity>
         </View>
         <StatusBar style="auto" />
       </ScrollView>
@@ -118,6 +132,7 @@ const styles = StyleSheet.create({
   },
   activeChallengeInfo: {
     flexDirection: "row",
+    margin: 5,
     borderWidth: 1,
     backgroundColor: "lightgray",
     justifyContent: "space-between",
@@ -125,4 +140,15 @@ const styles = StyleSheet.create({
   challengeText: {
     fontSize: 20,
   },
+  linkView: {
+    alignItems: 'center',
+    padding: 10,
+    marginVertical: 20,
+    backgroundColor: 'lightgreen',
+    borderWidth: 1
+  },
+  completeButtonView: {
+    backgroundColor: 'lightgreen',
+    borderLeftWidth: 1
+  }
 });
