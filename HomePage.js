@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   },
   activeChallengesContainer: {
     flexDirection: "column",
+    flex: 1
   },
   activeChallengesHeader: {
     fontSize: 20,
