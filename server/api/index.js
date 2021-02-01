@@ -5,6 +5,7 @@ const router = require("express").Router();
 router.use("/users", require("./users"));
 // "api/challenges"
 router.use("/challenges", require("./challenges"));
+router.use("/personalChallenges", require("./personalChallenges"));
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");

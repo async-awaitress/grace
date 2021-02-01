@@ -16,23 +16,23 @@ const FriendChallenge = db.define("friendChallenge", {
   },
   dailyStatusForFriend_1: {
     type: Sequelize.BOOLEAN,
-    default: false,
+    defaultValue: false,
   },
   dailyStatusForFriend_2: {
     type: Sequelize.BOOLEAN,
-    default: false,
+    defaultValue: false,
   },
   completionStatus: {
-    type: Sequelize.ENUM("completed, open, failed"),
-    default: "open",
+    type: Sequelize.ENUM("completed", "open", "failed"),
+    defaultValue: "open",
   },
   totalPointsEarned: {
     type: Sequelize.INTEGER,
-    default: 0,
+    defaultValue: 0,
   },
   totalPointsToWin: {
     type: Sequelize.INTEGER,
-    default: 0,
+    defaultValue: 0,
   },
 });
 

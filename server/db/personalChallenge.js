@@ -4,19 +4,19 @@ const db = require("./database");
 const PersonalChallenge = db.define("personalChallenge", {
   dailyStatus: {
     type: Sequelize.BOOLEAN,
-    default: false,
+    defaultValue: false,
   },
   completionStatus: {
     type: Sequelize.ENUM("open", "completed", "failed"),
-    deafult: "open",
+    defaultValue: "open",
   },
   totalPointsEarned: {
     type: Sequelize.INTEGER,
-    default: 0,
+    defaultValue: 0,
   },
   totalPointsToWin: {
     type: Sequelize.INTEGER,
-    feafualt: 0,
+    defaultValue: 0,
   },
 });
 
