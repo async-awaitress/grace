@@ -14,9 +14,12 @@ const Challenge = db.define("challenge", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  points: {
+  pointsPerDay: {
     type: Sequelize.INTEGER,
     allowNull: false,
+  },
+  description: {
+    type: Sequelize.TEXT,
   },
 });
 
