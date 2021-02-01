@@ -7,7 +7,7 @@ const Challenge = db.define("challenge", {
     allowNull: false,
   },
   category: {
-    type: Sequelize.ENUM("water", "waste", "transportation"),
+    type: Sequelize.ENUM("water", "waste", "transportation", "energy", "food"),
     allowNull: false,
   },
   duration: {
@@ -17,6 +17,12 @@ const Challenge = db.define("challenge", {
   pointsPerDay: {
     type: Sequelize.INTEGER,
     allowNull: false,
+  },
+  badge: {
+    type: Sequelize.BLOB,
+  },
+  type: {
+    type: Sequelize.ENUM("personal", "friend"),
   },
   description: {
     type: Sequelize.TEXT,
