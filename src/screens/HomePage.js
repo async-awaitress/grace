@@ -92,12 +92,12 @@ export default function HomePage({ navigation }) {
           </ScrollView>
         </View>
         <View style={styles.linkView}>
-          <TouchableOpacity onPress={() => navigation.push("MockChallenges")}>
-            <Text>View Friend Challenges</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("MockChallenges")}>
+            <Text>View Personal Challenges</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.linkView}>
-          <TouchableOpacity onPress={() => navigation.push("MockChallenges")}>
+          <TouchableOpacity onPress={() => navigation.navigate("MockChallenges")}>
             <Text>View Friend Challenges</Text>
           </TouchableOpacity>
         </View>

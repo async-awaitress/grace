@@ -1,14 +1,13 @@
 import "react-native-gesture-handler";
 import ChallengeDetailsScreen from "./src/screens/ChallengeDetailsScreen";
-import ChallengeListScreen from "./src/screens/ChallengeListScreen";
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import HomePage from './HomePage';
+// import ChallengeListScreen from "./src/screens/ChallengeListScreen";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import HomePage from "./src/screens/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from '@react-navigation/stack'
-import MockChallenges from './MockChallenges';
-
+import { createStackNavigator } from "@react-navigation/stack";
+import MockChallenges from "./MockChallenges";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -16,8 +15,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
-            <Stack.Screen name="HomePage" component={HomePage} />
-     <Stack.Screen name="MockChallenges" component={MockChallenges} />
+        <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="MockChallenges" component={MockChallenges} />
         <Stack.Screen
           name="Challenge Details"
           component={ChallengeDetailsScreen}
