@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
-import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 const PersonalChallengesScreen = () => {
   const [challenges, setChallenges] = useState([]);
@@ -15,7 +14,7 @@ const PersonalChallengesScreen = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges`);
+        const res = await axios.get("http://localhost:8080/api/challenges");
         setChallenges(res.data);
       } catch (error) {
         console.log("get request failed", error);
@@ -31,7 +30,7 @@ const PersonalChallengesScreen = () => {
         data={challenges}
         keyExtractor={(challenge) => challenge.id}
         renderItem={({ item }) => {
-          if (item.type === "personal") {
+          if (item.type === "friend") {
             return (
               <TouchableOpacity
                 onPress={() =>

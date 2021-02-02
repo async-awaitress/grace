@@ -30,13 +30,13 @@ const users = [
 
 const challenges = [
   {
-    title: "Water Warrior",
-    category: "water",
+    title: "Totes McGotes",
+    category: "waste",
     duration: 7,
-    pointsPerDay: 2,
+    pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/drop",
-    description: "Take shower for less than 5 minutes",
+    badge: "./assets/bag",
+    description: "Every time you go shopping, bring a reusable tote or bag",
   },
   {
     title: "Waste Warrior",
@@ -48,6 +48,7 @@ const challenges = [
     description:
       "Don't use disposable or single use containers, bottles, utensils",
   },
+
   {
     title: "Turnt Down For What",
     category: "energy",
@@ -59,7 +60,16 @@ const challenges = [
       "Everytime you leave a room, turn off the lights! Don't leave any stray lights on",
   },
   {
-    title: "Foot Soldier",
+    title: "Water Warrior",
+    category: "water",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/drop",
+    description: "Take shower for less than 5 minutes",
+  },
+  {
+    title: "Foot Soldiers",
     category: "transportation",
     duration: 14,
     pointsPerDay: 2,
@@ -78,14 +88,13 @@ const challenges = [
     description: "Make only meatless meals",
   },
   {
-    title: "Turnt Down For What",
+    title: "Power Down",
     category: "energy",
-    duration: 7,
-    pointsPerDay: 2,
+    duration: 10,
+    pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/light",
-    description:
-      "Everytime you leave a room, turn off the lights! Don't leave any stray lights on",
+    badge: "./assets/battery",
+    description: "Unplug your computer and other large electronics at night",
   },
   {
     title: "No Drizzle, My Nizzle",
