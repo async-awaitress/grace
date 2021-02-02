@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "chalk": "^4.1.0",
+    "cors": "^2.8.5",
     "expo": "~40.0.0",
     "expo-status-bar": "~1.0.3",
     "express": "^4.17.1",
