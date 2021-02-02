@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
-const PersonalChallengesScreen = () => {
+const PersonalChallengesScreen = ({navigation}) => {
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const PersonalChallengesScreen = () => {
             return (
               <TouchableOpacity
                 onPress={() =>
-                  console.log("Ian navigate to single view here:)")
+                  navigation.navigate("Challenge Details", item)
                 }
               >
                 <View style={styles.list}>
