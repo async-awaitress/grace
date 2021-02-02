@@ -1,6 +1,9 @@
 import Constants from "expo-constants";
 const { manifest } = Constants;
 
-// this points to the IP address of each person's laptop where they run the express server
-export const EXPRESS_ROOT_PATH = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
-
+export let EXPRESS_ROOT_PATH;
+if (!manifest.debuggerHost) {
+  EXPRESS_ROOT_PATH = `http://localhost:8080`;
+} else {
+  EXPRESS_ROOT_PATH = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
+}
