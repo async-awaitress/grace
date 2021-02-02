@@ -2,8 +2,9 @@ import { blue, green, white } from 'chalk'
 import React from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import * as firebase from 'firebase'
+import { signIn } from '../../API/methods'
 
-export default class Login extends React.Component {
+export default class LoginScreen extends React.Component {
 
   state = {
     email: "",
@@ -12,12 +13,7 @@ export default class Login extends React.Component {
   }
 
   handleLogin = () => {
-    const {email, password} = this.state
-
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(error => this.setState({errorMessage: error.message}))
+    signIn(this.email, this.password)
   }
 
   render(){
@@ -50,6 +46,7 @@ export default class Login extends React.Component {
               value={this.state.password}></TextInput>
           </View>
         </View>
+//also, below, onPress, it should navigate to our homePage, which the list of challenges page,but not sure whether I can add another onPress for navigation. Maybe there is a way to enter the navigate in the handler function above.
 
         <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
           <Text style={{color: "green", fontWeight: "500"}}>
@@ -57,7 +54,7 @@ export default class Login extends React.Component {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{alignSelf: "center", marginTop: 32}}>
+        <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => this.props.navigation.navigate("Registration")}>
           <Text style={{color: "green", fontSize: 13}}>
             New to GRace? <Text style={{fontWeight: "500", color: "red"}}>Sign Up</Text>
           </Text>

@@ -35,7 +35,8 @@
     "redux": "^4.0.5",
     "sequelize": "^6.5.0",
     "volleyball": "^1.5.1",
-    "firebase": "7.9.0"
+    "firebase": "7.9.0",
+    "expo-google-sign-in": "~8.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

@@ -5,13 +5,17 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import HomePage from './HomePage';
-// import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack'
 import MockChallenges from './MockChallenges';
 import * as firebase from 'firebase';
 import apiKeys from './config/keys';
-import Login from './src/screens/LoginScreen';
-import Registration from './src/screens/RegistrationScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
+import HomePage from "./src/screens/HomePage";
+import MockChallenges from "./MockChallenges";
+// import ChallengeListScreen from "./src/screens/ChallengeListScreen";
+
 
 
 const Stack = createStackNavigator();
@@ -28,9 +32,10 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
         <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="MockChallenges" component={MockChallenges} />
         <Stack.Screen
           name="Challenge Details"

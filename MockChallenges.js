@@ -1,10 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import axios from 'axios'
 
 export default function MockChallenges() {
     return (
         <View style={styles.container}>
-            <Text>THIS IS A MOCK CHALLENGES PAGE FOR TESTING REACT NAVIGATION</Text>
+            {/* Map All of the Challenges that are type personal */}
         </View>
     )
 }
