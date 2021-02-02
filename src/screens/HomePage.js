@@ -92,12 +92,16 @@ export default function HomePage({ navigation }) {
           </ScrollView>
         </View>
         <View style={styles.linkView}>
-          <TouchableOpacity onPress={() => navigation.navigate("MockChallenges")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Personal Challenges")}
+          >
             <Text>View Personal Challenges</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.linkView}>
-          <TouchableOpacity onPress={() => navigation.navigate("MockChallenges")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("MockChallenges")}
+          >
             <Text>View Friend Challenges</Text>
           </TouchableOpacity>
         </View>
@@ -141,14 +145,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   linkView: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 10,
     marginVertical: 20,
-    backgroundColor: 'lightgreen',
-    borderWidth: 1
+    backgroundColor: "lightgreen",
+    borderWidth: 1,
   },
   completeButtonView: {
-    backgroundColor: 'lightgreen',
-    borderLeftWidth: 1
-  }
+    backgroundColor: "lightgreen",
+    borderLeftWidth: 1,
+  },
 });

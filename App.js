@@ -8,6 +8,7 @@ import HomePage from "./src/screens/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MockChallenges from "./MockChallenges";
+import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -16,6 +17,10 @@ export default function App() {
       <Stack.Navigator>
         {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
         <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen
+          name="Personal Challenges"
+          component={PersonalChallengesScreen}
+        />
         <Stack.Screen name="MockChallenges" component={MockChallenges} />
         <Stack.Screen
           name="Challenge Details"
