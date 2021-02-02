@@ -35,7 +35,7 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/water",
+    badge: "./assets/drop",
     description: "Take shower for less than 5 minutes",
   },
   {
@@ -49,7 +49,17 @@ const challenges = [
       "Don't use disposable or single use containers, bottles, utensils",
   },
   {
-    title: "Transit Warrior",
+    title: "Turnt Down For What",
+    category: "energy",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/light",
+    description:
+      "Everytime you leave a room, turn off the lights! Don't leave any stray lights on",
+  },
+  {
+    title: "Foot Soldier",
     category: "transportation",
     duration: 14,
     pointsPerDay: 2,
@@ -57,6 +67,34 @@ const challenges = [
     badge: "./assets/cycle",
     description:
       "Instead of taking a car - walk, bike or take public transportation",
+  },
+  {
+    title: "Foodie Friends",
+    category: "food",
+    duration: 7,
+    pointsPerDay: 1,
+    type: "friend",
+    badge: "./assets/apple",
+    description: "Make only meatless meals",
+  },
+  {
+    title: "Turnt Down For What",
+    category: "energy",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/light",
+    description:
+      "Everytime you leave a room, turn off the lights! Don't leave any stray lights on",
+  },
+  {
+    title: "No Drizzle, My Nizzle",
+    category: "water",
+    duration: 5,
+    pointsPerDay: 2,
+    type: "friend",
+    badge: "./assets/water",
+    description: "Turn off the faucet while brushing your teeth",
   },
 ];
 
