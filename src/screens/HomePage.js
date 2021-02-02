@@ -100,7 +100,7 @@ export default function HomePage({ navigation }) {
         </View>
         <View style={styles.linkView}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("MockChallenges")}
+            onPress={() => navigation.navigate("Friend Challenges")}
           >
             <Text>View Friend Challenges</Text>
           </TouchableOpacity>
