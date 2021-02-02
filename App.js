@@ -4,7 +4,6 @@ import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import HomePage from './HomePage';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack'
 import MockChallenges from './MockChallenges';
@@ -13,7 +12,6 @@ import apiKeys from './config/keys';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import HomePage from "./src/screens/HomePage";
-import MockChallenges from "./MockChallenges";
 // import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 
 
