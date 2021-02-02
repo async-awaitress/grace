@@ -30,18 +30,22 @@ const PersonalChallengesScreen = () => {
         data={challenges}
         keyExtractor={(challenge) => challenge.id}
         renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              onPress={() => console.log("Ian navigate to single view here:)")}
-            >
-              <View style={styles.list}>
-                <Text>{item.title}</Text>
-                <Text>
-                  {item.duration} days / {item.pointsPerDay} points per day
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
+          if (item.type === "personal") {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  console.log("Ian navigate to single view here:)")
+                }
+              >
+                <View style={styles.list}>
+                  <Text>{item.title}</Text>
+                  <Text>
+                    {item.duration} days / {item.pointsPerDay} points per day
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          }
         }}
       ></FlatList>
     </View>
