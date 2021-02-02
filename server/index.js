@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { db } = require("./db");
 const app = express();
-const PORT = process.env.PORT;
+const PORT = 8080;
 const volleyball = require("volleyball");
 const cors = require("cors");
 
