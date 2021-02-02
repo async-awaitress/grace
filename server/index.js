@@ -5,6 +5,7 @@ const { db } = require("./db");
 const app = express();
 const PORT = process.env.PORT;
 const volleyball = require("volleyball");
+const cors = require("cors");
 
 // logging middleware
 // Only use logging middleware when not running tests
@@ -14,6 +15,9 @@ app.use(volleyball.custom({ debug }));
 // body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// to prevent cors error (while we are making requests from one url to another)
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, "build")));
 
