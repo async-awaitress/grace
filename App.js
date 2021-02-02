@@ -1,20 +1,19 @@
 import "react-native-gesture-handler";
 import ChallengeDetailsScreen from "./src/screens/ChallengeDetailsScreen";
-import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack'
-import MockChallenges from './MockChallenges';
 import * as firebase from 'firebase';
 import apiKeys from './config/keys';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import HomePage from "./src/screens/HomePage";
+import AuthScreen from "./src/screens/AuthScreen"
 // import ChallengeListScreen from "./src/screens/ChallengeListScreen";
-
-
+import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
+import FriendChallengesScreen from "./src/screens/FriendChallengesScreen";
 
 const Stack = createStackNavigator();
 
@@ -34,7 +33,15 @@ export default function App() {
         <Stack.Screen name="Registration" component={RegistrationScreen} />
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="MockChallenges" component={MockChallenges} />
+        <Stack.Screen name="GoogleSignIn" component={AuthScreen}/>
+        <Stack.Screen
+          name="Personal Challenges"
+          component={PersonalChallengesScreen}
+        />
+        <Stack.Screen
+          name="Friend Challenges"
+          component={FriendChallengesScreen}
+        />
         <Stack.Screen
           name="Challenge Details"
           component={ChallengeDetailsScreen}
