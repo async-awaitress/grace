@@ -7,14 +7,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
+import { EXPRESS_ROOT_PATH } from "../api/grace";
 
-const PersonalChallengesScreen = () => {
+const FriendChallengesScreen = ({ navigation }) => {
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get("http://localhost:8080/api/challenges");
+        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges`);
         setChallenges(res.data);
       } catch (error) {
         console.log("get request failed", error);
@@ -25,7 +26,7 @@ const PersonalChallengesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Personal Challenges</Text>
+      <Text style={styles.title}>Friend Challenges</Text>
       <FlatList
         data={challenges}
         keyExtractor={(challenge) => challenge.id}
@@ -33,9 +34,7 @@ const PersonalChallengesScreen = () => {
           if (item.type === "friend") {
             return (
               <TouchableOpacity
-                onPress={() =>
-                  console.log("Ian navigate to single view here:)")
-                }
+                onPress={() => navigation.navigate("Challenge Details", item)}
               >
                 <View style={styles.list}>
                   <Text>{item.title}</Text>
@@ -72,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PersonalChallengesScreen;
+export default FriendChallengesScreen;

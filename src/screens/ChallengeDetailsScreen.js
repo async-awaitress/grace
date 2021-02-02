@@ -45,7 +45,7 @@ const ChallengeDetailsScreen = ({ route }) => {
   };
 
   const setTransportTheme = () => {
-    setBgColor("lightpurple");
+    setBgColor("mediumpurple");
     setHeaderColor("purple");
   };
 
@@ -64,8 +64,8 @@ const ChallengeDetailsScreen = ({ route }) => {
     ? setEnergyTheme()
     : null;
 
-  category === "transport" &&
-  bgColor !== "lightpurple" &&
+  category === "transportation" &&
+  bgColor !== "mediumpurple" &&
   headerColor !== "purple"
     ? setTransportTheme()
     : null;
@@ -80,8 +80,7 @@ const ChallengeDetailsScreen = ({ route }) => {
         style={{
           fontSize: 40,
           fontWeight: "bold",
-          marginLeft: 15,
-          marginBottom: 5,
+          width:'80%',
           backgroundColor: headerColor,
           alignItems: "center",
         }}
@@ -109,7 +108,7 @@ const ChallengeDetailsScreen = ({ route }) => {
           style={{
             margin: 10,
             backgroundColor: bgColor,
-            borderWidth: 2,
+            borderWidth: 3,
             borderColor: headerColor,
           }}
         >
@@ -123,23 +122,7 @@ const ChallengeDetailsScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 40,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 5,
-    backgroundColor: "green",
-    alignItems: "center",
-  },
-  container: { flex: 1, alignItems: "center" },
-  list: {
-    flexDirection: "row",
-    padding: 10,
-    margin: 5,
-    borderWidth: 1,
-    backgroundColor: "lightgray",
-    justifyContent: "space-between",
-  },
+  container: {alignItems: "center", marginVertical: 10 },
   allInfo: {
     backgroundColor: "lightgray",
     width: "80%",
