@@ -8,20 +8,22 @@ import HomePage from "./src/screens/HomePage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
-import FriendListScreen from "./src/screens/FriendListScreen";
+import FriendChallengesScreen from "./src/screens/FriendChallengesScreen";
 
 const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen
           name="Personal Challenges"
           component={PersonalChallengesScreen}
         />
-        <Stack.Screen name="Friend Challenges" component={FriendListScreen} />
+        <Stack.Screen
+          name="Friend Challenges"
+          component={FriendChallengesScreen}
+        />
         <Stack.Screen
           name="Challenge Details"
           component={ChallengeDetailsScreen}
