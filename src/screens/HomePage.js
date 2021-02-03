@@ -18,32 +18,38 @@ export default function HomePage({ navigation }) {
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
   const [user, setUser] = useState({});
-  console.log(user);
+  const [dailyCompletion, setDailyCompletion] = useState({});
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchChallenges() {
       try {
         const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges/aaa`);
+        const challenges = res.data;
+        const dailyCompletionObjToSet = {};
+        challenges.forEach((challenge) => {
+          dailyCompletionObjToSet[challenge.id] =
+            challenge.personalChallenge.dailyStatus;
+        });
+        setDailyCompletion(dailyCompletionObjToSet);
         setChallenges(res.data);
       } catch (error) {
         console.log("get request failed", error);
       }
     }
-    fetchData();
-    // isFocused call useEffect whenever we view this component
+    fetchChallenges();
   }, [isFocused]);
 
-  useEffect(() => {
-    async function fetchPoints() {
-      try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/aaa`);
-        setUser(res.data);
-      } catch (error) {
-        console.log("get request failed", error);
-      }
+  const fetchPoints = async () => {
+    try {
+      const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/aaa`);
+      setUser(res.data);
+    } catch (error) {
+      console.log("get request failed", error);
     }
+  };
+
+  useEffect(() => {
     fetchPoints();
-    // isFocused call useEffect whenever we view this component
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
@@ -52,7 +58,13 @@ export default function HomePage({ navigation }) {
         `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
         { uid: userId }
       );
-      // console.log(res.data);
+      // dailyStatus = "true"
+      const dailyStatus = res.data.dailyStatus;
+      const dailyCompletionObjToSet = { [challengeId]: dailyStatus };
+
+      // spreading previous state and current state
+      setDailyCompletion({ ...dailyCompletion, ...dailyCompletionObjToSet });
+      fetchPoints();
     } catch (error) {
       console.log("update request failed", error);
     }
@@ -70,16 +82,26 @@ export default function HomePage({ navigation }) {
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
-              keyExtractor={(challenge) => challenge.challengeId}
+              keyExtractor={(challenge) => challenge.id}
               renderItem={({ item }) => (
                 <View style={styles.activeChallengeInfo}>
                   <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text>
+
                   <TouchableOpacity
-                    style={styles.completeButtonView}
+                    disabled={dailyCompletion[item.id]}
+                    style={
+                      dailyCompletion[item.id]
+                        ? styles.completedButtonView
+                        : styles.completeButtonView
+                    }
                     onPress={() => updateChallenge("aaa", item.id)}
                   >
-                    <Text>Complete</Text>
+                    {dailyCompletion[item.id] ? (
+                      <Text>Done!</Text>
+                    ) : (
+                      <Text>Complete</Text>
+                    )}
                   </TouchableOpacity>
                 </View>
               )}
@@ -154,6 +176,10 @@ const styles = StyleSheet.create({
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
+    borderLeftWidth: 1,
+  },
+  completedButtonView: {
+    backgroundColor: "orange",
     borderLeftWidth: 1,
   },
 });
