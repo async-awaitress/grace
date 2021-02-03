@@ -105,9 +105,9 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => {
+        onPress={async () => {
           // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
-          addPersonalChallengeHandler("aaa", id);
+          await addPersonalChallengeHandler("aaa", id);
           navigation.navigate("HomePage");
         }}
       >

@@ -28,23 +28,21 @@ const PersonalChallengesScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Personal Challenges</Text>
       <FlatList
-        data={challenges}
+        data={challenges.filter((challenge) => challenge.type === "personal")}
         keyExtractor={(challenge) => challenge.id}
         renderItem={({ item }) => {
-          if (item.type === "personal") {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Challenge Details", item)}
-              >
-                <View style={styles.list}>
-                  <Text>{item.title}</Text>
-                  <Text>
-                    {item.duration} days / {item.pointsPerDay} points per day
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }
+          return (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Challenge Details", item)}
+            >
+              <View style={styles.list}>
+                <Text>{item.title}</Text>
+                <Text>
+                  {item.duration} days / {item.pointsPerDay} points per day
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
         }}
       ></FlatList>
     </View>

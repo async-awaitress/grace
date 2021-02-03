@@ -8,40 +8,14 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 export default function HomePage({ navigation }) {
-  // const challenges = [
-  //   {
-  //     id: 1,
-  //     title: "Water Warrior",
-  //     category: "water",
-  //     duration: 7,
-  //     pointsPerDay: 2,
-  //     description: "Take shower for less than 5 minutes",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Waste Warrior",
-  //     category: "waste",
-  //     duration: 5,
-  //     pointsPerDay: 1,
-  //     description:
-  //       "Don't use disposable or single use containers, bottles, utensils",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Transit Warrior",
-  //     category: "transportation",
-  //     duration: 14,
-  //     pointsPerDay: 2,
-  //     description:
-  //       "Instead of taking a car - walk, bike or take public transportation",
-  //   },
-  // ];
-
+  const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
@@ -54,7 +28,8 @@ export default function HomePage({ navigation }) {
       }
     }
     fetchData();
-  }, []);
+    // isFocused call useEffect whenever we view this component
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
@@ -72,6 +47,7 @@ export default function HomePage({ navigation }) {
               renderItem={({ item }) => (
                 <View style={styles.activeChallengeInfo}>
                   <Text style={styles.challengeText}>{item.title}</Text>
+                  <Text>{item.category}</Text>
                   <TouchableOpacity style={styles.completeButtonView}>
                     <Text>Complete</Text>
                   </TouchableOpacity>
