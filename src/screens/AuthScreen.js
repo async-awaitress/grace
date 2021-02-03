@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as GoogleSignIn from 'expo-google-sign-in';
 
 export default class AuthScreen extends React.Component {

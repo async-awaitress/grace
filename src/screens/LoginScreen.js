@@ -1,10 +1,10 @@
 import React, { useState }from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import * as firebase from 'firebase'
 import { signIn } from '../../API/methods'
 
 
-export default function SignIn({navigation}) {
+export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -35,7 +35,7 @@ export default function SignIn({navigation}) {
               autoCapitalize="none"
               onChangeText={email => setEmail(email)}
               value={email}>
-              </TextInput>
+            </TextInput>
           </View>
           <View style={{marginTop:32}}>
             <Text style={styles.inputTitle}>Password</Text>
@@ -43,8 +43,9 @@ export default function SignIn({navigation}) {
               style={styles.input}
               secureTextEntry
               autoCapitalize="none"
-              onChangeText={password => setPassword( password)}
-              value={password}></TextInput>
+              value={password}
+              onChangeText={password => setPassword(password)}
+              ></TextInput>
           </View>
         </View>
 {/* also, below, onPress, it should navigate to our homePage, which the list of challenges page,but not sure whether I can add another onPress for navigation. Maybe there is a way to enter the navigate in the handler function above. */}
@@ -58,6 +59,15 @@ export default function SignIn({navigation}) {
         <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => navigation.navigate("Registration")}>
           <Text style={{color: "black", fontSize: 13}}>
             New to GRace? <Text style={{fontWeight: "500", color: "red"}}>Sign Up</Text>
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => navigation.navigate("GoogleSignIn")}>
+          <Image
+            style={styles.tinyLogo}
+            source={{uri:'https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_960/https://voxytalksy.com/wp-content/uploads/2018/08/google-voxytalksy.png'}}/>
+          <Text style={{color: "black", fontSize: 13}}>
+            Google <Text style={{fontWeight: "500", color: "red"}}>Sign In</Text>
           </Text>
         </TouchableOpacity>
       </View>

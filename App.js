@@ -30,8 +30,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Registration" component={RegistrationScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="GoogleSignIn" component={AuthScreen}/>

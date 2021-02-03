@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Alert, TextInput, TouchableOpacity} from 'react
 import * as firebase from 'firebase'
 import { registration } from '../../API/methods'
 
-export default function SignUp({ navigation }) {
+export default function RegistrationScreen({ navigation }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,7 +38,7 @@ export default function SignUp({ navigation }) {
         lastName,
         firstName,
       );
-      navigation.navigate('Loading');
+      navigation.navigate('HomePage');
       emptyState();
     }
   };
@@ -53,17 +53,19 @@ export default function SignUp({ navigation }) {
             <TextInput
               style={styles.input}
               autoCapitalize="none"
-              onChangeText={firstName => setFirstName({ firstName })}
-              value={firstName}>
-              </TextInput>
+              value={firstName}
+              onChangeText={firstName => setFirstName(firstName)}
+              >
+            </TextInput>
           </View>
           <View>
             <Text style={styles.inputTitle}>Last Name</Text>
             <TextInput
               style={styles.input}
               autoCapitalize="none"
-              onChangeText={lastName => setLastName({ lastName })}
-              value={lastName}>
+              value={lastName}
+              onChangeText={lastName => setLastName(lastName)}
+              >
               </TextInput>
           </View>
           <View>
@@ -71,8 +73,9 @@ export default function SignUp({ navigation }) {
             <TextInput
               style={styles.input}
               autoCapitalize="none"
-              onChangeText={email => setEmail({ email })}
-              value={email}>
+              value={email}
+              onChangeText={email => setEmail(email)}
+              >
               </TextInput>
           </View>
           <View style={{marginTop:32}}>
@@ -81,8 +84,9 @@ export default function SignUp({ navigation }) {
               style={styles.input}
               secureTextEntry
               autoCapitalize="none"
-              onChangeText={password => setPassword({ password })}
-              value={password}></TextInput>
+              value={password}
+              onChangeText={password => setPassword(password)}
+              ></TextInput>
           </View>
 
           <View style={{marginTop:32}}>
@@ -91,8 +95,9 @@ export default function SignUp({ navigation }) {
               style={styles.input}
               secureTextEntry
               autoCapitalize="none"
-              onChangeText={confirmPassword => setPassword({ confirmPassword })}
-              value={confirmPassword}></TextInput>
+              value={confirmPassword}
+              onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
+              ></TextInput>
           </View>
 
         </View>
