@@ -17,6 +17,7 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 export default function HomePage({ navigation }) {
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
+  const [totalPoints, setTotalPoints] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -30,6 +31,18 @@ export default function HomePage({ navigation }) {
     fetchData();
     // isFocused call useEffect whenever we view this component
   }, [isFocused]);
+
+  const updateChallenge = async (userId, challengeId) => {
+    try {
+      const res = await axios.put(
+        `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+        { uid: userId }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log("update request failed", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -48,7 +61,10 @@ export default function HomePage({ navigation }) {
                 <View style={styles.activeChallengeInfo}>
                   <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text>
-                  <TouchableOpacity style={styles.completeButtonView}>
+                  <TouchableOpacity
+                    style={styles.completeButtonView}
+                    onPress={() => updateChallenge("aaa", item.id)}
+                  >
                     <Text>Complete</Text>
                   </TouchableOpacity>
                 </View>
