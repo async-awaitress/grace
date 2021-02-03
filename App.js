@@ -15,6 +15,7 @@ import HomeScreen from "./src/screens/HomeScreen"
 // import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
 import FriendChallengesScreen from "./src/screens/FriendChallengesScreen";
+// import LoadingScreen from "./src/screens/LoadingScreen"
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
+        {/* <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/> */}
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Registration" component={RegistrationScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="HomePage" component={HomePage} />

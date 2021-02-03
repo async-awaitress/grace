@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,39 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import * as firebase from 'firebase'
+import { loggingOut } from '../../API/methods'
 
 export default function HomePage({ navigation }) {
+
+
+  const [firstName, setFirstName] = useState('');
+
+  let currentUserUID = firebase.auth().currentUser.uid;
+
+  useEffect(() => {
+    async function getUserInfo(){
+      let doc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(currentUserUID)
+      .get();
+
+      if (!doc.exists){
+        Alert.alert('No user data found!')
+      } else {
+        let dataObj = doc.data();
+        setFirstName(dataObj.firstName)
+      }
+    }
+    getUserInfo();
+  })
+
+  const handlePress = () => {
+    loggingOut();
+    navigation.navigate('Login');
+  };
+
   const challenges = [
     {
       id: 1,
@@ -47,6 +78,7 @@ export default function HomePage({ navigation }) {
       </View>
       <ScrollView>
         <View style={styles.activeChalengesContainer}>
+          <Text>Hello, {firstName}</Text>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
           <ScrollView horizontal={true}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
@@ -105,6 +137,13 @@ export default function HomePage({ navigation }) {
             <Text>View Friend Challenges</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          < Text style={styles.buttonText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
+
         <StatusBar style="auto" />
       </ScrollView>
     </View>
