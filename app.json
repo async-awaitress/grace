@@ -17,7 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.company.grace",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.226134016336-o0gtq1ppdouodlvmqq3ndjka47rjtvks"
+        }
+      }
+
     },
     "android": {
       "adaptiveIcon": {
