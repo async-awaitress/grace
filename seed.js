@@ -35,8 +35,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/bag",
-    description: "Every time you go shopping, bring a reusable tote or bag",
+    badge: "./assets/bag-c",
+    description: "Every time you go shopping, bring a reusable tote or bag.",
   },
   {
     title: "Waste Warrior",
@@ -44,9 +44,9 @@ const challenges = [
     duration: 5,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/apple",
+    badge: "./assets/bottle-c",
     description:
-      "Don't use disposable or single use containers, bottles, utensils",
+      "Don't use disposable or single use containers, bottles, utensils.",
   },
 
   {
@@ -55,9 +55,9 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/light",
+    badge: "./assets/light-c",
     description:
-      "Everytime you leave a room, turn off the lights! Don't leave any stray lights on",
+      "Everytime you leave a room, turn off the lights! Don't leave any stray lights on.",
   },
   {
     title: "Water Warrior",
@@ -65,8 +65,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/drop",
-    description: "Take shower for less than 5 minutes",
+    badge: "./assets/shower-c",
+    description: "Take shower for less than 5 minutes each day.",
   },
   {
     title: "Foot Soldiers",
@@ -74,9 +74,9 @@ const challenges = [
     duration: 14,
     pointsPerDay: 2,
     type: "friend",
-    badge: "./assets/cycle",
+    badge: "./assets/shoes-c",
     description:
-      "Instead of taking a car - walk, bike or take public transportation",
+      "Instead of taking a car - walk, bike or take public transportation.",
   },
   {
     title: "Foodie Friends",
@@ -84,8 +84,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 1,
     type: "friend",
-    badge: "./assets/apple",
-    description: "Make only meatless meals",
+    badge: "./assets/veg-c",
+    description: "Make only meatless meals.",
   },
   {
     title: "Power Down",
@@ -93,17 +93,57 @@ const challenges = [
     duration: 10,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/battery",
-    description: "Unplug your computer and other large electronics at night",
+    badge: "./assets/plug-c",
+    description: "Unplug your computer and other large electronics at night.",
   },
   {
-    title: "No Drizzle, My Nizzle",
+    title: "No Drizzle, My Nizzle.",
     category: "water",
     duration: 5,
     pointsPerDay: 2,
     type: "friend",
-    badge: "./assets/water",
-    description: "Turn off the faucet while brushing your teeth",
+    badge: "./assets/faucet-c",
+    description: "Turn off the faucet while brushing your teeth.",
+  },
+  {
+    title: "BYOC",
+    category: "waste",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/mug-c",
+    description:
+      "Bring your own resuable cup to your favorite cafe or make your own coffee or tea at home.",
+  },
+  {
+    title: "Home Cookin', Good Lookin'",
+    category: "food",
+    duration: 5,
+    pointsPerDay: 3,
+    type: "friend",
+    badge: "./assets/meal-c",
+    description:
+      "Cook all your meals at home to reduce your use of takeout containters.",
+  },
+  {
+    title: "Compost",
+    category: "food",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/apple-c",
+    description:
+      "Compost all your leftover food scraps, tea bags, coffee grounds, eggshells, old flowers. Leave out the dairy, oil and meat from your compost bin. At the end of the challenge, drop off the compost at a local collection area.",
+  },
+  {
+    title: "Carpool",
+    category: "transportation",
+    duration: 7,
+    pointsPerDay: 2,
+    type: "personal",
+    badge: "./assets/carpool-c",
+    description:
+      "If you must take a car, carpool! Everyone knows that pool parties are better anyways.",
   },
 ];
 
