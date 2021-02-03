@@ -17,7 +17,8 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 export default function HomePage({ navigation }) {
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
-  const [totalPoints, setTotalPoints] = useState(0);
+  const [user, setUser] = useState({});
+  console.log(user);
 
   useEffect(() => {
     async function fetchData() {
@@ -32,13 +33,26 @@ export default function HomePage({ navigation }) {
     // isFocused call useEffect whenever we view this component
   }, [isFocused]);
 
+  useEffect(() => {
+    async function fetchPoints() {
+      try {
+        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/aaa`);
+        setUser(res.data);
+      } catch (error) {
+        console.log("get request failed", error);
+      }
+    }
+    fetchPoints();
+    // isFocused call useEffect whenever we view this component
+  }, []);
+
   const updateChallenge = async (userId, challengeId) => {
     try {
       const res = await axios.put(
         `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
         { uid: userId }
       );
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.log("update request failed", error);
     }
@@ -88,6 +102,11 @@ export default function HomePage({ navigation }) {
         </View>
         <StatusBar style="auto" />
       </ScrollView>
+      <View>
+        <Text style={{ fontSize: 60, paddingBottom: 30 }}>
+          {user.totalPoints}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -99,6 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 100,
   },
   header: {
     backgroundColor: "green",
