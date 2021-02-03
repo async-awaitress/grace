@@ -10,44 +10,40 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import * as firebase from 'firebase'
-import { loggingOut } from '../../API/methods'
-
-export default function HomePage({ navigation }) {
-
-
-  const [firstName, setFirstName] = useState('');
-
-  let currentUserUID = firebase.auth().currentUser.uid;
-
-  useEffect(() => {
-    async function getUserInfo(){
-      let doc = await firebase
-      .firestore()
-      .collection('users')
-      .doc(currentUserUID)
-      .get();
-
-      if (!doc.exists){
-        Alert.alert('No user data found!')
-      } else {
-        let dataObj = doc.data();
-        setFirstName(dataObj.firstName)
-      }
-    }
-    getUserInfo();
-  })
-
-  const handlePress = () => {
-    loggingOut();
-    navigation.navigate('Login');
-  };
-
+import * as firebase from "firebase";
+import { loggingOut } from "../../API/methods";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 export default function HomePage({ navigation }) {
+  const [firstName, setFirstName] = useState("");
+
+  let currentUserUID = firebase.auth().currentUser.uid;
+
+  useEffect(() => {
+    async function getUserInfo() {
+      let doc = await firebase
+        .firestore()
+        .collection("users")
+        .doc(currentUserUID)
+        .get();
+
+      if (!doc.exists) {
+        Alert.alert("No user data found!");
+      } else {
+        let dataObj = doc.data();
+        setFirstName(dataObj.firstName);
+      }
+    }
+    getUserInfo();
+  });
+
+  const handlePress = () => {
+    loggingOut();
+    navigation.navigate("Login");
+  };
+
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
 
@@ -107,7 +103,7 @@ export default function HomePage({ navigation }) {
 
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={handlePress}>
-          < Text style={styles.buttonText}>Log Out</Text>
+            <Text style={styles.buttonText}>Log Out</Text>
           </TouchableOpacity>
         </View>
 
