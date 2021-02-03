@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import {
-  Text,
-  View,
-  Modal,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-} from "react-native";
-// import { ScrollView } from "react-native-gesture-handler";
-// import { connect } from "react-redux";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { EXPRESS_ROOT_PATH } from "../api/grace";
+import axios from "axios";
 
-const ChallengeDetailsScreen = ({ route }) => {
+const ChallengeDetailsScreen = ({ route, navigation }) => {
   const [bgColor, setBgColor] = useState("lightGray");
-  const [headerColor, setHeaderColor] = useState("lightGray");
+  const [headerColor, setHeaderColor] = useState("lightgray");
+
+  const addPersonalChallengeHandler = async (userId, challengeId) => {
+    try {
+      await axios.post(
+        `${EXPRESS_ROOT_PATH}/api/personalChallenges/add/${challengeId}`,
+        { uid: userId }
+      );
+      console.log("Challenge added to datatabse");
+    } catch (error) {
+      console.log("accept challenge rejected", error);
+    }
+  };
 
   const {
     id,
@@ -25,9 +29,6 @@ const ChallengeDetailsScreen = ({ route }) => {
     badge,
     duration,
   } = route.params;
-  console.log(route.params);
-
-  console.log(bgColor);
 
   const setWasteTheme = () => {
     setBgColor("lightgreen");
@@ -80,7 +81,7 @@ const ChallengeDetailsScreen = ({ route }) => {
         style={{
           fontSize: 40,
           fontWeight: "bold",
-          width:'80%',
+          width: "80%",
           backgroundColor: headerColor,
           alignItems: "center",
         }}
@@ -103,7 +104,13 @@ const ChallengeDetailsScreen = ({ route }) => {
           <Text style={styles.descriptionText}>{description}</Text>
         </View>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={async () => {
+          // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
+          await addPersonalChallengeHandler("aaa", id);
+          navigation.navigate("HomePage");
+        }}
+      >
         <View
           style={{
             margin: 10,
@@ -122,7 +129,7 @@ const ChallengeDetailsScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {alignItems: "center", marginVertical: 10 },
+  container: { alignItems: "center", marginVertical: 10 },
   allInfo: {
     backgroundColor: "lightgray",
     width: "80%",
