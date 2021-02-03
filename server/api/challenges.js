@@ -1,11 +1,23 @@
 const router = require("express").Router();
-const { Challenge, Item, User, PersonalChallenge } = require("../db");
+const { Challenge, User } = require("../db");
 
 router.get("/", async (req, res, next) => {
   try {
     const allChallenges = await Challenge.findAll();
-    // const sortedProjects = allProjects.sort((a, b) => a.id - b.id);
     res.send(allChallenges);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:userId", async (req, res, next) => {
+  try {
+    // request to find one user with uid and their assigned challenges of this user (through personalChallenges table)
+    const allPersonalChallenges = await User.findOne({
+      include: { model: Challenge },
+      where: { uid: req.params.userId },
+    });
+    res.send(allPersonalChallenges.challenges);
   } catch (error) {
     next(error);
   }

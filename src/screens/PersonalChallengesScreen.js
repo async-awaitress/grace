@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
-const PersonalChallengesScreen = ({navigation}) => {
+const PersonalChallengesScreen = ({ navigation }) => {
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
@@ -34,9 +34,7 @@ const PersonalChallengesScreen = ({navigation}) => {
           if (item.type === "personal") {
             return (
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Challenge Details", item)
-                }
+                onPress={() => navigation.navigate("Challenge Details", item)}
               >
                 <View style={styles.list}>
                   <Text>{item.title}</Text>
