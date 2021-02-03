@@ -156,7 +156,7 @@ export default function App() {
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
+
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="GoogleSignIn" component={AuthScreen} />
         <Stack.Screen

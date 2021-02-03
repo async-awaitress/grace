@@ -3,7 +3,7 @@ import React, { useState} from 'react'
 import { View, Text, StyleSheet, Alert, TextInput, TouchableOpacity} from 'react-native'
 import * as firebase from 'firebase'
 import { registration } from '../../API/methods'
-
+import axios from 'axios'
 export default function RegistrationScreen({ navigation }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -19,6 +19,8 @@ export default function RegistrationScreen({ navigation }) {
     setConfirmPassword('');
   };
 
+
+  useEffect()
   const handleSignUp = () => {
     if (!firstName) {
       Alert.alert('First name is required');
@@ -38,6 +40,8 @@ export default function RegistrationScreen({ navigation }) {
         lastName,
         firstName,
       );
+      let currentUserUID = firebase.auth().currentUser.uid;
+      axios.post('/api/users', {userId: currentUserUID, firstName, lastName, email})
       navigation.navigate('HomePage');
       emptyState();
     }
@@ -78,7 +82,7 @@ export default function RegistrationScreen({ navigation }) {
               >
               </TextInput>
           </View>
-          <View style={{marginTop:32}}>
+          <View style={{marginTop:5}}>
             <Text style={styles.inputTitle}>Password</Text>
             <TextInput
               style={styles.input}
@@ -89,7 +93,7 @@ export default function RegistrationScreen({ navigation }) {
               ></TextInput>
           </View>
 
-          <View style={{marginTop:32}}>
+          <View style={{marginTop:5}}>
             <Text style={styles.inputTitle}>Confirm Password</Text>
             <TextInput
               style={styles.input}
@@ -126,6 +130,8 @@ const styles = StyleSheet.create({
 
   },
   greeting: {
+    paddingTop: 30,
+    paddingBottom: 30,
     marginTop: 32,
     fontSize: 18,
     fontWeight: "400",
@@ -148,6 +154,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   inputTitle: {
+    paddingTop: 15,
     color: "black",
     fontSize: 10,
     textTransform: "uppercase"

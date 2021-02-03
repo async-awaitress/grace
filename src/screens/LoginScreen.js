@@ -1,5 +1,5 @@
-import React, { useState }from 'react'
-import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState, useEffect }from 'react'
+import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground} from 'react-native'
 import * as firebase from 'firebase'
 import { signIn } from '../../API/methods'
 
@@ -25,6 +25,7 @@ export default function LoginScreen({navigation}) {
 
     return (
       <View style={StyleSheet.container}>
+
         <Text style={styles.greeting}>Welcome to GRace</Text>
 
         <View style={styles.form}>
@@ -37,6 +38,7 @@ export default function LoginScreen({navigation}) {
               value={email}>
             </TextInput>
           </View>
+
           <View style={{marginTop:32}}>
             <Text style={styles.inputTitle}>Password</Text>
             <TextInput
@@ -70,18 +72,17 @@ export default function LoginScreen({navigation}) {
             Google <Text style={{fontWeight: "500", color: "red"}}>Sign In</Text>
           </Text>
         </TouchableOpacity>
-      </View>
-
+    </View>
     )
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-  },
+    },
   greeting: {
+    paddingTop: 30,
+    paddingBottom: 30,
     marginTop: 32,
     fontSize: 18,
     fontWeight: "400",
@@ -104,6 +105,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   inputTitle: {
+    alignItems: "center",
+    justifyContent: "center",
     color: "green",
     fontSize: 10,
     textTransform: "uppercase"
@@ -113,6 +116,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 40,
     color: "black"
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
   },
   button: {
     marginHorizontal: 30,
