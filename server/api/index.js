@@ -3,10 +3,10 @@ const cors = require("cors");
 
 router.use(cors());
 // "api/users/"
-// router.use("/users", require("../db/user"));
 router.use("/users", require("./users"));
 // "api/challenges"
 router.use("/challenges", require("./challenges"));
+// "api/personalChallenges"
 router.use("/personalChallenges", require("./personalChallenges"));
 
 router.use((req, res, next) => {
