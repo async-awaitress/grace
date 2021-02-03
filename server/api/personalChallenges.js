@@ -25,17 +25,18 @@ router.put("/updatePersonalChallenge/:challengeId", async (req, res, next) => {
       },
     });
 
+    // update daily completion to true and add points for completion
     const getPoints = await Challenge.findByPk(req.params.challengeId);
     await personalChallenge.update({
       dailyStatus: true,
       totalPointsEarned: getPoints.pointsPerDay,
     });
 
-    // update the user total points (confirm if that works)
+    // update totalPoints of user for completed task per day
     const user = await User.findByPk("aaa");
-    // console.log("use is", user);
-    // await user.update({ totalPoints: getPoints.pointsPerDay });
-    ///
+    await user.update({
+      totalPoints: (getPoints.pointsPerDay += getPoints.pointsPerDay),
+    });
 
     res.send(personalChallenge);
   } catch (error) {
