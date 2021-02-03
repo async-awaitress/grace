@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const ChallengeTrackerScreen = ({ navigation }) => {
+const Friends = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Challenge Tracker!!!!</Text>
+      <Text style={styles.title}>Friends!!!</Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChallengeTrackerScreen;
+export default Friends;

@@ -19,13 +19,17 @@ const Challenge = db.define("challenge", {
     allowNull: false,
   },
   badge: {
-    type: Sequelize.BLOB,
+    type: Sequelize.STRING,
   },
   type: {
     type: Sequelize.ENUM("personal", "friend"),
   },
   description: {
     type: Sequelize.TEXT,
+  },
+  tips: {
+    type: Sequelize.TEXT,
+    default: "some tips on this topic are coming soon",
   },
 });
 
