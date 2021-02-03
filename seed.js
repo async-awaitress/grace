@@ -12,17 +12,20 @@ const {
 
 const users = [
   {
-    name: "Rachel",
+    firstName: "Rachel",
+    lastName: "doe",
     uid: "aaa",
     email: "rachel@mail.com",
   },
   {
     name: "Sam",
+    lastName: "doe",
     uid: "bbb",
     email: "sam@mail.com",
   },
   {
     name: "Tom",
+    lastName: "doe",
     uid: "ccc",
     email: "tom@mail.com",
   },
@@ -86,7 +89,7 @@ const challenges = [
     description:
       "Instead of taking a car - walk, bike or take public transportation.",
     tips:
-      "You can greatly reduce transportation emissions by walking, biking and taking public transportation to reduce smog and CO2. Going on foot, bike or public transportation also helps to reduce noise pollution and congestion. You can also reap the benefits of increased health by going on foot or cycling, both of which are excellent choices for some physical activity.",
+      "You can greatly reduce transportation emissions by walking, biking and taking public transportation. Going on foot, bike or public transportation also helps to reduce noise pollution and congestion. You can also reap the benefits of increased health by going on foot or cycling, both of which are excellent choices for some physical activity.",
   },
   {
     title: "Foodie Friends",
@@ -96,7 +99,8 @@ const challenges = [
     type: "friend",
     badge: "./assets/veg-c",
     description: "Make only meatless meals.",
-    tips: "",
+    tips:
+      "Plants require much less water to produce than their animal counterparts and animal waste contributes to pollution in the waterways. Animal agriculture creates methane, a greeenhouse gas that increases global warming. So by switching to a plant based diet, you can help save fresh water and reduce greenhouse gasses! ",
   },
   {
     title: "Power Down",
@@ -106,7 +110,8 @@ const challenges = [
     type: "personal",
     badge: "./assets/plug-c",
     description: "Unplug your computer and other large electronics at night.",
-    tips: "",
+    tips:
+      "A large majority of the energy that powers our homes comes from fossil fuels, so unplugging them reduces your energy demand and carbon emissions. Did you know that your devices consume electricity when they are plugged in but not in use? By unplugging those devices, you can your energy use! Try bundling your devices on a power strip to unplug multiple devices at once!",
   },
   {
     title: "No Drizzle, My Nizzle.",
@@ -116,7 +121,8 @@ const challenges = [
     type: "friend",
     badge: "./assets/faucet-c",
     description: "Turn off the faucet while brushing your teeth.",
-    tips: "",
+    tips:
+      "According to the EPA, just by turning off the tap while you brush your teeth in the morning and before bedtime, you can save up to 8 gallons of water! That adds up to more than 200 gallons a month.",
   },
   {
     title: "BYOC",
@@ -127,7 +133,8 @@ const challenges = [
     badge: "./assets/mug-c",
     description:
       "Bring your own resuable cup to your favorite cafe or make your own coffee or tea at home.",
-    tips: "",
+    tips:
+      "Since most disposable cups are lined with a thin layer of plastic, they are unable to be recycled and end up in landfills, slowly breaking down into micropastics and contaminating the planet. By bringing your own cup or making your brew at home, you are eliminating the need to use these cups at all. You can also ask your local cafe if they give a discount or any other incentive for bringing your own mug!",
   },
   {
     title: "Home Cookin', Good Lookin'",
@@ -138,7 +145,8 @@ const challenges = [
     badge: "./assets/meal-c",
     description:
       "Cook all your meals at home to reduce your use of takeout containters.",
-    tips: "",
+    tips:
+      "By cooking your own meals at home, you are more aware of the ingredients that go into your food. This includes everything from how much oil is added to where your ingredients are sourced from. If you choose local ingredients, you reduce your carbon footprint even more by eliminating the need for your food to travel from across the world. You also get to choose the portion sizes, therefore reducing food waste if you only make what you can eat. Home kitchens produce less energy than commerical kitchens and you completely remove the need for takeout containers in the process and can store leftovers in reusable containters!",
   },
   {
     title: "Compost",
@@ -161,7 +169,8 @@ const challenges = [
     badge: "./assets/carpool-c",
     description:
       "If you must take a car, carpool! Everyone knows that pool parties are better anyways.",
-    tips: "",
+    tips:
+      "By carpooling, you can reduce the amount of vehicles on the road, therefore reducing traffic and the total transportation emissions. This helps to improve the overall air quality which is better for the health of the people and the planet. Take group/shared rides to places such as the grocery store, events, places of worship, work and school. You can even search 'ride share' on Craigslist to help carpoolers find each other for trips between cities!",
   },
 ];
 
