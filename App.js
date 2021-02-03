@@ -1,6 +1,5 @@
 import "react-native-gesture-handler";
 import ChallengeDetailsScreen from "./src/screens/ChallengeDetailsScreen";
-// import ChallengeListScreen from "./src/screens/ChallengeListScreen";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";

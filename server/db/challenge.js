@@ -27,6 +27,10 @@ const Challenge = db.define("challenge", {
   description: {
     type: Sequelize.TEXT,
   },
+  tips: {
+    type: Sequelize.TEXT,
+    default: "some tips on this topic are coming soon",
+  },
 });
 
 module.exports = Challenge;
