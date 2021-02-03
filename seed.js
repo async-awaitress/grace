@@ -18,13 +18,13 @@ const users = [
     email: "rachel@mail.com",
   },
   {
-    name: "Sam",
+    firstName: "Sam",
     lastName: "doe",
     uid: "bbb",
     email: "sam@mail.com",
   },
   {
-    name: "Tom",
+    firstName: "Tom",
     lastName: "doe",
     uid: "ccc",
     email: "tom@mail.com",
