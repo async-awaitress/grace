@@ -6,12 +6,12 @@ import { loggingOut } from "../../API/methods"
 export default class HomeScreen extends React.Component {
   state = {
     email: "",
-    displayName: ""
+    firstName: ""
   }
 
   componentDidMount(){
     const {email, displayName} = firebase.auth().currentUser
-    this.setState({email, displayName})
+    this.setState({email, firstName})
   }
 
   signOutUser = () => {

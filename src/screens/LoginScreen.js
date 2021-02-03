@@ -1,30 +1,31 @@
-import { blue, green, white } from 'chalk'
-import React from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import React, { useState }from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import * as firebase from 'firebase'
 import { signIn } from '../../API/methods'
 
-export default class LoginScreen extends React.Component {
 
-  state = {
-    email: "",
-    password: "",
-    errorMessage: null
-  }
+export default function SignIn({navigation}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  handleLogin = () => {
-    signIn(this.email, this.password)
-  }
+  const handleLogin = () => {
+    if (!email) {
+      Alert.alert('Email field is required.');
+    }
 
-  render(){
+    if (!password) {
+      Alert.alert('Password field is required.');
+    }
+
+    signIn(email, password);
+    setEmail('');
+    setPassword('');
+    navigation.navigate("HomePage")
+  };
+
     return (
       <View style={StyleSheet.container}>
         <Text style={styles.greeting}>Welcome to GRace</Text>
-
-
-        <View style={styles.errorMessage}>
-          {this.state.errorMessage && <Text style={styles.error}>{this.errorMessage}</Text>}
-        </View>
 
         <View style={styles.form}>
           <View>
@@ -32,8 +33,8 @@ export default class LoginScreen extends React.Component {
             <TextInput
               style={styles.input}
               autoCapitalize="none"
-              onChangeText={email => this.setState({ email })}
-              value={this.state.email}>
+              onChangeText={email => setEmail(email)}
+              value={email}>
               </TextInput>
           </View>
           <View style={{marginTop:32}}>
@@ -42,27 +43,27 @@ export default class LoginScreen extends React.Component {
               style={styles.input}
               secureTextEntry
               autoCapitalize="none"
-              onChangeText={password => this.setState({ password })}
-              value={this.state.password}></TextInput>
+              onChangeText={password => setPassword( password)}
+              value={password}></TextInput>
           </View>
         </View>
-//also, below, onPress, it should navigate to our homePage, which the list of challenges page,but not sure whether I can add another onPress for navigation. Maybe there is a way to enter the navigate in the handler function above.
+{/* also, below, onPress, it should navigate to our homePage, which the list of challenges page,but not sure whether I can add another onPress for navigation. Maybe there is a way to enter the navigate in the handler function above. */}
 
-        <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
-          <Text style={{color: "green", fontWeight: "500"}}>
-            Sing in
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={{color: "black", fontWeight: "500"}}>
+            Sign in
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => this.props.navigation.navigate("Registration")}>
-          <Text style={{color: "green", fontSize: 13}}>
+        <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => navigation.navigate("Registration")}>
+          <Text style={{color: "black", fontSize: 13}}>
             New to GRace? <Text style={{fontWeight: "500", color: "red"}}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
       </View>
 
     )
-  }
+
 }
 
 const styles = StyleSheet.create({
@@ -98,14 +99,14 @@ const styles = StyleSheet.create({
     textTransform: "uppercase"
   },
   input: {
-    borderBottomColor: "blue",
+    borderBottomColor: "green",
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 40,
-    color: yellow
+    color: "black"
   },
   button: {
     marginHorizontal: 30,
-    backgroundColor: "white",
+    backgroundColor: "#f4978e",
     borderRadius: 4,
     height: 52,
     alignItems: "center",
