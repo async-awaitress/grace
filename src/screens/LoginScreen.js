@@ -22,7 +22,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     if (!password) {
-      Alert.alert("Password field is required.");
+       Alert.alert("Password field is required.");
     }
 
     await signIn(email, password);
