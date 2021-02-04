@@ -52,7 +52,9 @@ export default function HomePage({ navigation }) {
   useEffect(() => {
     async function fetchChallenges() {
       try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges/aaa`);
+        const res = await axios.get(
+          `${EXPRESS_ROOT_PATH}/api/challenges/${currentUserUID}`
+        );
         const challenges = res.data;
         const dailyCompletionObjToSet = {};
         challenges.forEach((challenge) => {
@@ -70,7 +72,9 @@ export default function HomePage({ navigation }) {
 
   const fetchPoints = async () => {
     try {
-      const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/aaa`);
+      const res = await axios.get(
+        `${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`
+      );
       setUser(res.data);
     } catch (error) {
       console.log("get request failed", error);
@@ -125,7 +129,7 @@ export default function HomePage({ navigation }) {
                         ? styles.completedButtonView
                         : styles.completeButtonView
                     }
-                    onPress={() => updateChallenge("aaa", item.id)}
+                    onPress={() => updateChallenge(currentUserUID, item.id)}
                   >
                     {dailyCompletion[item.id] ? (
                       <Text>Done!</Text>
@@ -142,14 +146,14 @@ export default function HomePage({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Personal Challenges")}
           >
-            <Text>View Personal Challenges</Text>
+            <Text>View All Personal Challenges</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.linkView}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Friend Challenges")}
           >
-            <Text>View Friend Challenges</Text>
+            <Text>View All Friend Challenges</Text>
           </TouchableOpacity>
         </View>
 
