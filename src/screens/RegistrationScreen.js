@@ -11,6 +11,9 @@ import {
 import * as firebase from "firebase";
 import { registration } from "../../API/methods";
 import axios from "axios";
+import { EXPRESS_ROOT_PATH } from "../api/grace";
+
+
 export default function RegistrationScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -40,15 +43,15 @@ export default function RegistrationScreen({ navigation }) {
       Alert.alert("Password does not match!");
     } else {
       await registration(email, password, lastName, firstName);
-      // let currentUserUID = firebase.auth().currentUser.uid;
-      // await axios.post("/api/users", {
-      //   uid: currentUserUID,
-      //   firstName,
-      //   lastName,
-      //   email,
-      // });
+      let currentUserUID = firebase.auth().currentUser.uid;
+      await axios.post(`${EXPRESS_ROOT_PATH}/api/users`, {
+        uid: currentUserUID,
+        firstName,
+        lastName,
+        email
+      });
       navigation.navigate("HomePage");
-      // emptyState();
+      emptyState();
     }
   };
 

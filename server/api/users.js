@@ -22,12 +22,12 @@ router.get("/:userId", async (req, res, next) => {
 });
 
 
-router.post("/users", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const newUser = await User.create(req.body)
     res.json(newUser)
   } catch (error) {
-
+    next(error)
   }
 })
 
