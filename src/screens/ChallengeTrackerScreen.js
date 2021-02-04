@@ -43,7 +43,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       <Text style={styles.title}>Challenge Tracker!!!!</Text>
       <VictoryPie
         padAngle={5}
-        // used to hide labels
+        // use to hide labels
         labelComponent={<View />}
         innerRadius={70}
         width={200}
