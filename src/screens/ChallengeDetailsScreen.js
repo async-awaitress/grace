@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import axios from "axios";
+import * as firebase from "firebase";
 
 const ChallengeDetailsScreen = ({ route, navigation }) => {
   const [bgColor, setBgColor] = useState("lightGray");
   const [headerColor, setHeaderColor] = useState("lightgray");
+  const currentUserUID = firebase.auth().currentUser.uid;
 
   const addPersonalChallengeHandler = async (userId, challengeId) => {
     try {
@@ -107,7 +109,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
       <TouchableOpacity
         onPress={async () => {
           // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
-          await addPersonalChallengeHandler("aaa", id);
+          await addPersonalChallengeHandler(currentUserUID, id);
           navigation.navigate("HomePage");
         }}
       >

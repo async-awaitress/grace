@@ -33,7 +33,7 @@ router.put("/updatePersonalChallenge/:challengeId", async (req, res, next) => {
     });
 
     // update totalPoints of user for completed task per day
-    const user = await User.findByPk("aaa");
+    const user = await User.findByPk(req.body.uid);
     await user.update({
       totalPoints: user.totalPoints + challenge.pointsPerDay,
     });
