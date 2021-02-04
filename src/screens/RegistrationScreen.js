@@ -36,6 +36,8 @@ export default function RegistrationScreen({ navigation }) {
       Alert.alert("Email field is required.");
     } else if (!password) {
       Alert.alert("Password field is required.");
+    } else if (password.length < 6){
+      Alert.alert("Password needs to be at least six characters long")
     } else if (!confirmPassword) {
       setPassword("");
       Alert.alert("Confirm password field is required.");
