@@ -5,7 +5,7 @@ import { Feather } from "@expo/vector-icons";
 
 class HomeIcon extends React.Component {
   render() {
-    const color = this.props.focused ? "#9FC78A" : "#8688BC";
+    const color = this.props.focused ? "#689451" : "#383db8";
     return (
       <View>
         <IconBadge
