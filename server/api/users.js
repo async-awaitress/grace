@@ -11,6 +11,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+
 router.get("/:userId", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { uid: req.params.userId } });
@@ -19,5 +20,15 @@ router.get("/:userId", async (req, res, next) => {
     next(error);
   }
 });
+
+
+router.post("/users", async (req, res, next) => {
+  try {
+    const newUser = await User.create(req.body)
+    res.json(newUser)
+  } catch (error) {
+
+  }
+})
 
 module.exports = router;
