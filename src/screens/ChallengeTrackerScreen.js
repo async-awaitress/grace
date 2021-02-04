@@ -37,10 +37,13 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     for(let i = 0; i < duration; i++) {
       let section = { key: "", y: 1 }
       let color = incompleteColor
+      if(i === currentDay && personalChallenge.dailyStatus || i < currentDay) {
+        color = completeColor
+      }
       challengeData.push(section)
       colors.push(color)
     }
-
+    console.log(personalChallenge.dailyStatus)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Challenge Tracker!!!!</Text>
