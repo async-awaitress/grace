@@ -13,6 +13,7 @@ import AuthScreen from "./src/screens/AuthScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
 import FriendChallengesScreen from "./src/screens/FriendChallengesScreen";
+// import LoadingScreen from "./src/screens/LoadingScreen"
 import ProfileScreen from "./src/screens/ProfileScreen";
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -26,6 +27,12 @@ import HomeIcon from "./src/screens/Icons/HomeIcon";
 const Stack = createStackNavigator();
 const ChallengeStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
+
+export default function App() {
+  if (!firebase.apps.length) {
+    console.log("Connected with Firebase");
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
 
 //nav between home, challenge list, details
 // const ChallengeScreenNav = () => (
@@ -129,15 +136,13 @@ const TabsScreenNav = () => (
   </Tabs.Navigator>
 );
 
-export default function App() {
-  if (!firebase.apps.length) {
-    console.log("Connected with Firebase");
-    firebase.initializeApp(apiKeys.firebaseConfig);
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
+        {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
+        {/* <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/> */}
+
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -156,7 +161,7 @@ export default function App() {
             headerShown: false,
           }}
         />
-
+        {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="GoogleSignIn" component={AuthScreen} />
         <Stack.Screen
@@ -231,8 +236,8 @@ export default function App() {
     //   </userContext.Provider>
     // </Provider>
   );
-}
 
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
