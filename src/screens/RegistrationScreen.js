@@ -47,8 +47,8 @@ export default function RegistrationScreen({ navigation }) {
       //   lastName,
       //   email,
       // });
-      // navigation.navigate("HomePage");
-      // emptyState();
+      () => navigation.navigate("HomePage");
+      emptyState();
     }
   };
 

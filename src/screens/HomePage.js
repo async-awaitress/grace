@@ -60,7 +60,10 @@ export default function HomePage({ navigation }) {
     // isFocused call useEffect whenever we view this component
   }, [isFocused]);
 
-  console.log(challenges[0].personalChallenge.dailyStatus)
+  if(challenges.length > 0) {
+    console.log(challenges[0].personalChallenge.dailyStatus)
+  }
+
 
   return (
     <View style={styles.container}>
