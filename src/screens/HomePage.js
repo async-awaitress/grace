@@ -15,11 +15,13 @@ import { loggingOut } from "../../API/methods";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
+import { icons } from "./Icons/icons";
 
 export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
-
+  // console.log("ICON HERE", icons[1]);
   let currentUserUID = firebase.auth().currentUser.uid;
+  // console.log("icons", icons);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -48,6 +50,9 @@ export default function HomePage({ navigation }) {
   const [challenges, setChallenges] = useState([]);
   const [user, setUser] = useState({});
   const [dailyCompletion, setDailyCompletion] = useState({});
+  const [badges, setBadges] = useState({});
+  // console.log("BADGES", badges);
+  // console.log("BADGES", badges);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -63,6 +68,15 @@ export default function HomePage({ navigation }) {
         });
         setDailyCompletion(dailyCompletionObjToSet);
         setChallenges(res.data);
+
+        ///ICONS TABLE
+        // let badgesTable = {};
+        // challenges.forEach((challenge) => {
+        //   badgesTable[
+        //     challenge.category
+        //   ] = `require("../../.${challenge.badge}")`;
+        // });
+        // setBadges({ ...badges, ...badgesTable });
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -102,6 +116,12 @@ export default function HomePage({ navigation }) {
       console.log("update request failed", error);
     }
   };
+  // const icon = require("../../assets/bottle-c.png");
+
+  // const getBadge = (badgeName) => {
+  // "../../" + badgeName + ".png";
+  // return require("../../" + badgeName + ".png");
+  // };
 
   return (
     <View style={styles.container}>
@@ -117,28 +137,38 @@ export default function HomePage({ navigation }) {
             <FlatList
               data={challenges}
               keyExtractor={(challenge) => challenge.id}
-              renderItem={({ item }) => (
-                <View style={styles.activeChallengeInfo}>
-                  <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text>
+              renderItem={({ item }) => {
+                // const badgePath = `../../${item.badge}.png`;
+                // console.log("badge path", `../../${item.badge}.png`);
+                const imgSource = () => require(`../../.${item.badges}.png`);
+                let imgSource = require(`../../assets/bottle-c.png`);
+                return (
+                  <View style={styles.activeChallengeInfo}>
+                    <Text style={styles.challengeText}>{item.title}</Text>
+                    <Text>{item.category}</Text>
+                    {/* <Image source={badges[challenge.category]} /> */}
+                    {/* <Image source={require("../.././assets/bottle-c.png")} /> */}
+                    {/* <Image source={getBadge(item.badge)} /> */}
+                    <Image source={icons[2]} />
 
-                  <TouchableOpacity
-                    disabled={dailyCompletion[item.id]}
-                    style={
-                      dailyCompletion[item.id]
-                        ? styles.completedButtonView
-                        : styles.completeButtonView
-                    }
-                    onPress={() => updateChallenge(currentUserUID, item.id)}
-                  >
-                    {dailyCompletion[item.id] ? (
-                      <Text>Done!</Text>
-                    ) : (
-                      <Text>Complete</Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              )}
+                    <TouchableOpacity
+                      disabled={dailyCompletion[item.id]}
+                      style={
+                        dailyCompletion[item.id]
+                          ? styles.completedButtonView
+                          : styles.completeButtonView
+                      }
+                      onPress={() => updateChallenge(currentUserUID, item.id)}
+                    >
+                      {dailyCompletion[item.id] ? (
+                        <Text>Done!</Text>
+                      ) : (
+                        <Text>Complete</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
             />
           </ScrollView>
         </View>
