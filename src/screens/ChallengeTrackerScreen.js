@@ -61,8 +61,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       />
       <View>
         <Image source={require(`../../assets/bag-c.png`)} />
-        <Image source={`../.${badge}.png`} />
-        <Image source={icon} />
+        {/* <Image source={`../.${badge}.png`} />
+        <Image source={icon} /> */}
       </View>
       <View style={styles.infoContainer}>
         <Text>{description}</Text>

@@ -106,6 +106,7 @@ export default function HomePage({ navigation }) {
       </View>
       <ScrollView>
         <View style={styles.activeChalengesContainer}>
+          <Text>Hello, {firstName}</Text>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
           <ScrollView horizontal={true}>
             <FlatList
