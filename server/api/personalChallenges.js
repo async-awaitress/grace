@@ -28,7 +28,7 @@ router.put("/updatePersonalChallenge/:challengeId", async (req, res, next) => {
     // update daily completion to true and add points for completion
     const challenge = await Challenge.findByPk(req.params.challengeId);
     await personalChallenge.update({
-      dailyStatus: !dailyStatus,
+      dailyStatus: true,
       totalPointsEarned: challenge.pointsPerDay,
     });
 
@@ -36,6 +36,27 @@ router.put("/updatePersonalChallenge/:challengeId", async (req, res, next) => {
     const user = await User.findByPk(req.body.uid);
     await user.update({
       totalPoints: user.totalPoints + challenge.pointsPerDay,
+    });
+
+    res.send(personalChallenge);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/resetPersonalChallenge/:challengeId", async (req, res, next) => {
+  try {
+    const personalChallenge = await PersonalChallenge.findOne({
+      where: {
+        challengeId: req.params.challengeId,
+        userUid: req.body.uid,
+      },
+    });
+
+    // update daily completion to true and add points for completion
+    const challenge = await Challenge.findByPk(req.params.challengeId);
+    await personalChallenge.update({
+      dailyStatus: false,
     });
 
     res.send(personalChallenge);

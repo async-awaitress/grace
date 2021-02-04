@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { VictoryPie } from "victory-native";
+import * as firebase from "firebase";
+import axios from "axios";
+import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
-  const [icon, setIcon] = useState('')
-
-
+  let currentUserUID = firebase.auth().currentUser.uid;
 
   const {
     id,
@@ -19,13 +20,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     personalChallenge,
   } = route.params;
 
-  useEffect(() => {
-    setIcon(`../.${badge}.png`)
-  }, []);
+  console.log(route.params);
 
-  console.log(route.params)
+  console.log("DAILY STATUS", personalChallenge.dailyStatus);
 
-  const now = new Date();
+  let now = new Date();
   const lastUpdated = new Date(personalChallenge.updatedAt);
   const created = new Date(personalChallenge.createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
@@ -45,6 +44,28 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     colors.push(color);
   }
   // console.log(personalChallenge.dailyStatus);
+
+  const updateChallenge = async (userId, challengeId) => {
+    now = new Date();
+    if (personalChallenge.dailyStatus && now - lastUpdated > 86400000 * 2) {
+      console.log("USER DIDN'T CHECK")
+    } else if (personalChallenge.dailyStatus && now - lastUpdated > 86400000) {
+      try {
+        const res = await axios.put(
+          `${EXPRESS_ROOT_PATH}/api/personalChallenges/resetPersonalChallenge/${challengeId}`,
+          { uid: userId }
+        );
+        // dailyStatus = "true"
+        const dailyStatus = res.data.dailyStatus;
+        console.log(dailyStatus);
+      } catch (error) {
+        console.log("update request failed", error);
+      }
+    } else if (personalChallenge.dailyStatus && now - lastUpdated < 86400000) {
+      console.log("Task Already Completed Today!");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -67,6 +88,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       <View style={styles.infoContainer}>
         <Text>{description}</Text>
       </View>
+      <View>
+        <TouchableOpacity onPress={() => updateChallenge(currentUserUID, id)}>
+          <Text>RESET</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -80,12 +106,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems:'center',
+    alignItems: "center",
   },
   infoContainer: {
     borderWidth: 1,
-    width: '80%'
-  }
+    width: "80%",
+  },
 });
 
 export default ChallengeTrackerScreen;
