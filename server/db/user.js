@@ -24,11 +24,11 @@ const User = db.define("user", {
   },
   totalPoints: {
     type: Sequelize.INTEGER,
-    default: 0,
+    defaultValue: 0,
   },
   status: {
     type: Sequelize.ENUM("beginner", "intermediate", "master"),
-    default: "beginner",
+    defaultValue: "beginner",
   },
 });
 
