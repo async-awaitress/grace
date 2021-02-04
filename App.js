@@ -171,6 +171,10 @@ export default function App() {
           name="Challenge Details"
           component={ChallengeDetailsScreen}
         />
+        <Stack.Screen
+          name="Challenge Tracker"
+          component={ChallengeTrackerScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
 
