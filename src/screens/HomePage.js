@@ -19,9 +19,7 @@ import { icons } from "./Icons/icons";
 
 export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
-  // console.log("ICON HERE", icons[1]);
   let currentUserUID = firebase.auth().currentUser.uid;
-  // console.log("icons", icons);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -50,9 +48,6 @@ export default function HomePage({ navigation }) {
   const [challenges, setChallenges] = useState([]);
   const [user, setUser] = useState({});
   const [dailyCompletion, setDailyCompletion] = useState({});
-  const [badges, setBadges] = useState({});
-  // console.log("BADGES", badges);
-  // console.log("BADGES", badges);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -68,15 +63,6 @@ export default function HomePage({ navigation }) {
         });
         setDailyCompletion(dailyCompletionObjToSet);
         setChallenges(res.data);
-
-        ///ICONS TABLE
-        // let badgesTable = {};
-        // challenges.forEach((challenge) => {
-        //   badgesTable[
-        //     challenge.category
-        //   ] = `require("../../.${challenge.badge}")`;
-        // });
-        // setBadges({ ...badges, ...badgesTable });
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -116,13 +102,6 @@ export default function HomePage({ navigation }) {
       console.log("update request failed", error);
     }
   };
-  // const icon = require("../../assets/bottle-c.png");
-
-  // const getBadge = (badgeName) => {
-  // "../../" + badgeName + ".png";
-  // return require("../../" + badgeName + ".png");
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -132,43 +111,38 @@ export default function HomePage({ navigation }) {
         <View style={styles.activeChalengesContainer}>
           <Text>Hello, {firstName}</Text>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
-          <ScrollView horizontal={true}>
+          {/* <ScrollView horizontal={true}> */}
+          <ScrollView horizontal={false}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
               keyExtractor={(challenge) => challenge.id}
-              renderItem={({ item }) => {
-                // const badgePath = `../../${item.badge}.png`;
-                // console.log("badge path", `../../${item.badge}.png`);
-                const imgSource = () => require(`../../.${item.badges}.png`);
-                let imgSource = require(`../../assets/bottle-c.png`);
-                return (
-                  <View style={styles.activeChallengeInfo}>
-                    <Text style={styles.challengeText}>{item.title}</Text>
-                    <Text>{item.category}</Text>
-                    {/* <Image source={badges[challenge.category]} /> */}
-                    {/* <Image source={require("../.././assets/bottle-c.png")} /> */}
-                    {/* <Image source={getBadge(item.badge)} /> */}
-                    <Image source={icons[2]} />
+              renderItem={({ item }) => (
+                <View style={styles.activeChallengeInfo}>
+                  <Text style={styles.challengeText}>{item.title}</Text>
+                  <Text>{item.category}</Text>
+                  <Image
+                    source={icons[item.badge]}
+                    style={{ width: 70, height: 70 }}
+                  />
 
-                    <TouchableOpacity
-                      disabled={dailyCompletion[item.id]}
-                      style={
-                        dailyCompletion[item.id]
-                          ? styles.completedButtonView
-                          : styles.completeButtonView
-                      }
-                      onPress={() => updateChallenge(currentUserUID, item.id)}
-                    >
-                      {dailyCompletion[item.id] ? (
-                        <Text>Done!</Text>
-                      ) : (
-                        <Text>Complete</Text>
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
+                  <TouchableOpacity
+                    disabled={dailyCompletion[item.id]}
+                    style={
+                      dailyCompletion[item.id]
+                        ? styles.completedButtonView
+                        : styles.completeButtonView
+                    }
+                    onPress={() => updateChallenge(currentUserUID, item.id)}
+                  >
+                    {dailyCompletion[item.id] ? (
+                      <Text>Done!</Text>
+                    ) : (
+                      <Text>Complete</Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              )}
             />
           </ScrollView>
         </View>
