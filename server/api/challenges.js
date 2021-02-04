@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Challenge, User } = require("../db");
+const { Challenge, User, PersonalChallenge } = require("../db");
 
 router.get("/", async (req, res, next) => {
   try {

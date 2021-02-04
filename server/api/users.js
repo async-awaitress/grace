@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { User } = require("../db");
 
-router.get("/users", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const allUsers = await User.findAll();
     // const sortedProjects = allProjects.sort((a, b) => a.id - b.id);
@@ -11,6 +11,17 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
+
+router.get("/:userId", async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { uid: req.params.userId } });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 router.post("/users", async (req, res, next) => {
   try {
     const newUser = await User.create(req.body)
@@ -19,4 +30,5 @@ router.post("/users", async (req, res, next) => {
 
   }
 })
+
 module.exports = router;

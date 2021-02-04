@@ -46,19 +46,58 @@ export default function HomePage({ navigation }) {
 
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
+  const [user, setUser] = useState({});
+  const [dailyCompletion, setDailyCompletion] = useState({});
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchChallenges() {
       try {
         const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges/aaa`);
+        const challenges = res.data;
+        const dailyCompletionObjToSet = {};
+        challenges.forEach((challenge) => {
+          dailyCompletionObjToSet[challenge.id] =
+            challenge.personalChallenge.dailyStatus;
+        });
+        setDailyCompletion(dailyCompletionObjToSet);
         setChallenges(res.data);
       } catch (error) {
         console.log("get request failed", error);
       }
     }
-    fetchData();
-    // isFocused call useEffect whenever we view this component
+    fetchChallenges();
   }, [isFocused]);
+
+  const fetchPoints = async () => {
+    try {
+      const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/aaa`);
+      setUser(res.data);
+    } catch (error) {
+      console.log("get request failed", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPoints();
+  }, []);
+
+  const updateChallenge = async (userId, challengeId) => {
+    try {
+      const res = await axios.put(
+        `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+        { uid: userId }
+      );
+      // dailyStatus = "true"
+      const dailyStatus = res.data.dailyStatus;
+      const dailyCompletionObjToSet = { [challengeId]: dailyStatus };
+
+      // spreading previous state and current state
+      setDailyCompletion({ ...dailyCompletion, ...dailyCompletionObjToSet });
+      fetchPoints();
+    } catch (error) {
+      console.log("update request failed", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -73,13 +112,26 @@ export default function HomePage({ navigation }) {
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
-              keyExtractor={(challenge) => challenge.challengeId}
+              keyExtractor={(challenge) => challenge.id}
               renderItem={({ item }) => (
                 <View style={styles.activeChallengeInfo}>
                   <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text>
-                  <TouchableOpacity style={styles.completeButtonView}>
-                    <Text>Complete</Text>
+
+                  <TouchableOpacity
+                    disabled={dailyCompletion[item.id]}
+                    style={
+                      dailyCompletion[item.id]
+                        ? styles.completedButtonView
+                        : styles.completeButtonView
+                    }
+                    onPress={() => updateChallenge("aaa", item.id)}
+                  >
+                    {dailyCompletion[item.id] ? (
+                      <Text>Done!</Text>
+                    ) : (
+                      <Text>Complete</Text>
+                    )}
                   </TouchableOpacity>
                 </View>
               )}
@@ -109,6 +161,11 @@ export default function HomePage({ navigation }) {
 
         <StatusBar style="auto" />
       </ScrollView>
+      <View>
+        <Text style={{ fontSize: 60, paddingBottom: 30 }}>
+          {user.totalPoints}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -120,6 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 100,
   },
   header: {
     backgroundColor: "green",
@@ -155,6 +213,10 @@ const styles = StyleSheet.create({
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
+    borderLeftWidth: 1,
+  },
+  completedButtonView: {
+    backgroundColor: "orange",
     borderLeftWidth: 1,
   },
 });
