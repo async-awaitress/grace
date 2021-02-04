@@ -15,10 +15,10 @@ import { loggingOut } from "../../API/methods";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
+import { icons } from "./Icons/icons";
 
 export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
-
   let currentUserUID = firebase.auth().currentUser.uid;
 
   useEffect(() => {
@@ -102,7 +102,6 @@ export default function HomePage({ navigation }) {
       console.log("update request failed", error);
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -112,7 +111,8 @@ export default function HomePage({ navigation }) {
         <View style={styles.activeChalengesContainer}>
           <Text>Hello, {firstName}</Text>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
-          <ScrollView horizontal={true}>
+          {/* <ScrollView horizontal={true}> */}
+          <ScrollView horizontal={false}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
@@ -121,6 +121,10 @@ export default function HomePage({ navigation }) {
                 <View style={styles.activeChallengeInfo}>
                   <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text>
+                  <Image
+                    source={icons[item.badge]}
+                    style={{ width: 70, height: 70 }}
+                  />
 
                   <TouchableOpacity
                     disabled={dailyCompletion[item.id]}
