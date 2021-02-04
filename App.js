@@ -1,72 +1,70 @@
 import "react-native-gesture-handler";
-import ChallengeDetailsScreen from "./src/screens/ChallengeDetailsScreen";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase";
 import apiKeys from "./config/keys";
-import LoginScreen from "./src/screens/LoginScreen";
-import RegistrationScreen from "./src/screens/RegistrationScreen";
-import HomePage from "./src/screens/HomePage";
-import AuthScreen from "./src/screens/AuthScreen";
-import HomeScreen from "./src/screens/HomeScreen";
-import PersonalChallengesScreen from "./src/screens/PersonalChallengesScreen";
-import FriendChallengesScreen from "./src/screens/FriendChallengesScreen";
-// import LoadingScreen from "./src/screens/LoadingScreen"
-import ProfileScreen from "./src/screens/ProfileScreen";
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Friends from "./src/screens/Friends";
 import { Provider } from "react-redux";
-import ChallengeTrackerScreen from "./src/screens/ChallengeTrackerScreen";
-import FriendsIcon from "./src/screens/Icons/FriendsIcon";
-import UserIcon from "./src/screens/Icons/UserIcon";
-import HomeIcon from "./src/screens/Icons/HomeIcon";
+import {
+  FriendsIcon,
+  HomeIcon,
+  UserIcon,
+  AuthScreen,
+  ChallengeDetailsScreen,
+  // ChallengeTrackerScreen,
+  FriendChallengesScreen,
+  Friends,
+  HomePage,
+  // LoadingScreen,
+  LoginScreen,
+  PersonalChallengesScreen,
+  ProfileScreen,
+  RegistrationScreen,
+} from "./src/screens";
 
 const Stack = createStackNavigator();
 const ChallengeStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-export default function App() {
-  if (!firebase.apps.length) {
-    console.log("Connected with Firebase");
-    firebase.initializeApp(apiKeys.firebaseConfig);
-  }
-
 //nav between home, challenge list, details
-// const ChallengeScreenNav = () => (
-//   <ChallengeStack.Navigator
-//     initialRouteName="Home"
-//     screenOptions={{
-//       title: "",
-//       headerBackAllowFontScaling: true,
-//       headerBackTitleStyle: {
-//         fontSize: 16,
-//       },
-//       headerTransparent: true,
-//       headerTintColor: "white",
-//     }}
-//   >
-//     <ChallengeStack.Screen
-//       name="Home"
-//       component={HomePage}
-//       options={{
-//         title: "",
-//       }}
-//     />
-//     <ChallengeStack.Screen
-//       name="Browse Challenges"
-//       component={PersonalChallengesScreen}
-//       options={{ title: "" }}
-//     />
-//     <ChallengeStack.Screen
-//       name="Challenge Details"
-//       component={ChallengeDetailsScreen}
-//       options={{ title: "" }}
-//     />
-//   </ChallengeStack.Navigator>
-// );
+
+const ChallengeScreenNav = () => (
+  <ChallengeStack.Navigator
+    initialRouteName="Home"
+    screenOptions={{
+      title: "",
+      headerBackAllowFontScaling: true,
+      headerBackTitleStyle: {
+        fontSize: 16,
+      },
+      headerTransparent: true,
+      headerTintColor: "white",
+    }}
+  >
+    <ChallengeStack.Screen
+      name="Home"
+      component={HomePage}
+      options={{
+        title: "",
+      }}
+    />
+    <ChallengeStack.Screen
+      name="Browse Challenges"
+      component={PersonalChallengesScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
+      name="Challenge Details"
+      component={ChallengeDetailsScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+  </ChallengeStack.Navigator>
+);
 
 //bottom nav bar
 const TabsScreenNav = () => (
@@ -81,22 +79,22 @@ const TabsScreenNav = () => (
         } else if (route.name === "Friends") {
           iconName = "users";
         }
-        color = focused ? "#9FC78A" : "#8688BC";
+        color = focused ? "#689451" : "#383db8";
         return <Feather name={iconName} size={20} color={color} />;
       },
     })}
     tabBarOptions={{
-      activeTintColor: "#9FC78A",
-      inactiveTintColor: "#8688BC",
+      activeTintColor: "#689451",
+      inactiveTintColor: "#383db8",
     }}
   >
     {/* <Tabs.Screen name="Challenges" component={ChallengeScreenNav} /> */}
     <Tabs.Screen
       name="Home"
-      component={HomePage}
+      component={ChallengeScreenNav}
       options={{
         tabBarIcon: ({ focused, color }) => {
-          color = focused ? "#9FC78A" : "#8688BC";
+          color = focused ? "#689451" : "#383db8";
           return (
             <>
               <HomeIcon focused={focused} />
@@ -110,7 +108,7 @@ const TabsScreenNav = () => (
       component={Friends}
       options={{
         tabBarIcon: ({ focused, color }) => {
-          color = focused ? "#9FC78A" : "#8688BC";
+          color = focused ? "#689451" : "#383db8";
           return (
             <>
               <FriendsIcon focused={focused} />
@@ -124,7 +122,7 @@ const TabsScreenNav = () => (
       component={ProfileScreen}
       options={{
         tabBarIcon: ({ focused, color }) => {
-          color = focused ? "#9FC78A" : "#8688BC";
+          color = focused ? "#689451" : "#383db8";
           return (
             <>
               <UserIcon focused={focused} />
@@ -136,11 +134,15 @@ const TabsScreenNav = () => (
   </Tabs.Navigator>
 );
 
+export default function App() {
+  if (!firebase.apps.length) {
+    console.log("Connected with Firebase");
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
-        {/* <Stack.Screen name="Challenge List" component={ChallengeListScreen} /> */}
         {/* <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/> */}
 
         <Stack.Screen
@@ -161,8 +163,7 @@ const TabsScreenNav = () => (
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+
         <Stack.Screen name="GoogleSignIn" component={AuthScreen} />
         <Stack.Screen
           name="Personal Challenges"
@@ -236,7 +237,6 @@ const TabsScreenNav = () => (
     //   </userContext.Provider>
     // </Provider>
   );
-
 }
 const styles = StyleSheet.create({
   container: {
