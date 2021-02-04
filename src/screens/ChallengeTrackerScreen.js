@@ -20,8 +20,10 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const now = new Date()
     const lastUpdated = new Date(personalChallenge.updatedAt)
     const created = new Date(personalChallenge.createdAt);
+    const currentDay =  Math.floor((now - created) / 86400000)
     console.log(now)
     console.log(lastUpdated)
+    console.log("current day",currentDay)
 
     console.log(now - lastUpdated)
     console.log(now - created);
@@ -30,6 +32,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const colors = []
     const completeColor = "#ff924c"
     const incompleteColor = "#999"
+
 
     for(let i = 0; i < duration; i++) {
       let section = { key: "", y: 1 }
@@ -49,11 +52,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         width={200}
         height={200}
         cornerRadius={10}
-        data={[
-          { key: "", y: 1 },
-          { key: "", y: 1 },
-        ]}
-        colorScale={["#ff924c", "#999"]}
+        data={challengeData}
+        colorScale={colors}
       />
     </View>
   );
