@@ -49,6 +49,17 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     now = new Date();
     if (personalChallenge.dailyStatus && now - lastUpdated > 86400000 * 2) {
       console.log("USER DIDN'T CHECK")
+      try {
+        const res = await axios.put(
+          `${EXPRESS_ROOT_PATH}/api/personalChallenges/failPersonalChallenge/${challengeId}`,
+          { uid: userId }
+        );
+        // dailyStatus = "true"
+        const completionStatus = res.data.completionStatus;
+        console.log(completionStatus);
+      } catch (error) {
+        console.log("update request failed", error);
+      }
     } else if (personalChallenge.dailyStatus && now - lastUpdated > 86400000) {
       try {
         const res = await axios.put(

@@ -65,4 +65,46 @@ router.put("/resetPersonalChallenge/:challengeId", async (req, res, next) => {
   }
 });
 
+router.put("/failPersonalChallenge/:challengeId", async (req, res, next) => {
+  try {
+    const personalChallenge = await PersonalChallenge.findOne({
+      where: {
+        challengeId: req.params.challengeId,
+        userUid: req.body.uid,
+      },
+    });
+
+    // update daily completion to true and add points for completion
+    const challenge = await Challenge.findByPk(req.params.challengeId);
+    await personalChallenge.update({
+      completionStatus: 'failed',
+    });
+
+    res.send(personalChallenge);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/completePersonalChallenge/:challengeId", async (req, res, next) => {
+  try {
+    const personalChallenge = await PersonalChallenge.findOne({
+      where: {
+        challengeId: req.params.challengeId,
+        userUid: req.body.uid,
+      },
+    });
+
+    // update daily completion to true and add points for completion
+    const challenge = await Challenge.findByPk(req.params.challengeId);
+    await personalChallenge.update({
+      completionStatus: "completed",
+    });
+
+    res.send(personalChallenge);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
