@@ -106,13 +106,12 @@ export default function HomePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Home (placeholder)</Text>
+        <Text style={styles.headerText}>Welcome, {firstName}</Text>
       </View>
       <ScrollView>
-        <View style={styles.activeChalengesContainer}>
-          <Text>Hello, {firstName}</Text>
+        <View style={styles.challengesContainer}>
           <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
-          <ScrollView horizontal={true}>
+          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
               data={challenges}
@@ -176,34 +175,62 @@ export default function HomePage({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
-    marginVertical: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffedd6",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 100,
+    justifyContent: "space-around",
   },
   header: {
-    backgroundColor: "green",
-    padding: 10,
+    backgroundColor: "#ff924c",
+    padding: 40,
     width: "100%",
   },
   headerText: {
-    fontSize: 40,
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
-  activeChallengesContainer: {
+  activeChallengeContainer: {
+    backgroundColor: "green",
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "column",
+    alignContent: "space-between",
+    width: 400,
+    height: 300,
+  },
+  challengesContainer: {
     flexDirection: "column",
     flex: 1,
+    backgroundColor: "white",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 30,
+    fontSize: 40,
+    fontFamily: "Bradley Hand",
+    margin: 5,
   },
   activeChallengeInfo: {
-    flexDirection: "row",
+    flexDirection: "column",
     margin: 5,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#ffedd6",
     backgroundColor: "lightgray",
-    justifyContent: "space-between",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "space-between",
   },
   challengeText: {
     fontSize: 20,
@@ -213,14 +240,21 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 20,
     backgroundColor: "lightgreen",
-    borderWidth: 1,
+    borderWidth: 2,
+    borderRadius: 10,
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
-    borderLeftWidth: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
   },
   completedButtonView: {
     backgroundColor: "orange",
-    borderLeftWidth: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
   },
 });
