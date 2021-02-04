@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email) {
       Alert.alert("Email field is required.");
     }
@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
       Alert.alert("Password field is required.");
     }
 
-    signIn(email, password);
+    await signIn(email, password);
     setEmail("");
     setPassword("");
     navigation.navigate("HomePage");

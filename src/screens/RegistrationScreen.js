@@ -26,7 +26,7 @@ export default function RegistrationScreen({ navigation }) {
     setConfirmPassword("");
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!firstName) {
       Alert.alert("First name is required");
     } else if (!email) {
@@ -39,15 +39,15 @@ export default function RegistrationScreen({ navigation }) {
     } else if (password !== confirmPassword) {
       Alert.alert("Password does not match!");
     } else {
-      registration(email, password, lastName, firstName);
+      await registration(email, password, lastName, firstName);
       // let currentUserUID = firebase.auth().currentUser.uid;
-      // axios.post("/api/users", {
-      //   userId: currentUserUID,
+      // await axios.post("/api/users", {
+      //   uid: currentUserUID,
       //   firstName,
       //   lastName,
       //   email,
       // });
-      // navigation.navigate("HomePage");
+      navigation.navigate("HomePage");
       // emptyState();
     }
   };
