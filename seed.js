@@ -38,7 +38,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/bag-c",
+    // badge: "./assets/bag-c",
+    badge: "bag",
     description: "Every time you go shopping, bring a reusable tote or bag.",
     tips:
       "A simple change of bringing your groceries and goods home in reusable grocery bags can help the planet is so many ways. Plastic bags are created with non-renewable resources and are likely to end up in as litter or in landfill forever. Although paper bags are easier to recycle, reducing your use of them can also save countless trees. When a reusable bag is made from materials that are quickly renewed like cotton or bamboo, the environment reaps the benefits and the bag can be reused many times over.",
@@ -49,7 +50,8 @@ const challenges = [
     duration: 5,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/bottle-c",
+    // badge: "./assets/bottle-c",
+    badge: "bottle",
     description:
       "Don't use any kind of single use plastics such as plastic bags, take out containers, cups, lids, bottles, straws or utensils.",
     tips:
@@ -62,7 +64,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/light-c",
+    // badge: "./assets/light-c",
+    badge: "light",
     description:
       "Everytime you leave a room, turn off the lights! Don't leave any stray lights on.",
     tips:
@@ -74,7 +77,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/shower-c",
+    // badge: "./assets/shower-c",
+    badge: "shower",
     description: "Take shower for less than 5 minutes each day.",
     tips:
       "According to a 2016 water study, the average shower lasts for 7.8 minutes and uses 15.8 gallons per shower. Taking shorter showers can save many gallons of water minimize your carbon footprint by reducing the amount of energy needed to heat your water tank. So set a timer and cut your shower time down!",
@@ -85,7 +89,8 @@ const challenges = [
     duration: 14,
     pointsPerDay: 2,
     type: "friend",
-    badge: "./assets/shoes-c",
+    // badge: "./assets/shoes-c",
+    badge: "shoes",
     description:
       "Instead of taking a car - walk, bike or take public transportation.",
     tips:
@@ -97,7 +102,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 1,
     type: "friend",
-    badge: "./assets/veg-c",
+    // badge: "./assets/veg-c",
+    badge: "veg",
     description: "Make only meatless meals.",
     tips:
       "Plants require much less water to produce than their animal counterparts and animal waste contributes to pollution in the waterways. Animal agriculture creates methane, a greeenhouse gas that increases global warming. So by switching to a plant based diet, you can help save fresh water and reduce greenhouse gasses! ",
@@ -108,7 +114,8 @@ const challenges = [
     duration: 10,
     pointsPerDay: 1,
     type: "personal",
-    badge: "./assets/plug-c",
+    // badge: "./assets/plug-c",
+    badge: "plug",
     description: "Unplug your computer and other large electronics at night.",
     tips:
       "A large majority of the energy that powers our homes comes from fossil fuels, so unplugging them reduces your energy demand and carbon emissions. Did you know that your devices consume electricity when they are plugged in but not in use? By unplugging those devices, you can your energy use! Try bundling your devices on a power strip to unplug multiple devices at once!",
@@ -119,7 +126,8 @@ const challenges = [
     duration: 5,
     pointsPerDay: 2,
     type: "friend",
-    badge: "./assets/faucet-c",
+    // badge: "./assets/faucet-c",
+    badge: "faucet",
     description: "Turn off the faucet while brushing your teeth.",
     tips:
       "According to the EPA, just by turning off the tap while you brush your teeth in the morning and before bedtime, you can save up to 8 gallons of water! That adds up to more than 200 gallons a month.",
@@ -130,7 +138,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/mug-c",
+    // badge: "./assets/mug-c",
+    badge: "mug",
     description:
       "Bring your own resuable cup to your favorite cafe or make your own coffee or tea at home.",
     tips:
@@ -142,7 +151,8 @@ const challenges = [
     duration: 5,
     pointsPerDay: 3,
     type: "friend",
-    badge: "./assets/meal-c",
+    // badge: "./assets/meal-c",
+    badge: "meal",
     description:
       "Cook all your meals at home to reduce your use of takeout containters.",
     tips:
@@ -154,7 +164,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/apple-c",
+    // badge: "./assets/apple-c",
+    badge: "apple",
     description:
       "Compost all your leftover food items such as non-greasy scraps, peels, tea bags, coffee grounds, eggshells and non-food items such egg cartons, newspapers, dried leaves, and old flowers. Leave out the dairy, oil, bones and meat from your compost bin. You can use any kind of container to hold your compost like a milk carton, bin or a paper/plastic bag in your freezer. At the end of the challenge, drop off the compost at a local collection area.",
     tips:
@@ -166,7 +177,8 @@ const challenges = [
     duration: 7,
     pointsPerDay: 2,
     type: "personal",
-    badge: "./assets/carpool-c",
+    // badge: "./assets/carpool-c",
+    badge: "carpool",
     description:
       "If you must take a car, carpool! Everyone knows that pool parties are better anyways.",
     tips:
