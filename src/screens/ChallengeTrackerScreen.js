@@ -114,15 +114,25 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.reset}>
         <TouchableOpacity onPress={() => updateChallenge(currentUserUID, id)}>
-          <Text>RESET</Text>
+          <Text style={styles.resetButton}>RESET(test)</Text>
         </TouchableOpacity>
       </View>
       <View>
-        <Modal visible={modalOpen}>
+        <Modal visible={modalOpen} animationType="slide">
           <View style={styles.tips}>
             <Text style={styles.popupText}>{tips}</Text>
+            <View style={styles.close}>
+              <TouchableOpacity onPress={() => setModalOpen(false)}>
+                <Text style={styles.button}>Close</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
+        <View style={styles.toggleTips}>
+          <TouchableOpacity onPress={() => setModalOpen(true)}>
+            <Text style={styles.button}>Tips?</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -138,31 +148,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    position: "relative"
+    position: "relative",
+    backgroundColor: "#ffedd6",
   },
   infoContainer: {
     borderWidth: 1,
     width: "80%",
-    top: 200
+    top: 200,
   },
   reset: {
-    top: 250
+    top: 300,
+    backgroundColor: "red",
+    borderRadius: 5,
+    borderWidth: 1,
   },
   descriptionHeader: {
-    top: 175
+    top: 175,
   },
   descriptionHeaderText: {
-    fontSize: 25
+    fontSize: 25,
   },
   tips: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex:1,
-    margin: 50
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    margin: 50,
   },
   popupText: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
+  toggleTips: {
+    top: 200,
+    backgroundColor: "#ff924c",
+    borderRadius: 5,
+    padding: 5,
+    borderWidth: 1,
+  },
+  close: {
+    backgroundColor: "#ff924c",
+    borderRadius: 5,
+    padding: 5,
+    borderWidth: 1,
+  },
+  button: {
+    fontSize: 17,
+  },
+  resetButton: {
+    fontSize: 50,
+    fontWeight: 'bold'
+  },
 });
 
 export default ChallengeTrackerScreen;
