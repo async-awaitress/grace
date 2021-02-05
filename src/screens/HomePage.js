@@ -102,6 +102,7 @@ export default function HomePage({ navigation }) {
       console.log("update request failed", error);
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -109,49 +110,69 @@ export default function HomePage({ navigation }) {
         <Text style={styles.headerText}>{firstName}!</Text>
       </View>
       <ScrollView>
-        <Text style={styles.activeChallengesHeader}>
-          Your Active Challenges
-        </Text>
+        {challenges.length === 0 ? (
+          <Text style={styles.activeChallengesHeader}>
+            You have no active challenges
+          </Text>
+        ) : (
+          <Text style={styles.activeChallengesHeader}>
+            Your Active Challenges
+          </Text>
+        )}
         <View style={styles.challengesContainer}>
-          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
-            {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
-            <FlatList
-              horizontal
-              data={challenges}
-              keyExtractor={(challenge) => challenge.id}
-              renderItem={({ item }) => (
-                <View style={styles.activeChallengeInfo}>
-                  {/* <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text> */}
-                  <Image
-                    source={icons[item.badge]}
-                    style={{ width: 70, height: 70 }}
-                  />
-
-                  <TouchableOpacity
-                    disabled={dailyCompletion[item.id]}
-                    style={
-                      dailyCompletion[item.id]
-                        ? styles.completedButtonView
-                        : styles.completeButtonView
-                    }
-                    onPress={() => updateChallenge(currentUserUID, item.id)}
-                  >
-                    {dailyCompletion[item.id] ? (
-                      <Text>Done!</Text>
-                    ) : (
-                      <Text>Complete</Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              )}
+          {challenges.length === 0 ? (
+            <Image
+              style={{ height: 80, width: 400 }}
+              source={{
+                uri:
+                  "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
+              }}
             />
-          </ScrollView>
+          ) : (
+            <ScrollView
+              style={styles.activeChallengeContainer}
+              horizontal={true}
+            >
+              <FlatList
+                horizontal
+                data={challenges}
+                keyExtractor={(challenge) => challenge.id}
+                renderItem={({ item }) => (
+                  <View style={styles.activeChallengeInfo}>
+                    {/* <Text style={styles.challengeText}>{item.title}</Text>
+                  <Text>{item.category}</Text> */}
+                    <Image
+                      source={icons[item.badge]}
+                      style={{ width: 70, height: 70 }}
+                    />
+
+                    <TouchableOpacity
+                      disabled={dailyCompletion[item.id]}
+                      style={
+                        dailyCompletion[item.id]
+                          ? styles.completedButtonView
+                          : styles.completeButtonView
+                      }
+                      onPress={() => updateChallenge(currentUserUID, item.id)}
+                    >
+                      {dailyCompletion[item.id] ? (
+                        <Text>Done!</Text>
+                      ) : (
+                        <Text>Complete</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </ScrollView>
+          )}
         </View>
         <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
         <View style={styles.linkView}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Personal Challenges")}
+            onPress={() =>
+              navigation.navigate("Personal Challenges", { challenges })
+            }
           >
             <Text style={styles.linkViewText}>
               View All Personal Challenges
@@ -173,24 +194,29 @@ export default function HomePage({ navigation }) {
         </View>
 
         <StatusBar style="auto" />
+        <View>
+          <Text
+            style={{
+              fontSize: 28,
+              paddingBottom: 5,
+              fontFamily: "Bradley Hand",
+              textAlign: "center",
+            }}
+          >
+            Your Total Points
+          </Text>
+          <Text
+            style={{
+              fontSize: 70,
+              paddingBottom: 30,
+              textAlign: "center",
+              fontFamily: "Bradley Hand",
+            }}
+          >
+            {user.totalPoints}
+          </Text>
+        </View>
       </ScrollView>
-      <View>
-        <Text
-          style={{ fontSize: 28, paddingBottom: 5, fontFamily: "Bradley Hand" }}
-        >
-          Your Total Points
-        </Text>
-        <Text
-          style={{
-            fontSize: 70,
-            paddingBottom: 30,
-            textAlign: "center",
-            fontFamily: "Bradley Hand",
-          }}
-        >
-          {user.totalPoints}
-        </Text>
-      </View>
     </View>
   );
 }
@@ -226,6 +252,7 @@ const styles = StyleSheet.create({
     width: 400,
     height: 190,
   },
+
   challengesContainer: {
     backgroundColor: "#f9f1f1",
     flexDirection: "column",
@@ -266,6 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f1f1",
     borderWidth: 2,
     borderRadius: 50,
+    borderColor: "green",
   },
   linkViewText: {
     fontSize: 25,
