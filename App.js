@@ -52,8 +52,14 @@ const ChallengeScreenNav = () => (
       }}
     />
     <ChallengeStack.Screen
-      name="Browse Challenges"
+      name="Personal Challenges"
       component={PersonalChallengesScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
+      name="Friend Challenges"
+      component={FriendChallengesScreen}
       options={{ title: "" }}
       backBehavior="order"
     />
@@ -163,7 +169,13 @@ export default function App() {
             headerShown: false,
           }}
         />
-
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="GoogleSignIn" component={AuthScreen} />
         <Stack.Screen
           name="Personal Challenges"
