@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import axios from "axios";
@@ -119,8 +120,24 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
           <TouchableOpacity
             onPress={async () => {
               // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
-              await addPersonalChallengeHandler(currentUserUID, id);
-              navigation.navigate("HomePage");
+              if (type === "personal") {
+                await addPersonalChallengeHandler(currentUserUID, id);
+              }
+              // else {
+              //   await addFriendChallengeHandler(currentUserUID, id)
+              // }
+              Alert.alert(
+                "Challenge Accepted!",
+                type === "personal"
+                  ? "You Got This!"
+                  : "Choose Your Friend On The Next Page",
+                [
+                  {
+                    text: "ok",
+                    onPress: () => navigation.navigate("Home"),
+                  },
+                ]
+              );
             }}
           >
             <View
@@ -149,7 +166,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#ff924c",
-    paddingTop: 35,
+    paddingTop: 50,
     padding: 5,
     width: "100%",
     textAlign: "center",
