@@ -28,26 +28,34 @@ const PersonalChallengesScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <FlatList
-          data={challenges.filter((challenge) => challenge.type === "personal")}
-          keyExtractor={(challenge) => challenge.id}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Challenge Details", item)}
-              >
-                <View style={styles.list}>
-                  <Text style={styles.challengeTitle}>{item.title}</Text>
-                  <Image source={icons[item.badge]} style={styles.badge} />
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        ></FlatList>
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Personal</Text>
+        <Text style={styles.headerText}>Challenges</Text>
       </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
+          <FlatList
+            data={challenges.filter(
+              (challenge) => challenge.type === "personal"
+            )}
+            keyExtractor={(challenge) => challenge.id}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Challenge Details", item)}
+                >
+                  <View style={styles.list}>
+                    <Text style={styles.challengeTitle}>{item.title}</Text>
+                    <Image source={icons[item.badge]} style={styles.badge} />
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          ></FlatList>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -73,6 +81,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 20,
     alignItems: "center",
+  },
+  header: {
+    backgroundColor: "#ff924c",
+    padding: 30,
+    width: "100%",
+    textAlign: "center",
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
   challengeTitle: {
     fontSize: 25,
