@@ -105,10 +105,13 @@ export default function HomePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Welcome, {firstName}</Text>
+        <Text style={styles.headerText}>Welcome,</Text>
+        <Text style={styles.headerText}>{firstName}!</Text>
       </View>
       <ScrollView>
-        <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
+        <Text style={styles.activeChallengesHeader}>
+          Your Active Challenges
+        </Text>
         <View style={styles.challengesContainer}>
           <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
@@ -145,6 +148,7 @@ export default function HomePage({ navigation }) {
             />
           </ScrollView>
         </View>
+        <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
         <View style={styles.linkView}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Personal Challenges")}
@@ -202,7 +206,8 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#ff924c",
-    padding: 40,
+    paddingTop: 40,
+    padding: 15,
     width: "100%",
     textAlign: "center",
   },
@@ -216,7 +221,6 @@ const styles = StyleSheet.create({
   },
   activeChallengeContainer: {
     display: "flex",
-    // flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
@@ -233,9 +237,10 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 40,
+    fontSize: 35,
     fontFamily: "Bradley Hand",
-    margin: 5,
+    marginVertical: 20,
+    textAlign: "center",
   },
   activeChallengeInfo: {
     flexDirection: "column",
@@ -256,8 +261,8 @@ const styles = StyleSheet.create({
   linkView: {
     alignItems: "center",
     padding: 10,
-    marginVertical: 20,
-    marginTop: 50,
+    marginVertical: 10,
+    marginBottom: 20,
     backgroundColor: "#f9f1f1",
     borderWidth: 2,
     borderRadius: 50,
