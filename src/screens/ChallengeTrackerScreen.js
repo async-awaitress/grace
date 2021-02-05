@@ -31,17 +31,17 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     tips,
   } = route.params;
 
-  console.log(route.params);
+  // console.log(route.params);
 
-  console.log("DAILY STATUS", personalChallenge.dailyStatus);
+  // console.log("DAILY STATUS", personalChallenge.dailyStatus);
 
   let now = new Date();
   const lastUpdated = new Date(personalChallenge.updatedAt);
   const created = new Date(personalChallenge.createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
   const exactDay = (now - created) / 86400000;
-  console.log("CURRENT DAY", currentDay);
-  console.log("EXACT DAY", exactDay)
+  // console.log("CURRENT DAY", currentDay);
+  // console.log("EXACT DAY", exactDay);
 
   const challengeData = [];
   const colors = [];
@@ -59,22 +59,19 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   }
   // console.log(personalChallenge.dailyStatus);
 
+  useEffect(() => {
+    updateChallenge(currentUserUID, id)
+    console.log("USEEFFECT")
+  }, [])
+
   const updateChallenge = async (userId, challengeId) => {
-    now = new Date();
-    if (personalChallenge.dailyStatus && now - lastUpdated > 86400000 * 2) {
-      console.log("USER DIDN'T CHECK");
-      try {
-        const res = await axios.put(
-          `${EXPRESS_ROOT_PATH}/api/personalChallenges/failPersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-        const completionStatus = res.data.completionStatus;
-        console.log(completionStatus);
-      } catch (error) {
-        console.log("update request failed", error);
-      }
-    } else if (personalChallenge.dailyStatus && now - lastUpdated > 86400000) {
+    const now = new Date();
+    const today = now.getDate();
+    const updatedDate = lastUpdated.getDate();
+    console.log("TODAY", today);
+    console.log("UPDATED DATE", updatedDate);
+    if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
+      console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE")
       try {
         const res = await axios.put(
           `${EXPRESS_ROOT_PATH}/api/personalChallenges/resetPersonalChallenge/${challengeId}`,
@@ -82,12 +79,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         );
         // dailyStatus = "true"
         const dailyStatus = res.data.dailyStatus;
-        console.log(dailyStatus);
-      } catch (error) {
-        console.log("update request failed", error);
+      } catch (err) {
+        console.log(err);
       }
-    } else if (personalChallenge.dailyStatus && now - lastUpdated < 86400000) {
-      console.log("Task Already Completed Today!");
     }
   };
 
@@ -128,11 +122,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       <View style={styles.infoContainer}>
         <Text>{description}</Text>
       </View>
-      <View style={styles.reset}>
-        <TouchableOpacity onPress={() => updateChallenge(currentUserUID, id)}>
-          <Text style={styles.resetButton}>RESET(test)</Text>
-        </TouchableOpacity>
-      </View>
       <View>
         <Modal visible={modalOpen} animationType="slide">
           <View style={styles.tips}>
@@ -172,12 +161,6 @@ const styles = StyleSheet.create({
     width: "80%",
     top: 200,
   },
-  reset: {
-    top: 300,
-    backgroundColor: "red",
-    borderRadius: 5,
-    borderWidth: 1,
-  },
   descriptionHeader: {
     top: 175,
   },
@@ -214,15 +197,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   daysCounter: {
-    top: 130
+    top: 130,
   },
   daysCounterText: {
     fontSize: 25,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   modal: {
-    backgroundColor: "#ff924c"
-  }
+    backgroundColor: "#ff924c",
+  },
 });
 
 export default ChallengeTrackerScreen;
