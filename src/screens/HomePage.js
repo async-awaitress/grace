@@ -108,17 +108,18 @@ export default function HomePage({ navigation }) {
         <Text style={styles.headerText}>Welcome, {firstName}</Text>
       </View>
       <ScrollView>
+        <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
         <View style={styles.challengesContainer}>
-          <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
           <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
+              horizontal
               data={challenges}
               keyExtractor={(challenge) => challenge.id}
               renderItem={({ item }) => (
                 <View style={styles.activeChallengeInfo}>
-                  <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text>
+                  {/* <Text style={styles.challengeText}>{item.title}</Text>
+                  <Text>{item.category}</Text> */}
                   <Image
                     source={icons[item.badge]}
                     style={{ width: 70, height: 70 }}
@@ -148,14 +149,16 @@ export default function HomePage({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Personal Challenges")}
           >
-            <Text>View All Personal Challenges</Text>
+            <Text style={styles.linkViewText}>
+              View All Personal Challenges
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.linkView}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Friend Challenges")}
           >
-            <Text>View All Friend Challenges</Text>
+            <Text style={styles.linkViewText}>View All Friend Challenges</Text>
           </TouchableOpacity>
         </View>
 
@@ -168,7 +171,19 @@ export default function HomePage({ navigation }) {
         <StatusBar style="auto" />
       </ScrollView>
       <View>
-        <Text style={{ fontSize: 60, paddingBottom: 30 }}>
+        <Text
+          style={{ fontSize: 28, paddingBottom: 5, fontFamily: "Bradley Hand" }}
+        >
+          Your Total Points
+        </Text>
+        <Text
+          style={{
+            fontSize: 70,
+            paddingBottom: 30,
+            textAlign: "center",
+            fontFamily: "Bradley Hand",
+          }}
+        >
           {user.totalPoints}
         </Text>
       </View>
@@ -189,6 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff924c",
     padding: 40,
     width: "100%",
+    textAlign: "center",
   },
   headerText: {
     fontSize: 30,
@@ -199,18 +215,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   activeChallengeContainer: {
-    backgroundColor: "green",
     display: "flex",
-    flexWrap: "wrap",
-    flexDirection: "column",
+    // flexWrap: "wrap",
+    flexDirection: "row",
     alignContent: "space-between",
     width: 400,
-    height: 300,
+    height: 190,
   },
   challengesContainer: {
+    backgroundColor: "#f9f1f1",
     flexDirection: "column",
     flex: 1,
-    backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
@@ -226,25 +241,30 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     margin: 5,
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 20,
     borderColor: "#ffedd6",
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    alignContent: "space-between",
-  },
-  challengeText: {
-    fontSize: 20,
+    alignContent: "center",
+    padding: 10,
+    height: 180,
+    width: 110,
   },
   linkView: {
     alignItems: "center",
     padding: 10,
     marginVertical: 20,
-    backgroundColor: "lightgreen",
+    marginTop: 50,
+    backgroundColor: "#f9f1f1",
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 50,
+  },
+  linkViewText: {
+    fontSize: 25,
+    fontFamily: "Bradley Hand",
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
@@ -252,6 +272,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 2,
     paddingHorizontal: 3,
+    marginTop: 20,
   },
   completedButtonView: {
     backgroundColor: "orange",
@@ -259,5 +280,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 2,
     paddingHorizontal: 3,
+    marginTop: 20,
   },
 });

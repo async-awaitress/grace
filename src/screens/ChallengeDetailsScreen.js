@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import axios from "axios";
 import * as firebase from "firebase";
+import { icons } from "./Icons/icons";
 
 const ChallengeDetailsScreen = ({ route, navigation }) => {
   const [bgColor, setBgColor] = useState("lightGray");
@@ -30,124 +38,180 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
     type,
     badge,
     duration,
+    tips,
   } = route.params;
 
   const setWasteTheme = () => {
     setBgColor("lightgreen");
-    setHeaderColor("green");
+    setHeaderColor("#7cc13a");
   };
 
   const setWaterTheme = () => {
     setBgColor("lightskyblue");
-    setHeaderColor("blue");
+    setHeaderColor("#1982c4");
   };
 
   const setEnergyTheme = () => {
     setBgColor("lightyellow");
-    setHeaderColor("yellow");
+    setHeaderColor("#ffca3a");
   };
 
   const setTransportTheme = () => {
     setBgColor("mediumpurple");
-    setHeaderColor("purple");
+    setHeaderColor("#6a4c93");
   };
 
   const setFoodTheme = () => {
-    setBgColor("lightred");
-    setHeaderColor("red");
+    setBgColor("#f5c4c4");
+    setHeaderColor("#f4555a");
   };
 
-  category === "waste" && bgColor !== "lightgreen" && headerColor !== "green"
+  category === "waste" && bgColor !== "lightgreen" && headerColor !== "#7cc13a"
     ? setWasteTheme()
     : null;
-  category === "water" && bgColor !== "lightskyblue" && headerColor !== "blue"
+  category === "water" &&
+  bgColor !== "lightskyblue" &&
+  headerColor !== "#1982c4"
     ? setWaterTheme()
     : null;
-  category === "energy" && bgColor !== "lightyellow" && headerColor !== "yellow"
+  category === "energy" &&
+  bgColor !== "lightyellow" &&
+  headerColor !== "#ffca3a"
     ? setEnergyTheme()
     : null;
 
   category === "transportation" &&
   bgColor !== "mediumpurple" &&
-  headerColor !== "purple"
+  headerColor !== "#6a4c93"
     ? setTransportTheme()
     : null;
 
-  category === "food" && bgColor !== "lightred" && headerColor !== "red"
+  category === "food" && bgColor !== "#f5c4c4" && headerColor !== "#f4555a"
     ? setFoodTheme()
     : null;
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 40,
-          fontWeight: "bold",
-          width: "80%",
-          backgroundColor: headerColor,
-          alignItems: "center",
-        }}
-      >
-        {title}
-      </Text>
-      <View
-        style={{
-          backgroundColor: bgColor,
-          width: "80%",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.stats}>
-          <Text style={styles.statsText}>
-            {duration} Days / {pointsPerDay} Points Per Day
-          </Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={[styles.challengeContainer, { borderColor: headerColor }]}>
+          <Image source={icons[badge]} style={styles.badge} />
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.allInfo}>
+            <View style={styles.stats}>
+              <Text style={styles.statsText}>Duration: {duration} Days</Text>
+              <Text style={styles.statsText}>
+                {pointsPerDay} Points Per Day
+              </Text>
+            </View>
+            <View style={styles.stats}>
+              <Text style={styles.descriptionText}>{description}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.stats}>
-          <Text style={styles.descriptionText}>{description}</Text>
-        </View>
-      </View>
-      <TouchableOpacity
-        onPress={async () => {
-          // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
-          await addPersonalChallengeHandler(currentUserUID, id);
-          navigation.navigate("HomePage");
-        }}
-      >
-        <View
-          style={{
-            margin: 10,
-            backgroundColor: bgColor,
-            borderWidth: 3,
-            borderColor: headerColor,
+
+        <TouchableOpacity
+          onPress={async () => {
+            // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
+            await addPersonalChallengeHandler(currentUserUID, id);
+            navigation.navigate("HomePage");
           }}
         >
-          <Text style={styles.descriptionText}>
-            {type === "personal" ? "Start Challenge" : "Challenge A Friend"}
+          <View
+            style={[
+              styles.button,
+              { backgroundColor: bgColor, borderColor: headerColor },
+            ]}
+          >
+            <Text style={styles.buttonText}>
+              {type === "personal" ? "Start Challenge" : "Challenge A Friend"}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={[styles.tips, { borderColor: headerColor }]}>
+          <Text style={[styles.tipsText, { fontSize: 20, paddingBottom: 2 }]}>
+            TIPS
           </Text>
+          <Text style={styles.tipsText}>{tips}</Text>
         </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { alignItems: "center", marginVertical: 10 },
+  container: {
+    alignItems: "center",
+    backgroundColor: "#ffedd6",
+    height: 1000,
+  },
+  challengeContainer: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderWidth: 3,
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 15,
+    width: 350,
+  },
   allInfo: {
-    backgroundColor: "lightgray",
     width: "80%",
     alignItems: "center",
   },
-  statsText: {
-    fontSize: 22,
+  title: {
+    fontFamily: "Bradley Hand",
+    fontSize: 35,
     fontWeight: "bold",
-    backgroundColor: "lightcoral",
+    width: "80%",
+    alignItems: "center",
+    textAlign: "center",
+    marginBottom: 15,
   },
-  stats: {
-    borderWidth: 1,
-    width: "100%",
+  badge: {
+    margin: 10,
+    marginBottom: 30,
+    width: 100,
+    height: 100,
   },
-  descriptionText: {
+  statsText: {
+    fontFamily: "Bradley Hand",
     fontSize: 20,
+    margin: 5,
+  },
+
+  descriptionText: {
+    fontFamily: "Bradley Hand",
+    padding: 20,
+    fontSize: 20,
+    textAlign: "center",
+  },
+  button: {
+    display: "flex",
+    margin: 20,
+    borderWidth: 3,
+    borderRadius: 30,
+    padding: 8,
+    paddingHorizontal: 30,
+    alignSelf: "center",
+  },
+  buttonText: {
+    fontFamily: "Bradley Hand",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  tips: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderWidth: 2,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 15,
+    width: 350,
+    paddingHorizontal: 5,
+  },
+  tipsText: {
+    textAlign: "center",
   },
 });
 
