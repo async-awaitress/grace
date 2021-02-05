@@ -13,6 +13,7 @@ const ProfileScreen = ({ navigation }) => {
   let currentUserUID = firebase.auth().currentUser.uid;
   console.log("UID", currentUserUID)
 
+
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -25,7 +26,7 @@ const ProfileScreen = ({ navigation }) => {
       }
     }
     fetchUser();
-  }, [isFocused]);
+  }, []);
 
   const date = new Date(user.createdAt).getDate()
   const month = new Date(user.createdAt).getMonth()
