@@ -126,7 +126,7 @@ export default function HomePage({ navigation }) {
                   />
 
                   <TouchableOpacity
-                    onPress={() => navigation.p("Challenge Tracker", item)}
+                    onPress={() => navigation.navigate("Challenge Tracker", item)}
                   >
                     <Text>Challenge Tracker</Text>
                   </TouchableOpacity>
