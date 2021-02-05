@@ -14,7 +14,7 @@ import {
   UserIcon,
   AuthScreen,
   ChallengeDetailsScreen,
-  // ChallengeTrackerScreen,
+  ChallengeTrackerScreen,
   FriendChallengesScreen,
   Friends,
   HomePage,
