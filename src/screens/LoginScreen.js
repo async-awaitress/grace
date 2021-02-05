@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }) {
     await signIn(email, password);
     setEmail("");
     setPassword("");
-    navigation.navigate("HomePage");
+    navigation.replace("HomePage");
   };
 
   return (
