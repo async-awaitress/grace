@@ -60,18 +60,16 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   // console.log(personalChallenge.dailyStatus);
 
   useEffect(() => {
-    updateChallenge(currentUserUID, id)
-    console.log("USEEFFECT")
-  }, [])
+    updateChallenge(currentUserUID, id);
+  }, []);
 
   const updateChallenge = async (userId, challengeId) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    console.log("TODAY", today);
-    console.log("UPDATED DATE", updatedDate);
+    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY 
     if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
-      console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE")
+      console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
       try {
         const res = await axios.put(
           `${EXPRESS_ROOT_PATH}/api/personalChallenges/resetPersonalChallenge/${challengeId}`,
@@ -81,6 +79,36 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         const dailyStatus = res.data.dailyStatus;
       } catch (err) {
         console.log(err);
+      }
+    }
+    if (today >= updatedDate + 2 && !personalChallenge.dailyStatus) {
+      try {
+        const res = await axios.put(
+          `${EXPRESS_ROOT_PATH}/api/personalChallenges/failPersonalChallenge/${challengeId}`,
+          { uid: userId }
+        );
+        // dailyStatus = "true"
+        const dailyStatus = res.data.dailyStatus;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const completeChallenge = async (userId, challengeId) => {
+     const now = new Date();
+    const today = now.getDate();
+    const updatedDate = lastUpdated.getDate();
+    if (!personalChallenge.dailyStatus && today > updatedDate && today < updatedDate + 3) {
+      try {
+        const res = await axios.put(
+          `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+          { uid: userId }
+        );
+        // dailyStatus = "true"
+        const dailyStatus = res.data.dailyStatus;
+      } catch (error) {
+        console.log("update request failed", error);
       }
     }
   };
@@ -103,12 +131,16 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       </Svg>
 
       <View style={{ position: "absolute", top: 69, left: 115.5 }}>
-        <Image
-          style={{ transform: [{ scale: 0.65 }] }}
-          source={require(`../../assets/bag-c.png`)}
-        />
-        {/* <Image source={`../.${badge}.png`} />
-        <Image source={icon} /> */}
+        <TouchableOpacity
+          onPress={() =>
+            completeChallenge(currentUserUID, id)
+          }
+        >
+          <Image
+            style={{ transform: [{ scale: 0.65 }] }}
+            source={require(`../../assets/bag-c.png`)}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.daysCounter}>
         <Text style={styles.daysCounterText}>
