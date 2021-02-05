@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { VictoryPie } from "victory-native";
 import * as firebase from "firebase";
 import axios from "axios";
@@ -7,7 +14,7 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import Svg from "react-native-svg";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
@@ -21,7 +28,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     badge,
     duration,
     personalChallenge,
-    tips
+    tips,
   } = route.params;
 
   console.log(route.params);
@@ -32,6 +39,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   const lastUpdated = new Date(personalChallenge.updatedAt);
   const created = new Date(personalChallenge.createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
+  const exactDay = (now - created) / 86400000;
+  console.log("CURRENT DAY", currentDay);
+  console.log("EXACT DAY", exactDay)
 
   const challengeData = [];
   const colors = [];
@@ -106,6 +116,12 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         {/* <Image source={`../.${badge}.png`} />
         <Image source={icon} /> */}
       </View>
+      <View style={styles.daysCounter}>
+        <Text style={styles.daysCounterText}>
+          Day {currentDay + 1} of {duration}{" "}
+          {personalChallenge.dailyStatus ? `Complete` : `Incomplete`}
+        </Text>
+      </View>
       <View style={styles.descriptionHeader}>
         <Text style={styles.descriptionHeaderText}>Description</Text>
       </View>
@@ -128,11 +144,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
             </View>
           </View>
         </Modal>
-        <View style={styles.toggleTips}>
-          <TouchableOpacity onPress={() => setModalOpen(true)}>
-            <Text style={styles.button}>Tips?</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.toggleTips}>
+        <TouchableOpacity onPress={() => setModalOpen(true)}>
+          <Text style={styles.button}>Tips?</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -195,8 +211,18 @@ const styles = StyleSheet.create({
   },
   resetButton: {
     fontSize: 50,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
+  daysCounter: {
+    top: 130
+  },
+  daysCounterText: {
+    fontSize: 25,
+    fontWeight: "bold"
+  },
+  modal: {
+    backgroundColor: "#ff924c"
+  }
 });
 
 export default ChallengeTrackerScreen;
