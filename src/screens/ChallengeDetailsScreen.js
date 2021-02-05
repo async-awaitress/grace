@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import axios from "axios";
@@ -91,54 +92,93 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
     : null;
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={[styles.challengeContainer, { borderColor: headerColor }]}>
-          <Image source={icons[badge]} style={styles.badge} />
-          <Text style={styles.title}>{title}</Text>
-          <View style={styles.allInfo}>
-            <View style={styles.stats}>
-              <Text style={styles.statsText}>Duration: {duration} Days</Text>
-              <Text style={styles.statsText}>
-                {pointsPerDay} Points Per Day
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Challenge</Text>
+        <Text style={styles.headerText}>Details</Text>
+      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <View
+            style={[styles.challengeContainer, { borderColor: headerColor }]}
+          >
+            <Image source={icons[badge]} style={styles.badge} />
+            <Text style={styles.title}>{title}</Text>
+            <View style={styles.allInfo}>
+              <View style={styles.stats}>
+                <Text style={styles.statsText}>Duration: {duration} Days</Text>
+                <Text style={styles.statsText}>
+                  {pointsPerDay} Points Per Day
+                </Text>
+              </View>
+              <View style={styles.stats}>
+                <Text style={styles.descriptionText}>{description}</Text>
+              </View>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            onPress={async () => {
+              // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
+              if (type === "personal") {
+                await addPersonalChallengeHandler(currentUserUID, id);
+              }
+              // else {
+              //   await addFriendChallengeHandler(currentUserUID, id)
+              // }
+              Alert.alert(
+                "Challenge Accepted!",
+                type === "personal"
+                  ? "You Got This!"
+                  : "Choose Your Friend On The Next Page",
+                [
+                  {
+                    text: "ok",
+                    onPress: () => navigation.navigate("Home"),
+                  },
+                ]
+              );
+            }}
+          >
+            <View
+              style={[
+                styles.button,
+                { backgroundColor: bgColor, borderColor: headerColor },
+              ]}
+            >
+              <Text style={styles.buttonText}>
+                {type === "personal" ? "Start Challenge" : "Challenge A Friend"}
               </Text>
             </View>
-            <View style={styles.stats}>
-              <Text style={styles.descriptionText}>{description}</Text>
-            </View>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          onPress={async () => {
-            // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
-            await addPersonalChallengeHandler(currentUserUID, id);
-            navigation.navigate("HomePage");
-          }}
-        >
-          <View
-            style={[
-              styles.button,
-              { backgroundColor: bgColor, borderColor: headerColor },
-            ]}
-          >
-            <Text style={styles.buttonText}>
-              {type === "personal" ? "Start Challenge" : "Challenge A Friend"}
+          </TouchableOpacity>
+          <View style={[styles.tips, { borderColor: headerColor }]}>
+            <Text style={[styles.tipsText, { fontSize: 20, paddingBottom: 2 }]}>
+              TIPS
             </Text>
+            <Text style={styles.tipsText}>{tips}</Text>
           </View>
-        </TouchableOpacity>
-        <View style={[styles.tips, { borderColor: headerColor }]}>
-          <Text style={[styles.tipsText, { fontSize: 20, paddingBottom: 2 }]}>
-            TIPS
-          </Text>
-          <Text style={styles.tipsText}>{tips}</Text>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#ff924c",
+    paddingTop: 50,
+    padding: 5,
+    width: "100%",
+    textAlign: "center",
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
   container: {
     alignItems: "center",
     backgroundColor: "#ffedd6",
