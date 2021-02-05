@@ -8,6 +8,7 @@ import apiKeys from "./config/keys";
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
+import Toast from "react-native-toast-message";
 import {
   FriendsIcon,
   HomeIcon,
@@ -29,8 +30,7 @@ const Stack = createStackNavigator();
 const ChallengeStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-//nav between home, challenge list, details
-
+//nav between home, challenge list, and challenge details
 const ChallengeScreenNav = () => (
   <ChallengeStack.Navigator
     initialRouteName="Home"
@@ -58,13 +58,18 @@ const ChallengeScreenNav = () => (
       backBehavior="order"
     />
     <ChallengeStack.Screen
+      name="Friend Challenges"
+      component={FriendChallengesScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
       name="Challenge Details"
       component={ChallengeDetailsScreen}
       options={{ title: "" }}
       backBehavior="order"
     />
   </ChallengeStack.Navigator>
-
 );
 
 //bottom nav bar
@@ -89,7 +94,6 @@ const TabsScreenNav = () => (
       inactiveTintColor: "#383db8",
     }}
   >
-    {/* <Tabs.Screen name="Challenges" component={ChallengeScreenNav} /> */}
     <Tabs.Screen
       name="Home"
       component={ChallengeScreenNav}
@@ -145,7 +149,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/> */}
-
         <Stack.Screen
           name="Login"
           component={LoginScreen}
