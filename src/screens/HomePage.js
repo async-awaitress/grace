@@ -105,22 +105,21 @@ export default function HomePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Home (placeholder)</Text>
+        <Text style={styles.headerText}>Welcome, {firstName}</Text>
       </View>
       <ScrollView>
-        <View style={styles.activeChalengesContainer}>
-          <Text>Hello, {firstName}</Text>
-          <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
-          {/* <ScrollView horizontal={true}> */}
-          <ScrollView horizontal={false}>
+        <Text style={styles.activeChallengesHeader}>Active Challenges</Text>
+        <View style={styles.challengesContainer}>
+          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             {/* Three FlatLists are used here to achieve a mockup Effect of horizontal scroll witrh limited data.  It will be replaced by a map that makes a new FlatList for every 3-5 active challenges */}
             <FlatList
+              horizontal
               data={challenges}
               keyExtractor={(challenge) => challenge.id}
               renderItem={({ item }) => (
                 <View style={styles.activeChallengeInfo}>
-                  <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text>
+                  {/* <Text style={styles.challengeText}>{item.title}</Text>
+                  <Text>{item.category}</Text> */}
                   <Image
                     source={icons[item.badge]}
                     style={{ width: 70, height: 70 }}
@@ -150,14 +149,16 @@ export default function HomePage({ navigation }) {
           <TouchableOpacity
             onPress={() => navigation.navigate("Personal Challenges")}
           >
-            <Text>View All Personal Challenges</Text>
+            <Text style={styles.linkViewText}>
+              View All Personal Challenges
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.linkView}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Friend Challenges")}
           >
-            <Text>View All Friend Challenges</Text>
+            <Text style={styles.linkViewText}>View All Friend Challenges</Text>
           </TouchableOpacity>
         </View>
 
@@ -170,7 +171,19 @@ export default function HomePage({ navigation }) {
         <StatusBar style="auto" />
       </ScrollView>
       <View>
-        <Text style={{ fontSize: 60, paddingBottom: 30 }}>
+        <Text
+          style={{ fontSize: 28, paddingBottom: 5, fontFamily: "Bradley Hand" }}
+        >
+          Your Total Points
+        </Text>
+        <Text
+          style={{
+            fontSize: 70,
+            paddingBottom: 30,
+            textAlign: "center",
+            fontFamily: "Bradley Hand",
+          }}
+        >
           {user.totalPoints}
         </Text>
       </View>
@@ -180,51 +193,93 @@ export default function HomePage({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
-    marginVertical: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffedd6",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 100,
+    justifyContent: "space-around",
   },
   header: {
-    backgroundColor: "green",
-    padding: 10,
+    backgroundColor: "#ff924c",
+    padding: 40,
     width: "100%",
+    textAlign: "center",
   },
   headerText: {
-    fontSize: 40,
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
-  activeChallengesContainer: {
+  activeChallengeContainer: {
+    display: "flex",
+    // flexWrap: "wrap",
+    flexDirection: "row",
+    alignContent: "space-between",
+    width: 400,
+    height: 190,
+  },
+  challengesContainer: {
+    backgroundColor: "#f9f1f1",
     flexDirection: "column",
     flex: 1,
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 30,
+    fontSize: 40,
+    fontFamily: "Bradley Hand",
+    margin: 5,
   },
   activeChallengeInfo: {
-    flexDirection: "row",
+    flexDirection: "column",
     margin: 5,
-    borderWidth: 1,
-    backgroundColor: "lightgray",
-    justifyContent: "space-between",
-  },
-  challengeText: {
-    fontSize: 20,
+    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#ffedd6",
+    backgroundColor: "white",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    padding: 10,
+    height: 180,
+    width: 110,
   },
   linkView: {
     alignItems: "center",
     padding: 10,
     marginVertical: 20,
-    backgroundColor: "lightgreen",
-    borderWidth: 1,
+    marginTop: 50,
+    backgroundColor: "#f9f1f1",
+    borderWidth: 2,
+    borderRadius: 50,
+  },
+  linkViewText: {
+    fontSize: 25,
+    fontFamily: "Bradley Hand",
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
-    borderLeftWidth: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
+    marginTop: 20,
   },
   completedButtonView: {
     backgroundColor: "orange",
-    borderLeftWidth: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
+    marginTop: 20,
   },
 });
