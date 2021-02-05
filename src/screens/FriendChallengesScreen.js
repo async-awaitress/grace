@@ -28,28 +28,36 @@ const FriendChallengesScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <FlatList
-          data={challenges}
-          keyExtractor={(challenge) => challenge.id}
-          renderItem={({ item }) => {
-            if (item.type === "friend") {
-              return (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Challenge Details", item)}
-                >
-                  <View style={styles.list}>
-                    <Text style={styles.challengeTitle}>{item.title}</Text>
-                    <Image source={icons[item.badge]} style={styles.badge} />
-                  </View>
-                </TouchableOpacity>
-              );
-            }
-          }}
-        ></FlatList>
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Friend</Text>
+        <Text style={styles.headerText}>Challenges</Text>
       </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
+          <FlatList
+            data={challenges}
+            keyExtractor={(challenge) => challenge.id}
+            renderItem={({ item }) => {
+              if (item.type === "friend") {
+                return (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Challenge Details", item)
+                    }
+                  >
+                    <View style={styles.list}>
+                      <Text style={styles.challengeTitle}>{item.title}</Text>
+                      <Image source={icons[item.badge]} style={styles.badge} />
+                    </View>
+                  </TouchableOpacity>
+                );
+              }
+            }}
+          ></FlatList>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -65,6 +73,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffedd6",
     height: 1000,
+  },
+  header: {
+    backgroundColor: "#ff924c",
+    padding: 30,
+    width: "100%",
+    textAlign: "center",
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
   list: {
     flexDirection: "row",

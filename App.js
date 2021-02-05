@@ -58,13 +58,18 @@ const ChallengeScreenNav = () => (
       backBehavior="order"
     />
     <ChallengeStack.Screen
+      name="Friend Challenges"
+      component={FriendChallengesScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
       name="Challenge Details"
       component={ChallengeDetailsScreen}
       options={{ title: "" }}
       backBehavior="order"
     />
   </ChallengeStack.Navigator>
-
 );
 
 //bottom nav bar
