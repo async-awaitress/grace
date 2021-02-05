@@ -52,7 +52,7 @@ export default function RegistrationScreen({ navigation }) {
         lastName,
         email
       });
-      navigation.navigate("HomePage");
+      navigation.replace("HomePage");
       emptyState();
     }
   };

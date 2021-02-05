@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios"
 import { EXPRESS_ROOT_PATH } from "../api/grace";
+import { loggingOut } from "../../API/methods";
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -18,8 +19,8 @@ const ProfileScreen = ({ navigation }) => {
     async function fetchUser() {
       try {
         const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`);
-
-        setUser(res.data)
+        const user = res.data
+        setUser(user)
 
       } catch (error) {
         console.log("get request failed", error);
@@ -28,6 +29,11 @@ const ProfileScreen = ({ navigation }) => {
     fetchUser();
   }, []);
 
+  // const handlePress = () => {
+  //   loggingOut();
+  //   navigation.replace("Login");
+  // };
+
   const date = new Date(user.createdAt).getDate()
   const month = new Date(user.createdAt).getMonth()
   const year = new Date(user.createdAt).getYear()
@@ -35,6 +41,8 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={{width: 400, height: 200, backgroundColor: '#a7f9ef', borderRadius: 10}} />
+
       <Text style={styles.title}>Profile Page!</Text>
 
       <View>
@@ -50,18 +58,22 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <View>
-        <Text style={styles.createdAt}>My goals</Text>
+        <Text style={styles.myGoals}>My goals</Text>
       </View>
 
       <View>
-        <Text style={styles.createdAt}>Completed Challenges</Text>
+        <Text style={styles.completed}>Completed Challenges</Text>
       </View>
 
       <View>
-        <Text style={styles.createdAt}>Badges Earned</Text>
+        <Text style={styles.badges}>Badges Earned</Text>
       </View>
 
-
+      {/* <View style={styles.container}>
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <Text style={styles.buttonText}>Log Out</Text>
+          </TouchableOpacity>
+      </View> */}
     </View>
   );
 };
@@ -78,10 +90,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center"
   },
+  button: {
+    marginHorizontal: 50,
+    backgroundColor: "#9bf6ff",
+    borderRadius: 10,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   name: {
     color: "black",
     fontSize: 12,
-
   }
 });
 
