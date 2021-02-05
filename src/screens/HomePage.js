@@ -141,10 +141,18 @@ export default function HomePage({ navigation }) {
                   <View style={styles.activeChallengeInfo}>
                     {/* <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text> */}
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Challenge Tracker", item)
+                    }
+                  >
                     <Image
                       source={icons[item.badge]}
                       style={{ width: 70, height: 70 }}
                     />
+
+                  </TouchableOpacity>
 
                     <TouchableOpacity
                       disabled={dailyCompletion[item.id]}

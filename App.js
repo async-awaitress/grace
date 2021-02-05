@@ -15,7 +15,7 @@ import {
   UserIcon,
   AuthScreen,
   ChallengeDetailsScreen,
-  // ChallengeTrackerScreen,
+  ChallengeTrackerScreen,
   FriendChallengesScreen,
   Friends,
   HomePage,
@@ -186,6 +186,10 @@ export default function App() {
         <Stack.Screen
           name="Challenge Details"
           component={ChallengeDetailsScreen}
+        />
+        <Stack.Screen
+          name="Challenge Tracker"
+          component={ChallengeTrackerScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
