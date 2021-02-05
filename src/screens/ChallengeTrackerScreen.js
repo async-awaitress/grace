@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
 import { VictoryPie } from "victory-native";
 import * as firebase from "firebase";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
+import Svg from "react-native-svg";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
+  const [modalOpen, setModalOpen] = useState(false)
+
   let currentUserUID = firebase.auth().currentUser.uid;
 
   const {
@@ -18,6 +21,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     badge,
     duration,
     personalChallenge,
+    tips
   } = route.params;
 
   console.log(route.params);
@@ -48,7 +52,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   const updateChallenge = async (userId, challengeId) => {
     now = new Date();
     if (personalChallenge.dailyStatus && now - lastUpdated > 86400000 * 2) {
-      console.log("USER DIDN'T CHECK")
+      console.log("USER DIDN'T CHECK");
       try {
         const res = await axios.put(
           `${EXPRESS_ROOT_PATH}/api/personalChallenges/failPersonalChallenge/${challengeId}`,
@@ -80,29 +84,45 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <VictoryPie
-        padAngle={5}
-        // use to hide labels
-        labelComponent={<View />}
-        innerRadius={70}
-        width={200}
-        height={200}
-        cornerRadius={10}
-        data={challengeData}
-        colorScale={colors}
-      />
-      <View>
-        <Image source={require(`../../assets/bag-c.png`)} />
+      <Svg height="50" width="200">
+        <VictoryPie
+          padAngle={5}
+          // use to hide labels
+          labelComponent={<View />}
+          innerRadius={70}
+          width={200}
+          height={200}
+          cornerRadius={10}
+          data={challengeData}
+          colorScale={colors}
+        />
+      </Svg>
+
+      <View style={{ position: "absolute", top: 69, left: 115.5 }}>
+        <Image
+          style={{ transform: [{ scale: 0.65 }] }}
+          source={require(`../../assets/bag-c.png`)}
+        />
         {/* <Image source={`../.${badge}.png`} />
         <Image source={icon} /> */}
+      </View>
+      <View style={styles.descriptionHeader}>
+        <Text style={styles.descriptionHeaderText}>Description</Text>
       </View>
       <View style={styles.infoContainer}>
         <Text>{description}</Text>
       </View>
-      <View>
+      <View style={styles.reset}>
         <TouchableOpacity onPress={() => updateChallenge(currentUserUID, id)}>
           <Text>RESET</Text>
         </TouchableOpacity>
+      </View>
+      <View>
+        <Modal visible={modalOpen}>
+          <View style={styles.tips}>
+            <Text style={styles.popupText}>{tips}</Text>
+          </View>
+        </Modal>
       </View>
     </View>
   );
@@ -110,7 +130,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
@@ -118,11 +138,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    position: "relative"
   },
   infoContainer: {
     borderWidth: 1,
     width: "80%",
+    top: 200
   },
+  reset: {
+    top: 250
+  },
+  descriptionHeader: {
+    top: 175
+  },
+  descriptionHeaderText: {
+    fontSize: 25
+  },
+  tips: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex:1,
+    margin: 50
+  },
+  popupText: {
+    fontSize: 20
+  }
 });
 
 export default ChallengeTrackerScreen;
