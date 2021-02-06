@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios"
@@ -34,39 +34,98 @@ const ProfileScreen = ({ navigation }) => {
   //   navigation.replace("Login");
   // };
 
-  const date = new Date(user.createdAt).getDate()
-  const month = new Date(user.createdAt).getMonth()
-  const year = new Date(user.createdAt).getYear()
-  const joinedDate = `${month}/${date}/${year}`
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  let date = new Date(user.createdAt)
+  let joinedDate = date.toLocaleDateString(undefined, options)
+  console.log(joinedDate);
+  // date = date.split("T")[0]
+  // console.log("Joined Date", date)
+  // date = date.split('T')[0]
+
 
   return (
     <View style={styles.container}>
-      <View style={{width: 400, height: 200, backgroundColor: '#a7f9ef', borderRadius: 10}} />
-
-      <Text style={styles.title}>Profile Page!</Text>
-
-      <View>
-        <Text style={styles.name}>{user.firstName}</Text>
+      <View style={{width: 400, height: 250, backgroundColor: '#a7f9ef', borderRadius: 20, borderWidth: 6, borderColor: "#9deaff", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#9deaff', shadowOpacity: 0.5}}>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
+        <View>
+          <Text style={styles.totalPoints}>{`Total Points\n${user.totalPoints}`}</Text>
+        </View>
+        <View>
+          <Text style={styles.createdAt}>{`Joined Date\n${joinedDate}`}</Text>
+        </View>
+          <Text style={styles.name}>{user.firstName}</Text>
       </View>
 
-      <View>
-        <Text style={styles.totalPoints}>Total Points: {user.totalPoints}</Text>
+
+
+      <View style={{width: 400, height: 250, backgroundColor: '#fdffb6', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#e4ffbb", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#e4ffbb', shadowOpacity: 1.0}}>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
+        <View>
+          <Text style={{padding: 6}}>My goals</Text>
+        </View>
+        <View>
+          <Text style={{padding: 6}}>Completed Challenges</Text>
+        </View>
       </View>
 
-      <View>
-        <Text style={styles.createdAt}>Joined Date: {joinedDate}</Text>
-      </View>
+      <Image
+        style={styles.tinyLogo}
+        source={require("../../assets/profilePic.png")}/>
 
-      <View>
-        <Text style={styles.myGoals}>My goals</Text>
-      </View>
+      <View style={{width: 400, height: 250, backgroundColor: '#ff87ab', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "center"}}/>
+        <View>
+          <Text style={{padding: 6}}>Badges Earned</Text>
+        </View>
 
-      <View>
-        <Text style={styles.completed}>Completed Challenges</Text>
-      </View>
+        <ScrollView
+          style={styles.badgesEarned}
+          horizontal={true}
+          >
+            <FlatList/>
+              {/* <FlatList
+                horizontal
+                data={challenges}
+                keyExtractor={(challenge) => challenge.id}
+                renderItem={({ item }) => (
+                  <View style={styles.activeChallengeInfo}>
+                    <Text style={styles.challengeText}>{item.title}</Text>
+                    <Text>{item.category}</Text>
 
-      <View>
-        <Text style={styles.badges}>Badges Earned</Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                      navigation.navigate("Challenge Tracker", item)
+                    }
+                    >
+                    <Image
+                      source={icons[item.badge]}
+                      style={{ width: 70, height: 70 }}
+                    />
+
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      disabled={dailyCompletion[item.id]}
+                      style={
+                        dailyCompletion[item.id]
+                          ? styles.completedButtonView
+                          : styles.completeButtonView
+                      }
+                      onPress={() => updateChallenge(currentUserUID, item.id)}
+                    >
+                      {dailyCompletion[item.id] ? (
+                        <Text>Done!</Text>
+                      ) : (
+                        <Text>Complete</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                )}
+              /> */}
+            </ScrollView>
       </View>
 
       {/* <View style={styles.container}>
@@ -88,20 +147,56 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: "column"
+  },
+  tinyLogo: {
+    top: 200,
+    padding: 30,
+    margin: 10,
+    overflow: "visible",
+    borderRadius: 150 / 2,
+    borderWidth: 10,
+    borderColor: "white",
+    alignSelf: "center",
+    position: "absolute"
   },
   button: {
     marginHorizontal: 50,
-    backgroundColor: "#9bf6ff",
+    backgroundColor: "#bdb2ff",
     borderRadius: 10,
     height: 30,
     alignItems: "center",
     justifyContent: "center"
   },
+  createdAt: {
+    textAlign: "right",
+    paddingTop: 10,
+    paddingRight: 6,
+    fontWeight: "bold"
+  },
+  totalPoints: {
+   textAlign: "right",
+   paddingTop: 10,
+   paddingRight: 6,
+   fontWeight: "bold"
+  },
   name: {
     color: "black",
-    fontSize: 12,
-  }
+    padding: 2,
+    fontSize: 14,
+    fontWeight: "bold",
+    left: 55,
+    alignSelf: "flex-start"
+  },
+  badgesEarned: {
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "space-between",
+    width: 360,
+    height: 150,
+    color: "white"
+  },
 });
 
 export default ProfileScreen;
