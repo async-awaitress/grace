@@ -67,12 +67,12 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY 
+    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
     if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
       console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
       try {
-        const res = await axios.put(
-          `${EXPRESS_ROOT_PATH}/api/personalChallenges/resetPersonalChallenge/${challengeId}`,
+        const res = await EXPRESS_ROOT_PATH.put(
+          `/personalChallenges/resetPersonalChallenge/${challengeId}`,
           { uid: userId }
         );
         // dailyStatus = "true"
@@ -83,8 +83,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     }
     if (today >= updatedDate + 2 && !personalChallenge.dailyStatus) {
       try {
-        const res = await axios.put(
-          `${EXPRESS_ROOT_PATH}/api/personalChallenges/failPersonalChallenge/${challengeId}`,
+        const res = await EXPRESS_ROOT_PATH.put(
+          `/personalChallenges/failPersonalChallenge/${challengeId}`,
           { uid: userId }
         );
         // dailyStatus = "true"
@@ -101,8 +101,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const updatedDate = lastUpdated.getDate();
     if (!personalChallenge.dailyStatus && today > updatedDate && today < updatedDate + 3) {
       try {
-        const res = await axios.put(
-          `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+        const res = await EXPRESS_ROOT_PATH.put(
+          `/personalChallenges/updatePersonalChallenge/${challengeId}`,
           { uid: userId }
         );
         // dailyStatus = "true"

@@ -17,7 +17,7 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`);
+        const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
 
         setUser(res.data)
 
