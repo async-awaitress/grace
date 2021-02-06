@@ -20,8 +20,8 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
   const addPersonalChallengeHandler = async (userId, challengeId) => {
     try {
-      await axios.post(
-        `${EXPRESS_ROOT_PATH}/api/personalChallenges/add/${challengeId}`,
+      await EXPRESS_ROOT_PATH.post(
+        `/personalChallenges/add/${challengeId}`,
         { uid: userId }
       );
       console.log("Challenge added to datatabse");

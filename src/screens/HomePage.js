@@ -52,8 +52,8 @@ export default function HomePage({ navigation }) {
   useEffect(() => {
     async function fetchChallenges() {
       try {
-        const res = await axios.get(
-          `${EXPRESS_ROOT_PATH}/api/challenges/${currentUserUID}`
+        const res = await EXPRESS_ROOT_PATH.get(
+          `/challenges/${currentUserUID}`
         );
         const challenges = res.data;
         const dailyCompletionObjToSet = {};
@@ -72,8 +72,8 @@ export default function HomePage({ navigation }) {
 
   const fetchPoints = async () => {
     try {
-      const res = await axios.get(
-        `${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`
+      const res = await EXPRESS_ROOT_PATH.get(
+        `/users/${currentUserUID}`
       );
       setUser(res.data);
     } catch (error) {
@@ -87,8 +87,8 @@ export default function HomePage({ navigation }) {
 
   const updateChallenge = async (userId, challengeId) => {
     try {
-      const res = await axios.put(
-        `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+      const res = await EXPRESS_ROOT_PATH.put(
+        `/personalChallenges/updatePersonalChallenge/${challengeId}`,
         { uid: userId }
       );
       // dailyStatus = "true"

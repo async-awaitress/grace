@@ -46,7 +46,7 @@ export default function RegistrationScreen({ navigation }) {
     } else {
       await registration(email, password, lastName, firstName);
       let currentUserUID = firebase.auth().currentUser.uid;
-      await axios.post(`${EXPRESS_ROOT_PATH}/api/users`, {
+      await EXPRESS_ROOT_PATH.post(`/users`, {
         uid: currentUserUID,
         firstName,
         lastName,

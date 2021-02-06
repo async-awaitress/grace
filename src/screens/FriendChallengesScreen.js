@@ -18,7 +18,7 @@ const FriendChallengesScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/challenges`);
+        const res = await EXPRESS_ROOT_PATH.get(`/challenges`);
         setChallenges(res.data);
       } catch (error) {
         console.log("get request failed", error);
