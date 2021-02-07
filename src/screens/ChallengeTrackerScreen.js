@@ -102,7 +102,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const updatedDate = lastUpdated.getDate();
     if (
       !personalChallenge.dailyStatus &&
-      today > updatedDate &&
       today < updatedDate + 3
     ) {
       try {
