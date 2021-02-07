@@ -7,10 +7,11 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  ImageBackground,
 } from "react-native";
 import * as firebase from "firebase";
 import { signIn } from "../../API/methods";
+import axios from "axios"
+import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -25,10 +26,19 @@ export default function LoginScreen({ navigation }) {
        Alert.alert("Password field is required.");
     }
 
+    // const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${email}`)
+    // const user = res.data
     await signIn(email, password);
-    setEmail("");
-    setPassword("");
-    navigation.replace("HomePage")
+          setEmail("");
+          setPassword("");
+          navigation.replace("HomePage")
+    // if(!user){
+    //   Alert.alert("Wrong username/Password")
+    // }
+    // else{
+
+    // }
+
   };
 
   return (

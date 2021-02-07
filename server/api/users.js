@@ -11,7 +11,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-
+router.get("/:email", async (req, res, next) => {
+  try {
+    const user = await User.findOne({where:{
+      email: req.params.email
+    }})
+    res.send(user)
+  } catch (error) {
+    next(error)
+  }
+})
 router.get("/:userId", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { uid: req.params.userId } });

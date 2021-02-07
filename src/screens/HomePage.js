@@ -18,36 +18,35 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 
 export default function HomePage({ navigation }) {
-  const [firstName, setFirstName] = useState("");
   let currentUserUID = firebase.auth().currentUser.uid;
-
-  useEffect(() => {
-    async function getUserInfo() {
-      let doc = await firebase
-        .firestore()
-        .collection("users")
-        .doc(currentUserUID)
-        .get();
-
-      if (!doc.exists) {
-        Alert.alert("No user data found!");
-      } else {
-        let dataObj = doc.data();
-        setFirstName(dataObj.firstName);
-      }
-    }
-    getUserInfo();
-  });
-
-  const handlePress = () => {
-    loggingOut();
-    navigation.navigate("Login");
-  };
 
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
   const [user, setUser] = useState({});
   const [dailyCompletion, setDailyCompletion] = useState({});
+
+  const handlePress = async () => {
+    await loggingOut();
+    navigation.replace("Login");
+  };
+
+  // useEffect(() => {
+  //   async function getUserInfo() {
+  //     let doc = await firebase
+  //       .firestore()
+  //       .collection("users")
+  //       .doc(currentUserUID)
+  //       .get();
+
+  //     if (!doc.exists) {
+  //       Alert.alert("No user data found!");
+  //     } else {
+  //       let dataObj = doc.data();
+  //       setFirstName(dataObj.firstName);
+  //     }
+  //   }
+  //   getUserInfo();
+  // });
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -107,7 +106,7 @@ export default function HomePage({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Welcome,</Text>
-        <Text style={styles.headerText}>{firstName}!</Text>
+        <Text style={styles.headerText}>{user.firstName}!</Text>
       </View>
       <ScrollView>
         {challenges.length === 0 ? (

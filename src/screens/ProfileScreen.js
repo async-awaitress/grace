@@ -19,8 +19,7 @@ const ProfileScreen = ({ navigation }) => {
     async function fetchUser() {
       try {
         const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`);
-        const user = res.data
-        setUser(user)
+        setUser(res.data)
 
       } catch (error) {
         console.log("get request failed", error);
@@ -38,6 +37,7 @@ const ProfileScreen = ({ navigation }) => {
   let date = new Date(user.createdAt)
   let joinedDate = date.toLocaleDateString(undefined, options)
   console.log(joinedDate);
+  console.log("points", user.totalPoints)
   // date = date.split("T")[0]
   // console.log("Joined Date", date)
   // date = date.split('T')[0]

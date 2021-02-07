@@ -126,7 +126,7 @@ export default function RegistrationScreen({ navigation }) {
       >
         <Text style={{ color: "green", fontSize: 13 }}>
           Already have an account?
-          <Text style={{ fontWeight: "500", color: "red" }}>Log In</Text>
+          <Text style={{ fontWeight: "500", color: "red" }}> Log In</Text>
         </Text>
       </TouchableOpacity>
     </View>
