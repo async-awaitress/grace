@@ -181,6 +181,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
+    color: "#ffffff",
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
   },
   container: {
     flex: 1,
@@ -260,6 +263,7 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "100%",
     textAlign: "center",
+    alignItems: "center",
   },
 });
 
