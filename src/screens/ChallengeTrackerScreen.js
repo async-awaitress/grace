@@ -97,10 +97,14 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   };
 
   const completeChallenge = async (userId, challengeId) => {
-     const now = new Date();
+    const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    if (!personalChallenge.dailyStatus && today > updatedDate && today < updatedDate + 3) {
+    if (
+      !personalChallenge.dailyStatus &&
+      today > updatedDate &&
+      today < updatedDate + 3
+    ) {
       try {
         const res = await EXPRESS_ROOT_PATH.put(
           `/personalChallenges/updatePersonalChallenge/${challengeId}`,
@@ -116,7 +120,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
       <Svg height="50" width="200">
         <VictoryPie
           padAngle={5}
@@ -131,12 +137,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 69, left: 115.5 }}>
-        <TouchableOpacity
-          onPress={() =>
-            completeChallenge(currentUserUID, id)
-          }
-        >
+      {/* EDIT TOP AND LEFT IN NEXT LINE TO FINE TUNE BADGE PLACEMENT */}
+      <View style={{ position: "absolute", top: 123.5, left: 115.5 }}>
+        <TouchableOpacity onPress={() => completeChallenge(currentUserUID, id)}>
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
             source={icons[badge]}
@@ -250,8 +253,15 @@ const styles = StyleSheet.create({
     borderColor: "#ff924c",
   },
   descriptionText: {
-    fontSize: 17
-  }
+    fontSize: 17,
+  },
+  header: {
+    backgroundColor: "#ff924c",
+    paddingTop: 40,
+    padding: 15,
+    width: "100%",
+    textAlign: "center",
+  },
 });
 
 export default ChallengeTrackerScreen;
