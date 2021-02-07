@@ -148,11 +148,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           {personalChallenge.dailyStatus ? `Complete` : `Incomplete`}
         </Text>
       </View>
-      <View style={styles.descriptionHeader}>
-        <Text style={styles.descriptionHeaderText}>Description</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text>{description}</Text>
+      <View style={styles.descriptionBox}>
+        <Text style={styles.descriptionText}>{description}</Text>
       </View>
       <View>
         <Modal visible={modalOpen} animationType="slide">
@@ -238,6 +235,22 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: "#ff924c",
   },
+  descriptionBox: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderWidth: 2,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 15,
+    width: 350,
+    paddingHorizontal: 5,
+    top: 150,
+    borderColor: "#ff924c",
+  },
+  descriptionText: {
+    fontSize: 17
+  }
 });
 
 export default ChallengeTrackerScreen;
