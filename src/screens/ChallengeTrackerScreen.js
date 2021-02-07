@@ -12,6 +12,7 @@ import * as firebase from "firebase";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import Svg from "react-native-svg";
+import { icons } from "./Icons/icons";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -138,7 +139,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         >
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
-            source={require(`../../assets/bag-c.png`)}
+            source={icons[badge]}
           />
         </TouchableOpacity>
       </View>
