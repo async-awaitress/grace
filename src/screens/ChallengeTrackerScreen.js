@@ -16,7 +16,9 @@ import { icons } from "./Icons/icons";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [completed, setCompleted] = useState(route.params.personalChallenge.dailyStatus);
+  const [completed, setCompleted] = useState(
+    route.params.personalChallenge.dailyStatus
+  );
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
@@ -62,9 +64,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   // console.log(personalChallenge.dailyStatus);
 
   useEffect(() => {
-    updateChallenge(currentUserUID, id).then
-    (setCompleted(!completed)).then
-    (console.log(completed));
+    updateChallenge(currentUserUID, id)
+      .then(setCompleted(!completed))
+      .then(console.log(completed));
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
@@ -102,10 +104,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    if (
-      !personalChallenge.dailyStatus &&
-      today < updatedDate + 3
-    ) {
+    if (!personalChallenge.dailyStatus && today < updatedDate + 3) {
       try {
         const res = await EXPRESS_ROOT_PATH.put(
           `/personalChallenges/updatePersonalChallenge/${challengeId}`,
@@ -137,8 +136,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 69, left: 142 }}>
-
+      <View style={{ position: "absolute", top: 131, left: 142 }}>
         <TouchableOpacity
           onPress={() =>
             completeChallenge(currentUserUID, id).then(setCompleted(!completed))
@@ -152,8 +150,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.daysCounter}>
         <Text style={styles.daysCounterText}>
-          Day {currentDay + 1} of {duration}{" "}
-          {personalChallenge.dailyStatus ? `Complete` : `Incomplete`}
+          Day {currentDay + 1} of {duration}
+          {personalChallenge.dailyStatus ? ` Complete` : ` Incomplete`}
         </Text>
       </View>
       <View style={styles.descriptionBox}>
@@ -192,6 +190,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    height: 1000,
     alignItems: "center",
     position: "relative",
     backgroundColor: "#ffedd6",
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#ff924c",
-    paddingTop: 40,
+    paddingTop: 50,
     padding: 15,
     width: "100%",
     textAlign: "center",

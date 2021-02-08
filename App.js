@@ -67,6 +67,12 @@ const ChallengeScreenNav = () => (
       options={{ title: "" }}
       backBehavior="order"
     />
+    <ChallengeStack.Screen
+      name="Challenge Tracker"
+      component={ChallengeTrackerScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
   </ChallengeStack.Navigator>
 );
 
@@ -187,7 +193,7 @@ export default function App() {
         <Stack.Screen
           name="Challenge Tracker"
           component={ChallengeTrackerScreen}
-          options={{headerShown: false }}
+          // options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
