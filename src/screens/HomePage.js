@@ -26,8 +26,6 @@ export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
 
-
-
   useEffect(() => {
     async function getUserInfo() {
       let doc = await firebase
@@ -45,7 +43,6 @@ export default function HomePage({ navigation }) {
     }
     getUserInfo();
   });
-
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -68,7 +65,6 @@ export default function HomePage({ navigation }) {
     fetchChallenges();
   }, [isFocused]);
 
-
   const fetchPoints = async () => {
     try {
       const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
@@ -81,7 +77,6 @@ export default function HomePage({ navigation }) {
   useEffect(() => {
     fetchPoints();
   }, []);
-
 
   const updateChallenge = async (userId, challengeId) => {
     try {
@@ -102,7 +97,7 @@ export default function HomePage({ navigation }) {
   };
 
   const handlePress = async () => {
-     await loggingOut();
+    await loggingOut();
     navigation.replace("Login");
   };
 
@@ -291,16 +286,16 @@ const styles = StyleSheet.create({
   },
   linkView: {
     alignItems: "center",
-    padding: 10,
-    marginVertical: 10,
-    marginBottom: 20,
+    paddingVertical: 10,
+    margin: 20,
     backgroundColor: "#f9f1f1",
     borderWidth: 2,
-    borderRadius: 50,
+    borderRadius: 40,
     borderColor: "green",
+    width: 350,
   },
   linkViewText: {
-    fontSize: 25,
+    fontSize: 20,
     fontFamily: "Bradley Hand",
   },
   completeButtonView: {
