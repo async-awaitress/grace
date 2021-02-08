@@ -8,7 +8,6 @@ import apiKeys from "./config/keys";
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
-import Toast from "react-native-toast-message";
 import {
   FriendsIcon,
   HomeIcon,
