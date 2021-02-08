@@ -11,16 +11,23 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:email", async (req, res, next) => {
+router.get("/emails/:email", async (req, res, next) => {
   try {
     const user = await User.findOne({where:{
       email: req.params.email
     }})
-    res.send(user)
+    if(!user.uid){
+      res.status(401).send('Wrong username and/or password')
+    }
+    else {
+      res.send(user)
+    }
+
   } catch (error) {
     next(error)
   }
 })
+
 router.get("/:userId", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { uid: req.params.userId } });

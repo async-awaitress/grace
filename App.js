@@ -19,7 +19,6 @@ import {
   FriendChallengesScreen,
   Friends,
   HomePage,
-  // LoadingScreen,
   LoginScreen,
   PersonalChallengesScreen,
   ProfileScreen,
@@ -148,7 +147,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/> */}
         <Stack.Screen
           name="Login"
           component={LoginScreen}

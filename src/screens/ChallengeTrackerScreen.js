@@ -67,7 +67,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY 
+    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
     if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
       console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
       try {
@@ -130,7 +130,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 69, left: 115.5 }}>
+      <View style={{ position: "absolute", top: 69, left: 134.5 }}>
         <TouchableOpacity
           onPress={() =>
             completeChallenge(currentUserUID, id)

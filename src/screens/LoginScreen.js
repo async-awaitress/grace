@@ -18,6 +18,7 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
+
     if (!email) {
       Alert.alert("Email field is required.");
     }
@@ -26,18 +27,14 @@ export default function LoginScreen({ navigation }) {
        Alert.alert("Password field is required.");
     }
 
-    // const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${email}`)
-    // const user = res.data
     await signIn(email, password);
-          setEmail("");
-          setPassword("");
-          navigation.replace("HomePage")
-    // if(!user){
-    //   Alert.alert("Wrong username/Password")
-    // }
-    // else{
 
-    // }
+    const currentUserID = firebase.auth().currentUser.uid
+    if(currentUserID){
+      navigation.replace("HomePage")
+    }
+    setEmail("");
+    setPassword("");
 
   };
 

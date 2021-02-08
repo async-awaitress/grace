@@ -10,10 +10,20 @@ const ProfileScreen = ({ navigation }) => {
 
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
+  const [challenges, setChallenges] = useState([])
 
   let currentUserUID = firebase.auth().currentUser.uid;
   console.log("UID", currentUserUID)
 
+  // useEffect(()=> {
+  //   async function getChallenges() {
+  //     try {
+  //       const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/personalChallenges/${currentUserUID}`)
+  //     } catch (error) {
+
+  //     }
+  //   }
+  // })
 
   useEffect(() => {
     async function fetchUser() {
@@ -38,14 +48,21 @@ const ProfileScreen = ({ navigation }) => {
   let joinedDate = date.toLocaleDateString(undefined, options)
   console.log(joinedDate);
   console.log("points", user.totalPoints)
-  // date = date.split("T")[0]
-  // console.log("Joined Date", date)
-  // date = date.split('T')[0]
 
+  const handlePress = async () => {
+    await loggingOut()
+    firebase.auth().onAuthStateChanged((user) => {
+       if (user) {
+         navigation.replace('HomePage');
+       } else {
+         navigation.replace('Login');
+       }
+     });
+  }
 
   return (
     <View style={styles.container}>
-      <View style={{width: 400, height: 250, backgroundColor: '#a7f9ef', borderRadius: 20, borderWidth: 6, borderColor: "#9deaff", shadowOffset:{  width: 10,  height: 10,  },
+      <View style={{width: 370, height: 230, backgroundColor: '#a7f9ef', borderRadius: 20, borderWidth: 6, borderColor: "#9deaff", shadowOffset:{  width: 10,  height: 10,  },
       shadowColor: '#9deaff', shadowOpacity: 0.5}}>
         <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
@@ -59,7 +76,7 @@ const ProfileScreen = ({ navigation }) => {
 
 
 
-      <View style={{width: 400, height: 250, backgroundColor: '#fdffb6', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#e4ffbb", shadowOffset:{  width: 10,  height: 10,  },
+      <View style={{width: 370, height: 230, backgroundColor: '#fdffb6', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#e4ffbb", shadowOffset:{  width: 10,  height: 10,  },
       shadowColor: '#e4ffbb', shadowOpacity: 1.0}}>
         <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
@@ -74,9 +91,9 @@ const ProfileScreen = ({ navigation }) => {
         style={styles.tinyLogo}
         source={require("../../assets/profilePic.png")}/>
 
-      <View style={{width: 400, height: 250, backgroundColor: '#ff87ab', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
+      <View style={{width: 370, height: 210, backgroundColor: '#ff87ab', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
       shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
-        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "center"}}/>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
           <Text style={{padding: 6}}>Badges Earned</Text>
         </View>
@@ -127,7 +144,12 @@ const ProfileScreen = ({ navigation }) => {
               /> */}
             </ScrollView>
       </View>
-
+      <View style={{width: 70, height: 30, backgroundColor: 'black', margin: 2, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
+        <TouchableOpacity onPress={handlePress}>
+          <Text style={{color: "white"}}> Log out</Text>
+        </TouchableOpacity>
+      </View>
       {/* <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={handlePress}>
             <Text style={styles.buttonText}>Log Out</Text>
@@ -145,13 +167,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   container: {
+    top: 40,
     paddingTop: 40,
     flex: 1,
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   tinyLogo: {
-    top: 200,
+    top: 150,
     padding: 30,
     margin: 10,
     overflow: "visible",
@@ -183,11 +206,13 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "black",
+    position: "absolute",
     padding: 2,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
-    left: 55,
-    alignSelf: "flex-start"
+    left: 10,
+    bottom: -70,
+    height: "50%",
   },
   badgesEarned: {
     display: "flex",

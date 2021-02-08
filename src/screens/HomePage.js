@@ -23,30 +23,43 @@ export default function HomePage({ navigation }) {
   const isFocused = useIsFocused();
   const [challenges, setChallenges] = useState([]);
   const [user, setUser] = useState({});
+  const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
 
-  const handlePress = async () => {
-    await loggingOut();
-    navigation.replace("Login");
+
+
+  useEffect(() => {
+    async function getUserInfo() {
+      let doc = await firebase
+        .firestore()
+        .collection("users")
+        .doc(currentUserUID)
+        .get();
+
+      if (!doc.exists) {
+        Alert.alert("No user data found!");
+      } else {
+        let dataObj = doc.data();
+        setFirstName(dataObj.firstName);
+      }
+    }
+    getUserInfo();
+  });
+
+  const fetchPoints = async () => {
+    try {
+      const res = await axios.get(
+        `${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`
+      );
+      setUser(res.data);
+    } catch (error) {
+      console.log("get request failed", error);
+    }
   };
 
-  // useEffect(() => {
-  //   async function getUserInfo() {
-  //     let doc = await firebase
-  //       .firestore()
-  //       .collection("users")
-  //       .doc(currentUserUID)
-  //       .get();
-
-  //     if (!doc.exists) {
-  //       Alert.alert("No user data found!");
-  //     } else {
-  //       let dataObj = doc.data();
-  //       setFirstName(dataObj.firstName);
-  //     }
-  //   }
-  //   getUserInfo();
-  // });
+  useEffect(() => {
+    fetchPoints();
+  }, []);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -69,20 +82,6 @@ export default function HomePage({ navigation }) {
     fetchChallenges();
   }, [isFocused]);
 
-  const fetchPoints = async () => {
-    try {
-      const res = await axios.get(
-        `${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`
-      );
-      setUser(res.data);
-    } catch (error) {
-      console.log("get request failed", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPoints();
-  }, []);
 
   const updateChallenge = async (userId, challengeId) => {
     try {
@@ -102,11 +101,16 @@ export default function HomePage({ navigation }) {
     }
   };
 
+  const handlePress = async () => {
+     await loggingOut();
+    navigation.replace("Login");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Welcome,</Text>
-        <Text style={styles.headerText}>{user.firstName}!</Text>
+        <Text style={styles.headerText}>{firstName}!</Text>
       </View>
       <ScrollView>
         {challenges.length === 0 ? (
@@ -191,12 +195,6 @@ export default function HomePage({ navigation }) {
             onPress={() => navigation.navigate("Friend Challenges")}
           >
             <Text style={styles.linkViewText}>View All Friend Challenges</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Text style={styles.buttonText}>Log Out</Text>
           </TouchableOpacity>
         </View>
 
