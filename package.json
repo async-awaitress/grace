@@ -3,7 +3,7 @@
   "name": "grace",
   "scripts": {
     "start": "expo start",
-    "start-server": "nodemon server/index.js",
+    "start-dev": "ENV='development' expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -43,10 +43,12 @@
     "redux": "^4.0.5",
     "sequelize": "^6.5.0",
     "victory-native": "^35.3.1",
-    "volleyball": "^1.5.1"
+    "volleyball": "^1.5.1",
+    "expo-constants": "~9.3.3"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
+    "@babel/core": "~7.9.0",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3"
   },
   "private": true
 }
