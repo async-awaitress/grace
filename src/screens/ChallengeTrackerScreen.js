@@ -130,7 +130,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 69, left: 115.5 }}>
+      <View style={{ position: "absolute", top: 69, left: 134.5 }}>
         <TouchableOpacity
           onPress={() =>
             completeChallenge(currentUserUID, id)
