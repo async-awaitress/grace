@@ -12,9 +12,11 @@ import * as firebase from "firebase";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import Svg from "react-native-svg";
+import { icons } from "./Icons/icons";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [completed, setCompleted] = useState(route.params.personalChallenge.dailyStatus);
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
@@ -60,7 +62,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   // console.log(personalChallenge.dailyStatus);
 
   useEffect(() => {
-    updateChallenge(currentUserUID, id);
+    updateChallenge(currentUserUID, id).then
+    (setCompleted(!completed)).then
+    (console.log(completed));
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
@@ -76,7 +80,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           { uid: userId }
         );
         // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
       } catch (err) {
         console.log(err);
       }
@@ -96,17 +99,19 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   };
 
   const completeChallenge = async (userId, challengeId) => {
-     const now = new Date();
+    const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    if (!personalChallenge.dailyStatus && today > updatedDate && today < updatedDate + 3) {
+    if (
+      !personalChallenge.dailyStatus &&
+      today < updatedDate + 3
+    ) {
       try {
         const res = await EXPRESS_ROOT_PATH.put(
           `/personalChallenges/updatePersonalChallenge/${challengeId}`,
           { uid: userId }
         );
         // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
       } catch (error) {
         console.log("update request failed", error);
       }
@@ -115,7 +120,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
       <Svg height="50" width="200">
         <VictoryPie
           padAngle={5}
@@ -130,15 +137,16 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 69, left: 134.5 }}>
+      <View style={{ position: "absolute", top: 69, left: 142 }}>
+
         <TouchableOpacity
           onPress={() =>
-            completeChallenge(currentUserUID, id)
+            completeChallenge(currentUserUID, id).then(setCompleted(!completed))
           }
         >
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
-            source={require(`../../assets/bag-c.png`)}
+            source={icons[badge]}
           />
         </TouchableOpacity>
       </View>
@@ -148,11 +156,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           {personalChallenge.dailyStatus ? `Complete` : `Incomplete`}
         </Text>
       </View>
-      <View style={styles.descriptionHeader}>
-        <Text style={styles.descriptionHeaderText}>Description</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text>{description}</Text>
+      <View style={styles.descriptionBox}>
+        <Text style={styles.descriptionText}>{description}</Text>
       </View>
       <View>
         <Modal visible={modalOpen} animationType="slide">
@@ -177,10 +182,13 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 30,
+    fontSize: 26.3,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
+    color: "#ffffff",
+    fontFamily: "Bradley Hand",
+    textTransform: "uppercase",
   },
   container: {
     flex: 1,
@@ -237,6 +245,30 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: "#ff924c",
+  },
+  descriptionBox: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderWidth: 2,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 15,
+    width: 350,
+    paddingHorizontal: 5,
+    top: 150,
+    borderColor: "#ff924c",
+  },
+  descriptionText: {
+    fontSize: 17,
+  },
+  header: {
+    backgroundColor: "#ff924c",
+    paddingTop: 40,
+    padding: 15,
+    width: "100%",
+    textAlign: "center",
+    alignItems: "center",
   },
 });
 

@@ -188,6 +188,7 @@ export default function App() {
         <Stack.Screen
           name="Challenge Tracker"
           component={ChallengeTrackerScreen}
+          options={{headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
