@@ -28,7 +28,7 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`);
+        const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
         setUser(res.data)
 
       } catch (error) {
@@ -38,10 +38,6 @@ const ProfileScreen = ({ navigation }) => {
     fetchUser();
   }, []);
 
-  // const handlePress = () => {
-  //   loggingOut();
-  //   navigation.replace("Login");
-  // };
 
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   let date = new Date(user.createdAt)
@@ -52,11 +48,9 @@ const ProfileScreen = ({ navigation }) => {
   const handlePress = async () => {
     await loggingOut()
     firebase.auth().onAuthStateChanged((user) => {
-       if (user) {
-         navigation.replace('HomePage');
-       } else {
-         navigation.replace('Login');
-       }
+      //  if (!user) {
+          navigation.replace('Login');
+      //  }
      });
   }
 

@@ -46,26 +46,12 @@ export default function HomePage({ navigation }) {
     getUserInfo();
   });
 
-  const fetchPoints = async () => {
-    try {
-      const res = await axios.get(
-        `${EXPRESS_ROOT_PATH}/api/users/${currentUserUID}`
-      );
-      setUser(res.data);
-    } catch (error) {
-      console.log("get request failed", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPoints();
-  }, []);
 
   useEffect(() => {
     async function fetchChallenges() {
       try {
-        const res = await axios.get(
-          `${EXPRESS_ROOT_PATH}/api/challenges/${currentUserUID}`
+        const res = await EXPRESS_ROOT_PATH.get(
+          `/challenges/${currentUserUID}`
         );
         const challenges = res.data;
         const dailyCompletionObjToSet = {};
@@ -83,10 +69,24 @@ export default function HomePage({ navigation }) {
   }, [isFocused]);
 
 
+  const fetchPoints = async () => {
+    try {
+      const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
+      setUser(res.data);
+    } catch (error) {
+      console.log("get request failed", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPoints();
+  }, []);
+
+
   const updateChallenge = async (userId, challengeId) => {
     try {
-      const res = await axios.put(
-        `${EXPRESS_ROOT_PATH}/api/personalChallenges/updatePersonalChallenge/${challengeId}`,
+      const res = await EXPRESS_ROOT_PATH.put(
+        `/personalChallenges/updatePersonalChallenge/${challengeId}`,
         { uid: userId }
       );
       // dailyStatus = "true"
@@ -145,17 +145,16 @@ export default function HomePage({ navigation }) {
                     {/* <Text style={styles.challengeText}>{item.title}</Text>
                   <Text>{item.category}</Text> */}
 
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("Challenge Tracker", item)
-                    }
-                  >
-                    <Image
-                      source={icons[item.badge]}
-                      style={{ width: 70, height: 70 }}
-                    />
-
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("Challenge Tracker", item)
+                      }
+                    >
+                      <Image
+                        source={icons[item.badge]}
+                        style={{ width: 70, height: 70 }}
+                      />
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                       disabled={dailyCompletion[item.id]}
