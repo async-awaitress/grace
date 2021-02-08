@@ -137,7 +137,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       </Svg>
 
       {/* EDIT TOP AND LEFT IN NEXT LINE TO FINE TUNE BADGE PLACEMENT */}
-      <View style={{ position: "absolute", top: 123.5, left: 115.5 }}>
+      <View style={{ position: "absolute", top: 121, left: 115.5 }}>
         <TouchableOpacity onPress={() => completeChallenge(currentUserUID, id)}>
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
@@ -177,7 +177,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 30,
+    fontSize: 26.3,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
