@@ -52,7 +52,7 @@ export default function RegistrationScreen({ navigation }) {
         lastName,
         email
       });
-      navigation.navigate("HomePage");
+      navigation.replace("HomePage");
       emptyState();
     }
   };
@@ -92,7 +92,7 @@ export default function RegistrationScreen({ navigation }) {
           ></TextInput>
         </View>
         <View style={{ marginTop: 5 }}>
-          <Text style={styles.inputTitle}>Password</Text>
+          <Text style={styles.inputTitle}>Password (minimum 6 characters required)</Text>
           <TextInput
             style={styles.input}
             secureTextEntry
@@ -126,7 +126,7 @@ export default function RegistrationScreen({ navigation }) {
       >
         <Text style={{ color: "green", fontSize: 13 }}>
           Already have an account?
-          <Text style={{ fontWeight: "500", color: "red" }}>Log In</Text>
+          <Text style={{ fontWeight: "500", color: "red" }}> Log In</Text>
         </Text>
       </TouchableOpacity>
     </View>

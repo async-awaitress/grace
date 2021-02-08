@@ -137,8 +137,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      {/* EDIT TOP AND LEFT IN NEXT LINE TO FINE TUNE BADGE PLACEMENT */}
-      <View style={{ position: "absolute", top: 121, left: 115.5 }}>
+      <View style={{ position: "absolute", top: 69, left: 142 }}>
+
         <TouchableOpacity
           onPress={() =>
             completeChallenge(currentUserUID, id).then(setCompleted(!completed))

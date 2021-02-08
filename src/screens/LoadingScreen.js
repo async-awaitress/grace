@@ -7,9 +7,9 @@
 //      () => {
 //       firebase.auth().onAuthStateChanged((user) => {
 //         if (user) {
-//           navigation.replace('Dashboard');
+//           navigation.replace('HomePage');
 //         } else {
-//           navigation.replace('Home');
+//           navigation.replace('Login');
 //         }
 //       });
 //     }

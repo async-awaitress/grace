@@ -18,8 +18,15 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 
 export default function HomePage({ navigation }) {
-  const [firstName, setFirstName] = useState("");
   let currentUserUID = firebase.auth().currentUser.uid;
+
+  const isFocused = useIsFocused();
+  const [challenges, setChallenges] = useState([]);
+  const [user, setUser] = useState({});
+  const [firstName, setFirstName] = useState("");
+  const [dailyCompletion, setDailyCompletion] = useState({});
+
+
 
   useEffect(() => {
     async function getUserInfo() {
@@ -39,15 +46,6 @@ export default function HomePage({ navigation }) {
     getUserInfo();
   });
 
-  const handlePress = () => {
-    loggingOut();
-    navigation.navigate("Login");
-  };
-
-  const isFocused = useIsFocused();
-  const [challenges, setChallenges] = useState([]);
-  const [user, setUser] = useState({});
-  const [dailyCompletion, setDailyCompletion] = useState({});
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -70,6 +68,7 @@ export default function HomePage({ navigation }) {
     fetchChallenges();
   }, [isFocused]);
 
+
   const fetchPoints = async () => {
     try {
       const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
@@ -82,6 +81,7 @@ export default function HomePage({ navigation }) {
   useEffect(() => {
     fetchPoints();
   }, []);
+
 
   const updateChallenge = async (userId, challengeId) => {
     try {
@@ -99,6 +99,11 @@ export default function HomePage({ navigation }) {
     } catch (error) {
       console.log("update request failed", error);
     }
+  };
+
+  const handlePress = async () => {
+     await loggingOut();
+    navigation.replace("Login");
   };
 
   return (
@@ -189,12 +194,6 @@ export default function HomePage({ navigation }) {
             onPress={() => navigation.navigate("Friend Challenges")}
           >
             <Text style={styles.linkViewText}>View All Friend Challenges</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Text style={styles.buttonText}>Log Out</Text>
           </TouchableOpacity>
         </View>
 
