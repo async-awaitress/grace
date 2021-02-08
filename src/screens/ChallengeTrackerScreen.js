@@ -16,6 +16,7 @@ import { icons } from "./Icons/icons";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [completed, setCompleted] = useState(route.params.personalChallenge.dailyStatus);
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
@@ -61,7 +62,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   // console.log(personalChallenge.dailyStatus);
 
   useEffect(() => {
-    updateChallenge(currentUserUID, id);
+    updateChallenge(currentUserUID, id).then
+    (setCompleted(!completed)).then
+    (console.log(completed));
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
@@ -77,7 +80,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           { uid: userId }
         );
         // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
       } catch (err) {
         console.log(err);
       }
@@ -110,7 +112,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           { uid: userId }
         );
         // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
       } catch (error) {
         console.log("update request failed", error);
       }
@@ -138,7 +139,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
       {/* EDIT TOP AND LEFT IN NEXT LINE TO FINE TUNE BADGE PLACEMENT */}
       <View style={{ position: "absolute", top: 121, left: 115.5 }}>
-        <TouchableOpacity onPress={() => completeChallenge(currentUserUID, id)}>
+        <TouchableOpacity
+          onPress={() =>
+            completeChallenge(currentUserUID, id).then(setCompleted(!completed))
+          }
+        >
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
             source={icons[badge]}
