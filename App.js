@@ -28,7 +28,7 @@ const Stack = createStackNavigator();
 const ChallengeStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-//nav between home, challenge list, and challenge details
+//nav between home, challenge list, challenge details and tracker
 const ChallengeScreenNav = () => (
   <ChallengeStack.Navigator
     initialRouteName="Home"
@@ -193,63 +193,9 @@ export default function App() {
         <Stack.Screen
           name="Challenge Tracker"
           component={ChallengeTrackerScreen}
-          // options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
-
-    // <Provider>
-    //   <userContext.Provider>
-    //     <NavigationContainer>
-    //       <Stack.Navigator>
-    //         <>
-    //           <Stack.Screen
-    //             name="HomePage"
-    //             component={HomePage}
-    //             options={{
-    //               animationEnabled: false,
-    //               headerShown: false,
-    //             }}
-    //           />
-    //           <Stack.Screen
-    //             name="Challenge Tracker"
-    //             component={ChallengeTrackerScreen}
-    //             options={{
-    //               title: "",
-    //               headerBackAllowFontScaling: true,
-    //               headerBackTitleStyle: {
-    //                 fontSize: 16,
-    //               },
-    //               headerTransparent: true,
-    //               headerTintColor: "white",
-    //             }}
-    //           />
-    //         </>
-    //         <>
-    //           <Stack.Screen
-    //             name="Login"
-    //             component={LoginScreen}
-    //             title=""
-    //             options={{
-    //               animationEnabled: false,
-    //               headerShown: false,
-    //             }}
-    //           />
-    //           <Stack.Screen
-    //             name="Registration"
-    //             title=""
-    //             options={{
-    //               animationEnabled: false,
-    //               headerShown: false,
-    //             }}
-    //             component={RegistrationScreen}
-    //           />
-    //         </>
-    //       </Stack.Navigator>
-    //     </NavigationContainer>
-    //     {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
-    //   </userContext.Provider>
-    // </Provider>
   );
 }
 const styles = StyleSheet.create({

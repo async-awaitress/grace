@@ -35,18 +35,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     tips,
   } = route.params;
 
-  // console.log(route.params);
-
-  // console.log("DAILY STATUS", personalChallenge.dailyStatus);
-
   let now = new Date();
   const lastUpdated = new Date(personalChallenge.updatedAt);
   const created = new Date(personalChallenge.createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
   const exactDay = (now - created) / 86400000;
-  // console.log("CURRENT DAY", currentDay);
-  // console.log("EXACT DAY", exactDay);
-
   const challengeData = [];
   const colors = [];
   const completeColor = "#ff924c";
@@ -61,7 +54,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     challengeData.push(section);
     colors.push(color);
   }
-  // console.log(personalChallenge.dailyStatus);
 
   useEffect(() => {
     updateChallenge(currentUserUID, id)
