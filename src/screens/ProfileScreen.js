@@ -11,19 +11,30 @@ const ProfileScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
   const [challenges, setChallenges] = useState([])
+  const handlePress = async () => {
+    await loggingOut()
+    firebase.auth().onAuthStateChanged((user) => {
+       if (!user) {
+
+         navigation.replace('Login')
+       }
+      })
+  }
 
   let currentUserUID = firebase.auth().currentUser.uid;
   console.log("UID", currentUserUID)
 
-  // useEffect(()=> {
-  //   async function getChallenges() {
-  //     try {
-  //       const res = await axios.get(`${EXPRESS_ROOT_PATH}/api/personalChallenges/${currentUserUID}`)
-  //     } catch (error) {
+  useEffect(()=> {
+    async function getChallenges() {
+      try {
+        const res = await EXPRESS_ROOT_PATH.get(`/personalChallenges/${currentUserUID}`)
+  const completedChallenges = res.data
+         setCompletedChallenges(setCompletedChallenges)
+      } catch (error) {
 
-  //     }
-  //   }
-  // })
+      }
+    }
+  })
 
   useEffect(() => {
     async function fetchUser() {
@@ -45,14 +56,7 @@ const ProfileScreen = ({ navigation }) => {
   console.log(joinedDate);
   console.log("points", user.totalPoints)
 
-  const handlePress = async () => {
-    await loggingOut()
-    firebase.auth().onAuthStateChanged((user) => {
-      //  if (!user) {
-          navigation.replace('Login');
-      //  }
-     });
-  }
+
 
   return (
     <View style={styles.container}>
