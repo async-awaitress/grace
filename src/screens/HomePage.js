@@ -16,6 +16,18 @@ import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
+import apiKeys from "../../config/keys";
+import PendingChallengeComponent from "./PendingChallengeComponent";
+import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
+
+// create collection in firebase
+if (!firebase.apps.length) {
+  console.log("Connected with Firebase");
+  firebase.initializeApp(apiKeys.firebaseConfig);
+}
+
+const db = firebase.firestore();
+const friendChallengeInvitesRef = db.collection("friendChallengeInvites");
 
 export default function HomePage({ navigation }) {
   let currentUserUID = firebase.auth().currentUser.uid;
@@ -25,6 +37,7 @@ export default function HomePage({ navigation }) {
   const [user, setUser] = useState({});
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
+  const [friendChallenges, setFriendChallenges] = useState([]);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -65,6 +78,42 @@ export default function HomePage({ navigation }) {
     fetchChallenges();
   }, [isFocused]);
 
+  // listening from firebase req/invites for FriendChallenges
+  useEffect(() => {
+    const unsubscribe = friendChallengeInvitesRef.onSnapshot(
+      (querySnapshot) => {
+        const nextFriendChallenges = querySnapshot
+          // return array of the docs changes since the last snapshot
+          .docChanges()
+          // we want to listen messages which are only added
+          .filter(({ type }) => type === "added")
+          // we listen to all pending friend challenges from the user (sender)
+          .filter(({ doc }) => {
+            const currentUserUid = firebase.auth().currentUser.uid;
+            const friendChanllenge = doc.data();
+
+            return (
+              // listening to challenges I send and receive
+              (friendChanllenge.senderId === currentUserUid ||
+                friendChanllenge.receiverId === currentUserUid) &&
+              friendChanllenge.status === "pending"
+            );
+          })
+          .map(({ doc }) => {
+            // doc.data is method in doc object (unpack data)
+            const friendPendingChallenge = doc.data();
+            const docId = doc.id;
+            return { ...friendPendingChallenge, ...{ docId } };
+          });
+
+        // setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
+        setFriendChallenges(nextFriendChallenges);
+      }
+    );
+    //
+    return () => unsubscribe();
+  }, []);
+
   const fetchPoints = async () => {
     try {
       const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
@@ -96,9 +145,25 @@ export default function HomePage({ navigation }) {
     }
   };
 
-  const handlePress = async () => {
-    await loggingOut();
-    navigation.replace("Login");
+  ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
+  const onAccept = async (receiverId, senderId, challengeId) => {
+    try {
+      // add challenge to db
+      await EXPRESS_ROOT_PATH.post("/friendChallenges/add", {
+        receiverId: receiverId,
+        senderId: senderId,
+        challengeId: challengeId,
+      });
+
+      // get all friend challenges of the user
+      const friendChallenges = await EXPRESS_ROOT_PATH.get(
+        `/friendChallenges/${currentUserUID}`
+      );
+      console.log("friendChallenges", friendChallenges.data);
+      setFriendChallenges(friendChallenges.data);
+    } catch (error) {
+      console.log("friend challenge not added to db", error);
+    }
   };
 
   return (
@@ -129,7 +194,7 @@ export default function HomePage({ navigation }) {
           ) : (
             <ScrollView
               style={styles.activeChallengeContainer}
-              horizontal={true}
+              // horizontal={true}
             >
               <FlatList
                 horizontal
@@ -171,7 +236,37 @@ export default function HomePage({ navigation }) {
               />
             </ScrollView>
           )}
+
+          {/* ////// FRIEND CHALLENGES CONTAINER ///// */}
+          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
+            <FlatList
+              horizontal
+              data={friendChallenges}
+              keyExtractor={(friendChallenge) => friendChallenge.id}
+              renderItem={({ item }) => {
+                if (item.senderId === currentUserUID) {
+                  return <PendingChallengeComponent badge={item.badge} />;
+                } else {
+                  return (
+                    <ReceiveChallengeComponent
+                      badge={item.badge}
+                      onDecline={() => console.log("remove")}
+                      onAccept={() => {
+                        onAccept(
+                          item.receiverId,
+                          item.senderId,
+                          item.challengeId
+                        );
+                      }}
+                    />
+                  );
+                }
+              }}
+            />
+          </ScrollView>
         </View>
+        {/* ///////////////// */}
+
         <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
         <View style={styles.linkView}>
           <TouchableOpacity
@@ -308,6 +403,31 @@ const styles = StyleSheet.create({
   },
   completedButtonView: {
     backgroundColor: "orange",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
+    marginTop: 20,
+  },
+  pendingChallengeInfo: {
+    flexDirection: "column",
+    margin: 5,
+    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#ffedd6",
+    backgroundColor: "white",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    padding: 10,
+    height: 180,
+    width: 110,
+    opacity: 0.5,
+  },
+  pendingButtonView: {
+    backgroundColor: "red",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

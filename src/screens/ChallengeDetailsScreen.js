@@ -20,10 +20,9 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
   const addPersonalChallengeHandler = async (userId, challengeId) => {
     try {
-      await EXPRESS_ROOT_PATH.post(
-        `/personalChallenges/add/${challengeId}`,
-        { uid: userId }
-      );
+      await EXPRESS_ROOT_PATH.post(`/personalChallenges/add/${challengeId}`, {
+        uid: userId,
+      });
       console.log("Challenge added to datatabse");
     } catch (error) {
       console.log("accept challenge rejected", error);
@@ -126,18 +125,31 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
               // else {
               //   await addFriendChallengeHandler(currentUserUID, id)
               // }
-              Alert.alert(
-                "Challenge Accepted!",
-                type === "personal"
-                  ? "You Got This!"
-                  : "Choose Your Friend On The Next Page",
-                [
-                  {
-                    text: "ok",
-                    onPress: () => navigation.navigate("Home"),
-                  },
-                ]
-              );
+              {
+                if (type === "personal") {
+                  Alert.alert("Challenge Accepted!", "You Got This!", [
+                    {
+                      text: "ok",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                } else {
+                  Alert.alert(
+                    "Challenge Accepted!",
+                    "Choose friend on next page!",
+                    [
+                      {
+                        text: "ok",
+                        onPress: () =>
+                          navigation.navigate("Friend List", {
+                            challengeId: id,
+                            badge
+                          }),
+                      },
+                    ]
+                  );
+                }
+              }
             }}
           >
             <View
