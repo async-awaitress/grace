@@ -38,7 +38,6 @@ export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
   const [friendChallenges, setFriendChallenges] = useState([]);
-  console.log("HEREEE", friendChallenges);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -146,18 +145,26 @@ export default function HomePage({ navigation }) {
     }
   };
 
-  const handlePress = async () => {
-    await loggingOut();
-    navigation.replace("Login");
-  };
+  ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
+  const onAccept = async (receiverId, senderId, challengeId) => {
+    try {
+      // add challenge to db
+      await EXPRESS_ROOT_PATH.post("/friendChallenges/add", {
+        receiverId: receiverId,
+        senderId: senderId,
+        challengeId: challengeId,
+      });
 
-  // async function onAccept() {
-  //   try {
-      
-  //   } catch (error) {
-      
-  //   }
-  // }
+      // get all friend challenges of the user
+      const friendChallenges = await EXPRESS_ROOT_PATH.get(
+        `/friendChallenges/${currentUserUID}`
+      );
+      console.log("friendChallenges", friendChallenges.data);
+      setFriendChallenges(friendChallenges.data);
+    } catch (error) {
+      console.log("friend challenge not added to db", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -244,7 +251,13 @@ export default function HomePage({ navigation }) {
                     <ReceiveChallengeComponent
                       badge={item.badge}
                       onDecline={() => console.log("remove")}
-                      onAccept={() => console.log("accept")}
+                      onAccept={() => {
+                        onAccept(
+                          item.receiverId,
+                          item.senderId,
+                          item.challengeId
+                        );
+                      }}
                     />
                   );
                 }
