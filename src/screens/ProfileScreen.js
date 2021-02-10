@@ -5,39 +5,43 @@ import { useIsFocused } from "@react-navigation/native";
 import axios from "axios"
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { loggingOut } from "../../API/methods";
+import { icons } from "./Icons/icons";
 
 const ProfileScreen = ({ navigation }) => {
 
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
-  const [challenges, setChallenges] = useState([])
+  const [completedChallenges, setCompletedChallenges] = useState([])
+
+
   const handlePress = async () => {
     await loggingOut()
     firebase.auth().onAuthStateChanged((user) => {
        if (!user) {
-
          navigation.replace('Login')
        }
       })
   }
 
-  let currentUserUID = firebase.auth().currentUser.uid;
-  console.log("UID", currentUserUID)
+  // let currentUserUID = firebase.auth().currentUser.uid;
+  // console.log("UID", currentUserUID)
 
   useEffect(()=> {
-    async function getChallenges() {
+    async function getCompletedChallenges() {
+      let currentUserUID = firebase.auth().currentUser.uid;
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/personalChallenges/${currentUserUID}`)
-  const completedChallenges = res.data
-         setCompletedChallenges(setCompletedChallenges)
+        setCompletedChallenges(res.data)
       } catch (error) {
 
       }
     }
-  })
+    getCompletedChallenges();
+  }, [])
 
   useEffect(() => {
     async function fetchUser() {
+      let currentUserUID = firebase.auth().currentUser.uid;
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
         setUser(res.data)
@@ -55,7 +59,6 @@ const ProfileScreen = ({ navigation }) => {
   let joinedDate = date.toLocaleDateString(undefined, options)
   console.log(joinedDate);
   console.log("points", user.totalPoints)
-
 
 
   return (
@@ -81,13 +84,16 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={{padding: 6}}>My goals</Text>
         </View>
         <View>
-          <Text style={{padding: 6}}>Completed Challenges</Text>
+          <Text style={{padding: 6}}>Challenges Participated</Text>
         </View>
       </View>
 
-      <Image
+      <View style={styles.ImageContainer}>
+        <Image
         style={styles.tinyLogo}
         source={require("../../assets/profilePic.png")}/>
+      </View>
+
 
       <View style={{width: 370, height: 210, backgroundColor: '#ff87ab', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
       shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
@@ -100,48 +106,24 @@ const ProfileScreen = ({ navigation }) => {
           style={styles.badgesEarned}
           horizontal={true}
           >
-            <FlatList/>
-              {/* <FlatList
-                horizontal
-                data={challenges}
-                keyExtractor={(challenge) => challenge.id}
-                renderItem={({ item }) => (
-                  <View style={styles.activeChallengeInfo}>
-                    <Text style={styles.challengeText}>{item.title}</Text>
-                    <Text>{item.category}</Text>
-
-                    <TouchableOpacity
-                      onPress={() =>
-                      navigation.navigate("Challenge Tracker", item)
-                    }
-                    >
-                    <Image
-                      source={icons[item.badge]}
-                      style={{ width: 70, height: 70 }}
-                    />
-
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      disabled={dailyCompletion[item.id]}
-                      style={
-                        dailyCompletion[item.id]
-                          ? styles.completedButtonView
-                          : styles.completeButtonView
-                      }
-                      onPress={() => updateChallenge(currentUserUID, item.id)}
-                    >
-                      {dailyCompletion[item.id] ? (
-                        <Text>Done!</Text>
-                      ) : (
-                        <Text>Complete</Text>
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                )}
-              /> */}
-            </ScrollView>
+          <FlatList
+            horizontal
+            data={completedChallenges}
+            renderItem={({ item }) => (
+              <View style={styles.completedChallenges}>
+                <TouchableOpacity>
+                  <Image
+                    source={icons[item.badge]}
+                    style={{ width: 50, height: 50 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item, index) => index}
+          />
+        </ScrollView>
       </View>
+
       <View style={{width: 70, height: 30, backgroundColor: 'black', margin: 2, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
       shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
         <TouchableOpacity onPress={handlePress}>
@@ -171,17 +153,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
-  tinyLogo: {
-    top: 150,
-    padding: 30,
-    margin: 10,
-    overflow: "visible",
-    borderRadius: 150 / 2,
-    borderWidth: 10,
-    borderColor: "white",
-    alignSelf: "center",
-    position: "absolute"
-  },
+
   button: {
     marginHorizontal: 50,
     backgroundColor: "#bdb2ff",
@@ -212,12 +184,34 @@ const styles = StyleSheet.create({
     bottom: -70,
     height: "50%",
   },
+  ImageContainer: {
+    borderRadius: 150 / 2,
+    top: 170,
+    position: "absolute",
+    shadowOffset:{  width: 10,  height: 10},
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    alignSelf: "center"
+  },
   badgesEarned: {
+    display: "flex",
+    left: 5,
+    marginBottom: 10,
+    flexDirection: "row",
+    alignContent: "space-between",
+    width: 350,
+    height: 200,
+    borderWidth: 4,
+    borderColor: "white",
+    borderRadius: 7,
+    backgroundColor: "#ff87ab"
+  },
+  activeChallengeContainer: {
     display: "flex",
     flexDirection: "row",
     alignContent: "space-between",
-    width: 360,
-    height: 150,
+    width: 400,
+    height: 140,
     color: "white"
   },
 });
