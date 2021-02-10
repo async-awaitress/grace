@@ -16,6 +16,16 @@ import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
+import apiKeys from "../../config/keys";
+
+// create collection in firebase
+if (!firebase.apps.length) {
+  console.log("Connected with Firebase");
+  firebase.initializeApp(apiKeys.firebaseConfig);
+}
+
+const db = firebase.firestore();
+const friendChallengeInvitesRef = db.collection("friendChallengeInvites");
 
 export default function HomePage({ navigation }) {
   let currentUserUID = firebase.auth().currentUser.uid;
@@ -25,6 +35,7 @@ export default function HomePage({ navigation }) {
   const [user, setUser] = useState({});
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
+  const [friendChallenges, setFriendChallenges] = useState([]);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -64,6 +75,39 @@ export default function HomePage({ navigation }) {
     }
     fetchChallenges();
   }, [isFocused]);
+
+  // listening from firebase req/invites for FriendChallenges
+  useEffect(() => {
+    const unsubscribe = friendChallengeInvitesRef.onSnapshot(
+      (querySnapshot) => {
+        const nextFriendChallenges = querySnapshot
+          // return array of the docs changes since the last snapshot
+          .docChanges()
+          // we want to listen messages which are only added
+          .filter(({ type }) => type === "added")
+          // we listen to all pending friend challenges from the user (sender)
+          .filter(({ doc }) => {
+            const currentUserUid = firebase.auth().currentUser.uid;
+            const friendChanllenge = doc.data();
+            return (
+              // listening to challenges I send and receive
+              (friendChanllenge.senderId === currentUserUid ||
+                friendChanllenge.receiverId === currentUserUid) &&
+              friendChanllenge.status === "pending"
+            );
+          })
+          .map(({ doc }) => {
+            // doc.data is method in doc object (unpack data)
+            const friendPendingChallenge = doc.data();
+            return friendPendingChallenge;
+          });
+        console.log("HEREEE", friendChallenges);
+        setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
+      }
+    );
+    //
+    return () => unsubscribe();
+  }, []);
 
   const fetchPoints = async () => {
     try {
@@ -129,7 +173,7 @@ export default function HomePage({ navigation }) {
           ) : (
             <ScrollView
               style={styles.activeChallengeContainer}
-              horizontal={true}
+              // horizontal={true}
             >
               <FlatList
                 horizontal
@@ -171,6 +215,36 @@ export default function HomePage({ navigation }) {
               />
             </ScrollView>
           )}
+
+          {/* ////// FRIEND CHALLENGES CONTAINER ///// */}
+          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
+            <FlatList
+              horizontal
+              data={friendChallenges}
+              keyExtractor={(friendChallenge) => friendChallenge.id}
+              renderItem={({ item }) => (
+                <View style={styles.pendingChallengeInfo}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Challenge Tracker", item)
+                    }
+                  >
+                    <Image
+                      source={icons[item.badge]}
+                      style={{ width: 70, height: 70 }}
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    disabled={true}
+                    style={styles.pendingButtonView}
+                  >
+                    <Text style={{ color: "white" }}>Pending</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </ScrollView>
         </View>
         <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
         <View style={styles.linkView}>
@@ -308,6 +382,31 @@ const styles = StyleSheet.create({
   },
   completedButtonView: {
     backgroundColor: "orange",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    paddingHorizontal: 3,
+    marginTop: 20,
+  },
+  pendingChallengeInfo: {
+    flexDirection: "column",
+    margin: 5,
+    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#ffedd6",
+    backgroundColor: "white",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    padding: 10,
+    height: 180,
+    width: 110,
+    opacity: 0.5,
+  },
+  pendingButtonView: {
+    backgroundColor: "red",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

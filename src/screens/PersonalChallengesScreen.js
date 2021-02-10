@@ -39,7 +39,10 @@ const PersonalChallengesScreen = ({ navigation }) => {
             data={challenges.filter(
               (challenge) => challenge.type === "personal"
             )}
-            keyExtractor={(challenge) => challenge.id}
+            // keyExtractor={(challenge) => challenge.id}
+            keyExtractor={(item) => {
+              return item.id;
+            }}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
