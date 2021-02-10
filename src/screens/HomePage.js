@@ -17,6 +17,8 @@ import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 import apiKeys from "../../config/keys";
+import PendingChallengeComponent from "./PendingChallengeComponent";
+import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
 
 // create collection in firebase
 if (!firebase.apps.length) {
@@ -36,6 +38,7 @@ export default function HomePage({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
   const [friendChallenges, setFriendChallenges] = useState([]);
+  console.log("HEREEE", friendChallenges);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -89,6 +92,7 @@ export default function HomePage({ navigation }) {
           .filter(({ doc }) => {
             const currentUserUid = firebase.auth().currentUser.uid;
             const friendChanllenge = doc.data();
+
             return (
               // listening to challenges I send and receive
               (friendChanllenge.senderId === currentUserUid ||
@@ -99,10 +103,12 @@ export default function HomePage({ navigation }) {
           .map(({ doc }) => {
             // doc.data is method in doc object (unpack data)
             const friendPendingChallenge = doc.data();
-            return friendPendingChallenge;
+            const docId = doc.id;
+            return { ...friendPendingChallenge, ...{ docId } };
           });
-        console.log("HEREEE", friendChallenges);
-        setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
+
+        // setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
+        setFriendChallenges(nextFriendChallenges);
       }
     );
     //
@@ -144,6 +150,14 @@ export default function HomePage({ navigation }) {
     await loggingOut();
     navigation.replace("Login");
   };
+
+  // async function onAccept() {
+  //   try {
+      
+  //   } catch (error) {
+      
+  //   }
+  // }
 
   return (
     <View style={styles.container}>
@@ -222,30 +236,24 @@ export default function HomePage({ navigation }) {
               horizontal
               data={friendChallenges}
               keyExtractor={(friendChallenge) => friendChallenge.id}
-              renderItem={({ item }) => (
-                <View style={styles.pendingChallengeInfo}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("Challenge Tracker", item)
-                    }
-                  >
-                    <Image
-                      source={icons[item.badge]}
-                      style={{ width: 70, height: 70 }}
+              renderItem={({ item }) => {
+                if (item.senderId === currentUserUID) {
+                  return <PendingChallengeComponent badge={item.badge} />;
+                } else {
+                  return (
+                    <ReceiveChallengeComponent
+                      badge={item.badge}
+                      onDecline={() => console.log("remove")}
+                      onAccept={() => console.log("accept")}
                     />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    disabled={true}
-                    style={styles.pendingButtonView}
-                  >
-                    <Text style={{ color: "white" }}>Pending</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+                  );
+                }
+              }}
             />
           </ScrollView>
         </View>
+        {/* ///////////////// */}
+
         <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
         <View style={styles.linkView}>
           <TouchableOpacity
