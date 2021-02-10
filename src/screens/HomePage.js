@@ -114,6 +114,43 @@ export default function HomePage({ navigation }) {
     return () => unsubscribe();
   }, []);
 
+  //listening for change in status from pending to accepted or declined
+  useEffect(() => {
+    const unsubscribe = friendChallengeInvitesRef.onSnapshot(
+      (querySnapshot) => {
+        const removedFriendChallenges = querySnapshot
+          // return array of the docs changes since the last snapshot
+          .docChanges()
+          // we want to listen messages which are only removed
+          .filter(({ type }) => type === "removed");
+        // we listen to all pending friend challenges from the user (sender)
+        // .filter(({ doc }) => {
+        //   const currentUserUid = firebase.auth().currentUser.uid;
+        //   const friendChanllenge = doc.data();
+
+        //   return (
+        //     // listening to challenges I send and receive
+        //     (friendChanllenge.senderId === currentUserUid ||
+        //       friendChanllenge.receiverId === currentUserUid) &&
+        //     friendChanllenge.status === "pending"
+        //   );
+        // })
+        // .map(({ doc }) => {
+        //   // doc.data is method in doc object (unpack data)
+        //   const friendPendingChallenge = doc.data();
+        //   const docId = doc.id;
+        //   return { ...friendPendingChallenge, ...{ docId } };
+        // });
+        console.log("removed friend challenges", removedFriendChallenges);
+        // fetchFriendChallenges(currentUserUID);
+        // setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
+        // setFriendChallenges(removedFriendChallenges);
+      }
+    );
+    //
+    return () => unsubscribe();
+  }, []);
+
   const fetchPoints = async () => {
     try {
       const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
@@ -145,6 +182,22 @@ export default function HomePage({ navigation }) {
     }
   };
 
+  // get all friend challenges of the user
+  const fetchFriendChallenges = async (currentUserUID) => {
+    try {
+      const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
+        `/friendChallenges/${currentUserUID}`
+      );
+      setFriendChallenges(allFriendChallenges);
+    } catch (error) {
+      console.log("there was an error fetching the challenges", error);
+    }
+  };
+
+  // create collection in firebase
+  const db = firebase.firestore();
+  const friendChallengeInvitesRef = db.collection("friendChallengeInvites");
+
   ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
   const onAccept = async (receiverId, senderId, challengeId) => {
     try {
@@ -156,13 +209,24 @@ export default function HomePage({ navigation }) {
       });
 
       // get all friend challenges of the user
-      const friendChallenges = await EXPRESS_ROOT_PATH.get(
-        `/friendChallenges/${currentUserUID}`
-      );
-      console.log("friendChallenges", friendChallenges.data);
+      await fetchFriendChallenges(currentUserUID);
+
+      //add challenge to db after acceptance
       setFriendChallenges(friendChallenges.data);
+
+      // render the non faded challenge with complete button (like personal)
+      // maybe we need to make a pending section AND friend challenge section
     } catch (error) {
       console.log("friend challenge not added to db", error);
+    }
+  };
+
+  const removeFromFirebase = async (docId) => {
+    try {
+      await friendChallengeInvitesRef.doc(docId).delete();
+      console.log("Document successfully deleted!");
+    } catch (error) {
+      console.error("Error removing document: ", error);
     }
   };
 
@@ -257,6 +321,7 @@ export default function HomePage({ navigation }) {
                           item.senderId,
                           item.challengeId
                         );
+                        removeFromFirebase(item.docId);
                       }}
                     />
                   );
@@ -344,7 +409,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
-    height: 190,
+    height: 175,
   },
 
   challengesContainer: {
@@ -376,7 +441,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 180,
+    height: 170,
     width: 110,
   },
   linkView: {
@@ -403,31 +468,6 @@ const styles = StyleSheet.create({
   },
   completedButtonView: {
     backgroundColor: "orange",
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 2,
-    paddingHorizontal: 3,
-    marginTop: 20,
-  },
-  pendingChallengeInfo: {
-    flexDirection: "column",
-    margin: 5,
-    borderWidth: 2,
-    borderRadius: 20,
-    borderColor: "#ffedd6",
-    backgroundColor: "white",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    padding: 10,
-    height: 180,
-    width: 110,
-    opacity: 0.5,
-  },
-  pendingButtonView: {
-    backgroundColor: "red",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

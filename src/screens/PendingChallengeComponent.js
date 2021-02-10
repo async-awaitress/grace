@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 180,
+    height: 170,
     width: 110,
     opacity: 0.5,
   },

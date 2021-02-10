@@ -55,10 +55,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     colors.push(color);
   }
 
-  useEffect(() => {
-    updateChallenge(currentUserUID, id)
-      .then(setCompleted(!completed))
-      .then(console.log(completed));
+  useEffect(async () => {
+    await updateChallenge(currentUserUID, id)(setCompleted(!completed));
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
