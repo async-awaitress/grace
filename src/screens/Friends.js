@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, Image, Dimensions } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Friends = ({ navigation }) => {
   const [friends, setFriends] = useState([])
@@ -61,9 +62,11 @@ console.log('FRIENDS', friends)
                   backgroundColor: "#ff924c",
                 }}
               >
-                <Text style={styles.friendText}>
-                  {item.firstName + " " + item.lastName}
-                </Text>
+                <TouchableOpacity>
+                  <Text style={styles.friendText}>
+                    {item.firstName + " " + item.lastName}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           )}
