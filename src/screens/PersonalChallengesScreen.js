@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "#ffedd6",
-    height: 1000,
+    height: 1500,
   },
   list: {
     flexDirection: "row",

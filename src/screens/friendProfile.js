@@ -7,7 +7,7 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { loggingOut } from "../../API/methods";
 import { icons } from "./Icons/icons";
 
-const ProfileScreen = ({ navigation }) => {
+const friendProfileScreen = ({ navigation }) => {
 
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
@@ -30,16 +30,14 @@ const ProfileScreen = ({ navigation }) => {
     async function getCompletedChallenges() {
       let currentUserUID = firebase.auth().currentUser.uid;
       try {
-        const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
+        const res = await EXPRESS_ROOT_PATH.get(`/personalChallenges/${currentUserUID}`)
         setCompletedChallenges(res.data)
       } catch (error) {
-        next(error)
+
       }
     }
     getCompletedChallenges();
   }, [isFocused])
-
-  console.log("this is the badge data", completedChallenges)
 
   useEffect(() => {
     async function fetchUser() {
@@ -218,4 +216,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default friendProfileScreen;

@@ -13,6 +13,7 @@ import axios from "axios";
 let baseURL;
 if (process.env.ENV === "development") {
   if (!manifest.debuggerHost) {
+    console.log("inside first if")
     // local host when using web browser
     baseURL = `https://localhost:8080/api`;
     console.log("local ");
