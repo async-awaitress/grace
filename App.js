@@ -22,6 +22,7 @@ import {
   PersonalChallengesScreen,
   ProfileScreen,
   RegistrationScreen,
+  FriendList,
 } from "./src/screens";
 
 const Stack = createStackNavigator();
@@ -70,6 +71,12 @@ const ChallengeScreenNav = () => (
     <ChallengeStack.Screen
       name="Challenge Tracker"
       component={ChallengeTrackerScreen}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
+      name="Friend List"
+      component={FriendList}
       options={{ title: "" }}
       backBehavior="order"
     />
@@ -194,6 +201,7 @@ export default function App() {
           name="Challenge Tracker"
           component={ChallengeTrackerScreen}
         />
+        <Stack.Screen name="Friend List" component={FriendList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
