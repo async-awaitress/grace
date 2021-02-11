@@ -20,6 +20,7 @@ import apiKeys from "../../config/keys";
 import PendingChallengeComponent from "./PendingChallengeComponent";
 import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
 import ActiveChallengeComponent from "./ActiveChallengeComponent";
+import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
 
 // create collection in firebase
 if (!firebase.apps.length) {
@@ -40,6 +41,8 @@ export default function HomePage({ navigation }) {
   const [dailyCompletion, setDailyCompletion] = useState({});
   const [pendingFriendChallenges, setPendingFriendChallenges] = useState([]);
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
+  // const [value, setValue] = useState();
+  // console.log("pendingFriendChallenges", pendingFriendChallenges);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -94,7 +97,7 @@ export default function HomePage({ navigation }) {
 
   useEffect(() => {
     fetchFriendChallenges(currentUserUID);
-  }, []);
+  }, [isFocused]);
 
   // listening for pending challenges from firebase
   useEffect(() => {
@@ -104,7 +107,7 @@ export default function HomePage({ navigation }) {
           // return array of the docs changes since the last snapshot
           .docChanges()
           // we want to listen messages which are only added
-          .filter(({ type }) => type === "added" || type === "removed")
+          .filter(({ type }) => type === "added")
           // we listen to all pending friend challenges from the user (sender)
           .filter(({ doc }) => {
             const currentUserUid = firebase.auth().currentUser.uid;
@@ -130,60 +133,99 @@ export default function HomePage({ navigation }) {
         //   ...nextFriendChallenges,
         // ]);
         appendFriendChallenges(nextFriendChallenges);
+        // setPendingFriendChallenges(nextFriendChallenges);
       }
     );
-    //
+
     return () => unsubscribe();
   }, []);
 
-  const appendFriendChallenges = useCallback(
-    (newChallenge) => {
-      // receive the previous message and the current one
-      // setter from hook receive callback function
-      // setMessages(messages)
-      setPendingFriendChallenges((currentState) =>
-        // GiftedChat.append(previousMessages, messages)
-        [...currentState, ...newChallenge]
-      );
-    },
-    [pendingFriendChallenges]
-  );
+  // listening for pending challenges from firebase
+  useEffect(() => {
+    const unsubscribe = friendChallengeInvitesRef.onSnapshot(
+      (querySnapshot) => {
+        const nextFriendChallenges = querySnapshot
+          // return array of the docs changes since the last snapshot
+          .docChanges()
+          // we want to listen messages which are only added
+          .filter(({ type }) => type === "modified")
+          // we listen to all pending friend challenges from the user (sender)
+          .filter(({ doc }) => {
+            const currentUserUid = firebase.auth().currentUser.uid;
+            const friendChallenge = doc.data();
+
+            return (
+              // listening to challenges I send and receive
+              (friendChallenge.senderId === currentUserUid ||
+                friendChallenge.receiverId === currentUserUid) &&
+              friendChallenge.status === "pending"
+            );
+          })
+          .map(({ doc }) => {
+            // doc.data is method in doc object (unpack data)
+            const friendPendingChallenge = doc.data();
+            const docId = doc.id;
+            return { ...friendPendingChallenge, ...{ docId } };
+          });
+
+        // the way to spread state
+        // setPendingFriendChallenges((currentState) => [
+        //   ...currentState,
+        //   ...nextFriendChallenges,
+        // ]);
+        appendFriendChallenges(nextFriendChallenges);
+        // setPendingFriendChallenges(nextFriendChallenges);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const appendFriendChallenges = useCallback((newChallenge) => {
+    // receive the previous message and the current one
+    // setter from hook receive callback function
+    // setMessages(messages)
+    setPendingFriendChallenges((currentState) =>
+      // GiftedChat.append(previousMessages, messages)
+      [...currentState, ...newChallenge]
+    );
+  }, []);
 
   /*
   // listening for removing challenges from firebase
   useEffect(() => {
     const unsubscribe = friendChallengeInvitesRef.onSnapshot(
       (querySnapshot) => {
-        querySnapshot
+        const friendChallenges = querySnapshot
           // return array of the docs changes since the last snapshot
           .docChanges()
-          .forEach((change) => {
-            if (change.type === "removed") {
-              console.log(removed);
-            }
+          // .forEach((change) => {
+          //   if (change.type === "removed") {
+          //     console.log(removed);
+          //   }
+          // });
+          // we want to listen messages which are only removed
+          .filter(({ type }) => type === "removed")
+          // we listen to all pending friend challenges from the user (sender)
+          .filter(({ doc }) => {
+            const currentUserUid = firebase.auth().currentUser.uid;
+            const removedFriendChallenge = doc.data();
+            console.log("here", removedFriendChallenge);
+            return (
+              (removedFriendChallenge.senderId === currentUserUid ||
+                removedFriendChallenge.receiverId === currentUserUid) &&
+              removedFriendChallenge.status === "pending"
+            );
+          })
+          .map(({ doc }) => {
+            // doc.data is method in doc object (unpack data)
+            const friendPendingChallenge = doc.data();
+            // const docId = doc.id;
+            return friendPendingChallenge;
           });
-        // we want to listen messages which are only removed
-        // .filter(({ type }) => type === "removed")
-        // // we listen to all pending friend challenges from the user (sender)
-        // .filter(({ doc }) => {
-        //   const currentUserUid = firebase.auth().currentUser.uid;
-        //   const removedFriendChallenge = doc.data();
-        //   console.log("here", removedFriendChallenge);
-        //   return (
-        //     (removedFriendChallenge.senderId === currentUserUid ||
-        //       removedFriendChallenge.receiverId === currentUserUid) &&
-        //     removedFriendChallenge.status === "pending"
-        //   );
-        // })
-        // .map(({ doc }) => {
-        // doc.data is method in doc object (unpack data)
-        // const friendPendingChallenge = doc.data();
-        // // const docId = doc.id;
-        // return friendPendingChallenge;
-        // return "misia";
-        // });
         //
-        // console.log("removed friend challenges");
+        console.log("removed friend challenges");
+        console.log("friendChallenges", friendChallenges);
         // setPendingFriendChallenges
         // pendingFriendChallenges => old array
         // removedFriendChallenges => new array (we want to exclued elements from this array)
@@ -201,6 +243,7 @@ export default function HomePage({ navigation }) {
     return () => unsubscribe();
   }, []);
 */
+
   const fetchPoints = async () => {
     try {
       const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
@@ -254,14 +297,25 @@ export default function HomePage({ navigation }) {
     }
   };
 
-  const removeFromFirebase = async (docId) => {
-    try {
-      await friendChallengeInvitesRef.doc(docId).delete();
-      console.log("Document successfully deleted!");
-    } catch (error) {
-      console.error("Error removing document: ", error);
-    }
+  // const removeFromFirebase = async (docId) => {
+  //   try {
+  //     await friendChallengeInvitesRef.doc(docId).delete();
+  //     console.log("Document successfully deleted!");
+  //   } catch (error) {
+  //     console.error("Error removing document: ", error);
+  //   }
+  // };
+
+  const updateChallengeInFirebase = async (docId) => {
+    await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
+    console.log("firebase updated");
   };
+
+  // const refresh = () => {
+  //   // re-renders the component
+  //   setPendingFriendChallenges([]);
+  //   // setValue({});
+  // };
 
   return (
     <View style={styles.container}>
@@ -367,13 +421,15 @@ export default function HomePage({ navigation }) {
                     <ReceiveChallengeComponent
                       badge={item.badge}
                       onDecline={() => console.log("remove")}
-                      onAccept={() => {
-                        onAccept(
+                      onAccept={async () => {
+                        await onAccept(
                           item.receiverId,
                           item.senderId,
                           item.challengeId
                         );
-                        removeFromFirebase(item.docId);
+                        // removeFromFirebase(item.docId);
+                        await updateChallengeInFirebase(item.docId);
+                        // refresh();
                       }}
                     />
                   );

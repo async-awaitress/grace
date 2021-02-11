@@ -29,6 +29,7 @@ const FriendList = ({ navigation, route }) => {
   // state with all friends which belong to userId
   const [friends, setFriends] = useState([]);
   let userId = firebase.auth().currentUser.uid;
+  console.log("friends", friends);
 
   // useEffect to call route and retrive all friends from db
   useEffect(() => {
@@ -46,6 +47,7 @@ const FriendList = ({ navigation, route }) => {
 
   // WRITE FRIEND INVITE IN FIRESTORE FROM HERE
   async function onPressInviteForChallenge(receiverId) {
+    console.log("receiverId", receiverId);
     await friendChallengeInvitesRef.add({
       challengeId: route.params.challengeId,
       senderId: userId,
@@ -75,7 +77,8 @@ const FriendList = ({ navigation, route }) => {
               return (
                 <TouchableOpacity
                   onPress={(event) => {
-                    onPressInviteForChallenge(item.friend.receiverId);
+                    console.log("heree", item.uid);
+                    onPressInviteForChallenge(item.uid);
                     navigation.navigate("Home", {
                       challengeId: route.params.challengeId,
                     });
