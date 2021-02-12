@@ -1,18 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  Dimensions,
+} from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-import {useIsFocused} from "@react-navigation/native"
+import { useIsFocused } from "@react-navigation/native";
 
 const Friends = ({ navigation }) => {
+<<<<<<< HEAD
   const [friends, setFriends] = useState([])
   const [request, setRequest] = useState([])
   const isFocused = useIsFocused()
+=======
+  const [friends, setFriends] = useState([]);
+  const [request, setRequest] = useState([]);
+  const isFocused = useIsFocused();
+>>>>>>> main
   let currentUserUID = firebase.auth().currentUser.uid;
 
-  const WIDTH= Dimensions.get("window").width;
+  const WIDTH = Dimensions.get("window").width;
   const HEIGHT = Dimensions.get("window").height;
 
   useEffect(() => {
@@ -20,44 +33,49 @@ const Friends = ({ navigation }) => {
       const res = await EXPRESS_ROOT_PATH.get(
         `/users/friends/accepted/${currentUserUID}`
       );
-      const friends = res.data
-      setFriends(friends)
+      const friends = res.data;
+      setFriends(friends);
     }
-    getFriends()
-  }, [isFocused])
+    getFriends();
+  }, [isFocused]);
 
   useEffect(() => {
     async function getRequest() {
       const res = await EXPRESS_ROOT_PATH.get(
         `/users/friends/requests/${currentUserUID}`
       );
-      const friendRequests = res.data
-      setRequest(friendRequests)
-  } getRequest()
-}, [isFocused])
+      const friendRequests = res.data;
+      setRequest(friendRequests);
+    }
+    getRequest();
+  }, [isFocused]);
 
-const acceptFriend = async (id) => {
-  try {
-    const senderId = id
-    const statusOfFriendship = "accepted"
-    await EXPRESS_ROOT_PATH.put(`users/friends/response/${currentUserUID}`, {senderId, statusOfFriendship})
+  const acceptFriend = async (id) => {
+    try {
+      const senderId = id;
+      const statusOfFriendship = "accepted";
+      await EXPRESS_ROOT_PATH.put(`users/friends/response/${currentUserUID}`, {
+        senderId,
+        statusOfFriendship,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-const rejectFriend = async (id) => {
-  try {
-    const senderId = id
-    const statusOfFriendship = "declined"
-    await EXPRESS_ROOT_PATH.put(`users/friends/response/${currentUserUID}`, {senderId, statusOfFriendship})
-
-  } catch (error) {
-    console.log(error)
-  }
-}
-console.log('FRIENDS', friends)
+  const rejectFriend = async (id) => {
+    try {
+      const senderId = id;
+      const statusOfFriendship = "declined";
+      await EXPRESS_ROOT_PATH.put(`users/friends/response/${currentUserUID}`, {
+        senderId,
+        statusOfFriendship,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log("FRIENDS", friends);
 
 
   return (
@@ -77,20 +95,7 @@ console.log('FRIENDS', friends)
                   style={{ transform: [{ scale: 0.4 }] }}
                 />
               </View>
-              <View
-                style={{
-                  left: WIDTH / 5,
-                  borderWidth: 1,
-                  position: "absolute",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 250,
-                  height: 35,
-                  borderRadius: 4,
-                  zIndex: -1,
-                  backgroundColor: "#ff924c",
-                }}
-              >
+              <View style={[styles.friendName, { left: WIDTH / 5 }]}>
                 <TouchableOpacity>
                   <Text style={styles.friendText}>
                     {item.firstName + " " + item.lastName}
@@ -103,7 +108,7 @@ console.log('FRIENDS', friends)
       </View>
       <View>
         <Text>Pending Requests</Text>
-       <FlatList
+        <FlatList
           data={request}
           keyExtractor={(friend, index) => index}
           renderItem={({ item }) => (
@@ -114,38 +119,24 @@ console.log('FRIENDS', friends)
                   style={{ transform: [{ scale: 0.4 }] }}
                 />
               </View>
-              <View
-                style={{
-                  left: WIDTH / 5,
-                  borderWidth: 1,
-                  position: "absolute",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 250,
-                  height: 35,
-                  borderRadius: 4,
-                  zIndex: -1,
-                  backgroundColor: "#ff924c",
-                }}
-              >
+              <View style={[styles.friendName, { left: WIDTH / 5 }]}>
                 <TouchableOpacity>
                   <Text style={styles.friendText}>
                     {item.firstName + " " + item.lastName}
                   </Text>
                 </TouchableOpacity>
-
               </View>
               <View style={styles.buttons}>
-                  <View style={styles.accept}>
-                    <TouchableOpacity onPress={()=> acceptFriend(item.uid)}>
-                      <Feather name={"check-circle"} size={20} color={"blue"} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.reject}>
-                    <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
-                      <Feather name={"x-circle"} size={20} color={"red"} />
-                    </TouchableOpacity>
-                  </View>
+                <View style={styles.accept}>
+                  <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
+                    <Feather name={"check-circle"} size={20} color={"blue"} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.reject}>
+                  <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
+                    <Feather name={"x-circle"} size={20} color={"red"} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           )}
@@ -169,18 +160,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffedd6",
   },
   buttons: {
-   flexDirection: "row",
-   marginTop: 60
+    flexDirection: "row",
+    marginTop: 60,
   },
   friendBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    height: 100
+    height: 100,
   },
   friendText: {
     fontSize: 20,
     fontStyle: "italic",
+  },
+  friendName: {
+    borderWidth: 1,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 250,
+    height: 35,
+    borderRadius: 4,
+    zIndex: -1,
+    backgroundColor: "#ff924c",
   },
   header: {
     backgroundColor: "#ff924c",
@@ -198,14 +200,12 @@ const styles = StyleSheet.create({
     fontFamily: "Bradley Hand",
     textTransform: "uppercase",
   },
-  accept:{
-    paddingHorizontal:10,
-
+  accept: {
+    paddingHorizontal: 10,
   },
-  reject:{
-    paddingHorizontal:10
-
-  }
+  reject: {
+    paddingHorizontal: 10,
+  },
 });
 
 export default Friends;
