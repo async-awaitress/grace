@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
   activeChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: 20,
-    borderColor: "#ffedd6",
+    // borderColor: "#ffedd6",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -47,6 +47,14 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 170,
     width: 110,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   image: {
     width: 70,

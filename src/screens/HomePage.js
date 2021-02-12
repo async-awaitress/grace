@@ -236,7 +236,6 @@ export default function HomePage({ navigation }) {
 
       // update object in firebase from status "pending" to "active"
       await updateChallengeInFirebase(docId);
-
     } catch (error) {
       console.log("friend challenge not added to db", error);
     }
@@ -312,6 +311,11 @@ export default function HomePage({ navigation }) {
           )}
 
           {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
+          {/* <View style={styles.containerForFriendChallenges}></View> */}
+          <View style={{ marginTop: 20 }}>
+            <Text>Your Active Friend Challenges</Text>
+          </View>
+
           <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             <FlatList
               horizontal
@@ -327,10 +331,6 @@ export default function HomePage({ navigation }) {
                 />
               )}
             />
-          </ScrollView>
-
-          {/* ////// FRIEND PENDING CHALLENGES CONTAINER ///// */}
-          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             <FlatList
               horizontal
               data={pendingFriendChallenges}
@@ -352,6 +352,30 @@ export default function HomePage({ navigation }) {
               }}
             />
           </ScrollView>
+
+          {/* ////// FRIEND PENDING CHALLENGES CONTAINER ///// */}
+          {/* <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
+            <FlatList
+              horizontal
+              data={pendingFriendChallenges}
+              keyExtractor={(friendChallenge) => friendChallenge.docId}
+              renderItem={({ item }) => {
+                if (item.senderId === currentUserUID) {
+                  return <PendingChallengeComponent badge={item.badge} />;
+                } else {
+                  return (
+                    <ReceiveChallengeComponent
+                      badge={item.badge}
+                      onDecline={() => console.log("remove")}
+                      onAccept={async () => {
+                        await onAccept(item);
+                      }}
+                    />
+                  );
+                }
+              }}
+            />
+          </ScrollView> */}
         </View>
         {/* ///////////////// */}
 
@@ -432,7 +456,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
-    height: 175,
+    height: 180,
   },
 
   challengesContainer: {
@@ -446,9 +470,9 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 35,
+    fontSize: 20,
     fontFamily: "Bradley Hand",
-    marginVertical: 20,
+    marginVertical: 10,
     textAlign: "center",
   },
   activeChallengeInfo: {
