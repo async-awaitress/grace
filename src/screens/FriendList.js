@@ -29,6 +29,7 @@ const FriendList = ({ navigation, route }) => {
   // state with all friends which belong to userId
   const [friends, setFriends] = useState([]);
   let userId = firebase.auth().currentUser.uid;
+  console.log("friends", friends);
 
   // useEffect to call route and retrive all friends from db
   useEffect(() => {
@@ -46,6 +47,7 @@ const FriendList = ({ navigation, route }) => {
 
   // WRITE FRIEND INVITE IN FIRESTORE FROM HERE
   async function onPressInviteForChallenge(receiverId) {
+    console.log("receiverId", receiverId);
     await friendChallengeInvitesRef.add({
       challengeId: route.params.challengeId,
       senderId: userId,
@@ -55,7 +57,6 @@ const FriendList = ({ navigation, route }) => {
       // save time in miliseconds
       createdAt: new Date().getTime(),
     });
-    console.log("invite sent");
   }
 
   return (
@@ -65,29 +66,27 @@ const FriendList = ({ navigation, route }) => {
         <Text style={styles.headerText}>Friend</Text>
       </View>
       <ScrollView>
-        <View style={styles.list}>
-          <FlatList
-            keyExtractor={(item) => {
-              return item.id;
-            }}
-            data={friends}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity
-                  onPress={(event) => {
-                    onPressInviteForChallenge(item.friend.receiverId);
-                    navigation.navigate("Home", {
-                      challengeId: route.params.challengeId,
-                    });
-                  }}
-                >
-                  <Text>Invite {item.firstName} for challenge</Text>
-                </TouchableOpacity>
-              );
-            }}
-          ></FlatList>
-          {/* <Text style={styles.list}>Name</Text> */}
-        </View>
+        <FlatList
+          keyExtractor={(item) => {
+            return item.id;
+          }}
+          data={friends}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                style={styles.list}
+                onPress={(event) => {
+                  onPressInviteForChallenge(item.uid);
+                  navigation.navigate("Home", {
+                    challengeId: route.params.challengeId,
+                  });
+                }}
+              >
+                <Text>Invite {item.firstName} for challenge</Text>
+              </TouchableOpacity>
+            );
+          }}
+        ></FlatList>
       </ScrollView>
     </View>
   );

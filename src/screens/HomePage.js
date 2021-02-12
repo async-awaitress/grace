@@ -1,24 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
-  Button,
   ScrollView,
   TouchableOpacity,
   Image,
 } from "react-native";
 import * as firebase from "firebase";
-import { loggingOut } from "../../API/methods";
 import { useIsFocused } from "@react-navigation/native";
-import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 import apiKeys from "../../config/keys";
 import PendingChallengeComponent from "./PendingChallengeComponent";
 import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
+import ActiveChallengeComponent from "./ActiveChallengeComponent";
 
 // create collection in firebase
 if (!firebase.apps.length) {
@@ -37,7 +35,8 @@ export default function HomePage({ navigation }) {
   const [user, setUser] = useState({});
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
-  const [friendChallenges, setFriendChallenges] = useState([]);
+  const [pendingFriendChallenges, setPendingFriendChallenges] = useState([]);
+  const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -78,25 +77,41 @@ export default function HomePage({ navigation }) {
     fetchChallenges();
   }, [isFocused]);
 
-  // listening from firebase req/invites for FriendChallenges
+  // get all active friend challenges of the user
+  const fetchFriendChallenges = async (currentUserUID) => {
+    try {
+      const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
+        `/friendChallenges/${currentUserUID}`
+      );
+      setActiveFriendChallenges(allFriendChallenges.data);
+    } catch (error) {
+      console.log("there was an error fetching the challenges", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriendChallenges(currentUserUID);
+  }, [isFocused]);
+
+  // listening for invites/pending challenges from firebase
   useEffect(() => {
     const unsubscribe = friendChallengeInvitesRef.onSnapshot(
       (querySnapshot) => {
         const nextFriendChallenges = querySnapshot
           // return array of the docs changes since the last snapshot
           .docChanges()
-          // we want to listen messages which are only added
+          // we want to listen challenges which are only added
           .filter(({ type }) => type === "added")
           // we listen to all pending friend challenges from the user (sender)
           .filter(({ doc }) => {
             const currentUserUid = firebase.auth().currentUser.uid;
-            const friendChanllenge = doc.data();
+            const friendChallenge = doc.data();
 
             return (
               // listening to challenges I send and receive
-              (friendChanllenge.senderId === currentUserUid ||
-                friendChanllenge.receiverId === currentUserUid) &&
-              friendChanllenge.status === "pending"
+              (friendChallenge.senderId === currentUserUid ||
+                friendChallenge.receiverId === currentUserUid) &&
+              friendChallenge.status === "pending"
             );
           })
           .map(({ doc }) => {
@@ -105,50 +120,60 @@ export default function HomePage({ navigation }) {
             const docId = doc.id;
             return { ...friendPendingChallenge, ...{ docId } };
           });
-
-        // setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
-        setFriendChallenges(nextFriendChallenges);
+        appendFriendChallenges(nextFriendChallenges);
       }
     );
-    //
+
     return () => unsubscribe();
   }, []);
 
-  //listening for change in status from pending to accepted or declined
+  // listening for accepted (modified) challenges from firebase
   useEffect(() => {
     const unsubscribe = friendChallengeInvitesRef.onSnapshot(
-      (querySnapshot) => {
-        const removedFriendChallenges = querySnapshot
+      async (querySnapshot) => {
+        const docIds = querySnapshot
           // return array of the docs changes since the last snapshot
           .docChanges()
-          // we want to listen messages which are only removed
-          .filter(({ type }) => type === "removed");
-        // we listen to all pending friend challenges from the user (sender)
-        // .filter(({ doc }) => {
-        //   const currentUserUid = firebase.auth().currentUser.uid;
-        //   const friendChanllenge = doc.data();
+          // we want to listen messages which are only added
+          .filter(({ type }) => type === "modified")
+          // we listen to all pending friend challenges from the user (sender)
+          .filter(({ doc }) => {
+            const currentUserUid = firebase.auth().currentUser.uid;
+            const friendChallenge = doc.data();
+            return (
+              // listening to challenges I send and receive
+              (friendChallenge.senderId === currentUserUid ||
+                friendChallenge.receiverId === currentUserUid) &&
+              friendChallenge.status === "active"
+            );
+          })
+          .map(({ doc }) => {
+            const docId = doc.id;
+            return docId;
+          });
+        // removing pending challenge (which was accepted) from the state
+        if (docIds.length !== 0) {
+          removeAcceptedFriendChallengesFromState(docIds[0]);
 
-        //   return (
-        //     // listening to challenges I send and receive
-        //     (friendChanllenge.senderId === currentUserUid ||
-        //       friendChanllenge.receiverId === currentUserUid) &&
-        //     friendChanllenge.status === "pending"
-        //   );
-        // })
-        // .map(({ doc }) => {
-        //   // doc.data is method in doc object (unpack data)
-        //   const friendPendingChallenge = doc.data();
-        //   const docId = doc.id;
-        //   return { ...friendPendingChallenge, ...{ docId } };
-        // });
-        console.log("removed friend challenges", removedFriendChallenges);
-        // fetchFriendChallenges(currentUserUID);
-        // setFriendChallenges([...friendChallenges, ...nextFriendChallenges]);
-        // setFriendChallenges(removedFriendChallenges);
+          // after every change from firebase trigger fetching friend challenges from postgres
+          const currentUserUid = firebase.auth().currentUser.uid;
+          await fetchFriendChallenges(currentUserUid);
+        }
       }
     );
-    //
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const appendFriendChallenges = useCallback((newChallenge) => {
+    // receive the previous challenge and the current one
+    // setter from hook receive callback function
+    setPendingFriendChallenges((currentState) => [
+      ...currentState,
+      ...newChallenge,
+    ]);
   }, []);
 
   const fetchPoints = async () => {
@@ -182,51 +207,37 @@ export default function HomePage({ navigation }) {
     }
   };
 
-  // get all friend challenges of the user
-  const fetchFriendChallenges = async (currentUserUID) => {
-    try {
-      const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
-        `/friendChallenges/${currentUserUID}`
-      );
-      setFriendChallenges(allFriendChallenges);
-    } catch (error) {
-      console.log("there was an error fetching the challenges", error);
-    }
+  /////// PLACEHOLDER FOR CALLING EXPRESS ROUTES TO UPDATE DAILY FRIEND CHALLENGES
+  const updateFriendChallenge = async () => {
+    console.log("FriendChallenge updated");
   };
 
-  // create collection in firebase
-  const db = firebase.firestore();
-  const friendChallengeInvitesRef = db.collection("friendChallengeInvites");
+  const removeAcceptedFriendChallengesFromState = (docIdToRemove) => {
+    setPendingFriendChallenges((challenges) =>
+      challenges.filter((challenge) => challenge.docId !== docIdToRemove)
+    );
+  };
+
+  const updateChallengeInFirebase = async (docId) => {
+    await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
+    console.log("firebase updated");
+  };
 
   ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
-  const onAccept = async (receiverId, senderId, challengeId) => {
+  const onAccept = async (challenge) => {
+    const { receiverId, senderId, challengeId, docId } = challenge;
     try {
-      // add challenge to db
+      // add challenge to postgress
       await EXPRESS_ROOT_PATH.post("/friendChallenges/add", {
-        receiverId: receiverId,
-        senderId: senderId,
-        challengeId: challengeId,
+        receiverId,
+        senderId,
+        challengeId,
       });
 
-      // get all friend challenges of the user
-      await fetchFriendChallenges(currentUserUID);
-
-      //add challenge to db after acceptance
-      setFriendChallenges(friendChallenges.data);
-
-      // render the non faded challenge with complete button (like personal)
-      // maybe we need to make a pending section AND friend challenge section
+      // update object in firebase from status "pending" to "active"
+      await updateChallengeInFirebase(docId);
     } catch (error) {
       console.log("friend challenge not added to db", error);
-    }
-  };
-
-  const removeFromFirebase = async (docId) => {
-    try {
-      await friendChallengeInvitesRef.doc(docId).delete();
-      console.log("Document successfully deleted!");
-    } catch (error) {
-      console.error("Error removing document: ", error);
     }
   };
 
@@ -256,6 +267,7 @@ export default function HomePage({ navigation }) {
               }}
             />
           ) : (
+            ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
             <ScrollView
               style={styles.activeChallengeContainer}
               // horizontal={true}
@@ -266,9 +278,6 @@ export default function HomePage({ navigation }) {
                 keyExtractor={(challenge) => challenge.id}
                 renderItem={({ item }) => (
                   <View style={styles.activeChallengeInfo}>
-                    {/* <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text> */}
-
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate("Challenge Tracker", item)
@@ -301,12 +310,31 @@ export default function HomePage({ navigation }) {
             </ScrollView>
           )}
 
-          {/* ////// FRIEND CHALLENGES CONTAINER ///// */}
+          {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
+          {/* <View style={styles.containerForFriendChallenges}></View> */}
+          <View style={{ marginTop: 20 }}>
+            <Text>Your Active Friend Challenges</Text>
+          </View>
+
           <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             <FlatList
               horizontal
-              data={friendChallenges}
+              data={activeFriendChallenges}
               keyExtractor={(friendChallenge) => friendChallenge.id}
+              renderItem={({ item }) => (
+                <ActiveChallengeComponent
+                  badge={item.badge}
+                  isCompleted={dailyCompletion[item.id]}
+                  onComplete={() => updateFriendChallenge()}
+                  challenge={item}
+                  navigation={navigation}
+                />
+              )}
+            />
+            <FlatList
+              horizontal
+              data={pendingFriendChallenges}
+              keyExtractor={(friendChallenge) => friendChallenge.docId}
               renderItem={({ item }) => {
                 if (item.senderId === currentUserUID) {
                   return <PendingChallengeComponent badge={item.badge} />;
@@ -315,13 +343,8 @@ export default function HomePage({ navigation }) {
                     <ReceiveChallengeComponent
                       badge={item.badge}
                       onDecline={() => console.log("remove")}
-                      onAccept={() => {
-                        onAccept(
-                          item.receiverId,
-                          item.senderId,
-                          item.challengeId
-                        );
-                        removeFromFirebase(item.docId);
+                      onAccept={async () => {
+                        await onAccept(item);
                       }}
                     />
                   );
@@ -329,6 +352,30 @@ export default function HomePage({ navigation }) {
               }}
             />
           </ScrollView>
+
+          {/* ////// FRIEND PENDING CHALLENGES CONTAINER ///// */}
+          {/* <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
+            <FlatList
+              horizontal
+              data={pendingFriendChallenges}
+              keyExtractor={(friendChallenge) => friendChallenge.docId}
+              renderItem={({ item }) => {
+                if (item.senderId === currentUserUID) {
+                  return <PendingChallengeComponent badge={item.badge} />;
+                } else {
+                  return (
+                    <ReceiveChallengeComponent
+                      badge={item.badge}
+                      onDecline={() => console.log("remove")}
+                      onAccept={async () => {
+                        await onAccept(item);
+                      }}
+                    />
+                  );
+                }
+              }}
+            />
+          </ScrollView> */}
         </View>
         {/* ///////////////// */}
 
@@ -409,7 +456,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
-    height: 175,
+    height: 180,
   },
 
   challengesContainer: {
@@ -423,9 +470,9 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 35,
+    fontSize: 20,
     fontFamily: "Bradley Hand",
-    marginVertical: 20,
+    marginVertical: 10,
     textAlign: "center",
   },
   activeChallengeInfo: {
