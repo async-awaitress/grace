@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
-    backgroundColor: "white"
+    backgroundColor: "#ffedd6"
   },
 
   button: {
