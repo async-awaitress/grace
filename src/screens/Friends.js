@@ -9,7 +9,7 @@ import {useIsFocused} from "@react-navigation/native"
 const Friends = ({ navigation }) => {
   const [friends, setFriends] = useState([])
   const [request, setRequest] = useState([])
-   const isFocused = useIsFocused()
+  const isFocused = useIsFocused()
   let currentUserUID = firebase.auth().currentUser.uid;
 
   const WIDTH= Dimensions.get("window").width;
@@ -59,14 +59,8 @@ const rejectFriend = async (id) => {
 }
 console.log('FRIENDS', friends)
 
+
   return (
-    // <View style={styles.container}>
-    //   <Text style={styles.title}>
-    //     Please pardon this page while it's under construction.
-    //   </Text>
-    //   <Text style={styles.title}>🚧🚧🚧🚧🚧</Text>
-    //   <Text style={styles.title}>Friends are coming soon!</Text>
-    // </View>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>FRIENDS</Text>
