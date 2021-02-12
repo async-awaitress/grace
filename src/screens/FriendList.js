@@ -6,11 +6,15 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Dimensions,
+  Image,
 } from "react-native";
 import * as firebase from "firebase";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
+
 // import App from "../../App";
 
 // App.initializeApp();
@@ -29,21 +33,22 @@ const FriendList = ({ navigation, route }) => {
   // state with all friends which belong to userId
   const [friends, setFriends] = useState([]);
   let userId = firebase.auth().currentUser.uid;
-  console.log("friends", friends);
+  const isFocused = useIsFocused();
+
+  const WIDTH = Dimensions.get("window").width;
+  const HEIGHT = Dimensions.get("window").height;
 
   // useEffect to call route and retrive all friends from db
   useEffect(() => {
-    async function fetchFriends() {
-      try {
-        const res = await EXPRESS_ROOT_PATH.get(`/users/friends/${userId}`);
-        const friends = res.data;
-        setFriends(friends);
-      } catch (error) {
-        console.log("get request failed", error);
-      }
+    async function getFriends() {
+      const res = await EXPRESS_ROOT_PATH.get(
+        `/users/friends/accepted/${userId}`
+      );
+      const allFriends = res.data;
+      setFriends(allFriends);
     }
-    fetchFriends();
-  }, []);
+    getFriends();
+  }, [isFocused]);
 
   // WRITE FRIEND INVITE IN FIRESTORE FROM HERE
   async function onPressInviteForChallenge(receiverId) {
@@ -67,26 +72,34 @@ const FriendList = ({ navigation, route }) => {
       </View>
       <ScrollView>
         <FlatList
-          keyExtractor={(item) => {
-            return item.id;
-          }}
           data={friends}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                style={styles.list}
-                onPress={(event) => {
-                  onPressInviteForChallenge(item.uid);
-                  navigation.navigate("Home", {
-                    challengeId: route.params.challengeId,
-                  });
-                }}
-              >
-                <Text>Invite {item.firstName} for challenge</Text>
-              </TouchableOpacity>
-            );
-          }}
-        ></FlatList>
+          keyExtractor={(friend, index) => index}
+          renderItem={({ item }) => (
+            <View style={styles.friendBox}>
+              <View>
+                <Image
+                  source={require("../../assets/profilePic.png")}
+                  style={{ transform: [{ scale: 0.4 }] }}
+                />
+              </View>
+              <View style={[styles.friendName, { left: WIDTH / 5 }]}>
+                <TouchableOpacity
+                  onPress={(event) => {
+                    onPressInviteForChallenge(item.uid);
+                    navigation.navigate("Home", {
+                      challengeId: route.params.challengeId,
+                    });
+                  }}
+                >
+                  <Text style={styles.friendText}>
+                    Challenge
+                    {" " + item.firstName + " " + item.lastName}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        />
       </ScrollView>
     </View>
   );
@@ -126,6 +139,27 @@ const styles = StyleSheet.create({
     fontFamily: "Bradley Hand",
     textTransform: "uppercase",
     textAlign: "center",
+  },
+  friendBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    height: 100,
+  },
+  friendText: {
+    fontSize: 20,
+    fontStyle: "italic",
+  },
+  friendName: {
+    borderWidth: 1,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 250,
+    height: 35,
+    borderRadius: 4,
+    zIndex: -1,
+    backgroundColor: "#ff924c",
   },
 });
 
