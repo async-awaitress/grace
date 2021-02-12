@@ -35,6 +35,7 @@ export default function HomePage({ navigation }) {
   const [user, setUser] = useState({});
   const [firstName, setFirstName] = useState("");
   const [dailyCompletion, setDailyCompletion] = useState({});
+  const [dailyCompletionFriends, setDailyCompletionFriends] = useState({});
   const [pendingFriendChallenges, setPendingFriendChallenges] = useState([]);
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
 
@@ -208,8 +209,41 @@ export default function HomePage({ navigation }) {
   };
 
   /////// PLACEHOLDER FOR CALLING EXPRESS ROUTES TO UPDATE DAILY FRIEND CHALLENGES
-  const updateFriendChallenge = async () => {
-    console.log("FriendChallenge updated");
+  const updateFriendChallenge = async (
+    currentUserUID,
+    friendChallengeId,
+    senderId,
+    receiverId
+  ) => {
+    try {
+      const res = await EXPRESS_ROOT_PATH.put(
+        `/friendChallenges/update/${friendChallengeId}/${currentUserUID}`
+      );
+      if (currentUserUID === senderId) {
+        const dailyStatusForSender = res.data.dailyStatusForSender;
+        const dailyCompletionObjToSet = {
+          [friendChallengeId]: { [senderId]: dailyStatusForSender },
+        };
+        // spreading previous state and current state
+        setDailyCompletionFriends({
+          ...dailyCompletionFriends,
+          ...dailyCompletionObjToSet,
+        });
+      } else {
+        const dailyStatusForReceiver = res.data.dailyStatusForReceiver;
+        const dailyCompletionObjToSet = {
+          [friendChallengeId]: { [receiverId]: dailyStatusForReceiver },
+        };
+        // spreading previous state and current state
+        setDailyCompletionFriends({
+          ...dailyCompletionFriends,
+          ...dailyCompletionObjToSet,
+        });
+      }
+      fetchPoints();
+    } catch (error) {
+      console.log("update request failed", error);
+    }
   };
 
   const removeAcceptedFriendChallengesFromState = (docIdToRemove) => {
@@ -324,8 +358,15 @@ export default function HomePage({ navigation }) {
               renderItem={({ item }) => (
                 <ActiveChallengeComponent
                   badge={item.badge}
-                  isCompleted={dailyCompletion[item.id]}
-                  onComplete={() => updateFriendChallenge()}
+                  isCompleted={dailyCompletionFriends[item.id]}
+                  onComplete={() =>
+                    updateFriendChallenge(
+                      currentUserUID,
+                      item.id,
+                      item.senderId,
+                      item.receiverId
+                    )
+                  }
                   challenge={item}
                   navigation={navigation}
                 />
@@ -401,26 +442,8 @@ export default function HomePage({ navigation }) {
 
         <StatusBar style="auto" />
         <View>
-          <Text
-            style={{
-              fontSize: 28,
-              paddingBottom: 5,
-              fontFamily: "Bradley Hand",
-              textAlign: "center",
-            }}
-          >
-            Your Total Points
-          </Text>
-          <Text
-            style={{
-              fontSize: 70,
-              paddingBottom: 30,
-              textAlign: "center",
-              fontFamily: "Bradley Hand",
-            }}
-          >
-            {user.totalPoints}
-          </Text>
+          <Text style={styles.totalPointsText}>Your Total Points</Text>
+          <Text style={styles.totalPointsNum}>{user.totalPoints}</Text>
         </View>
       </ScrollView>
     </View>
@@ -520,5 +543,17 @@ const styles = StyleSheet.create({
     padding: 2,
     paddingHorizontal: 3,
     marginTop: 20,
+  },
+  totalPointsText: {
+    fontSize: 28,
+    paddingBottom: 5,
+    fontFamily: "Bradley Hand",
+    textAlign: "center",
+  },
+  totalPointsNum: {
+    fontSize: 70,
+    paddingBottom: 30,
+    textAlign: "center",
+    fontFamily: "Bradley Hand",
   },
 });

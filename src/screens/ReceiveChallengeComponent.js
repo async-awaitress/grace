@@ -30,9 +30,7 @@ const styles = StyleSheet.create({
   pendingChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    // borderWidth: 2,
     borderRadius: 20,
-    // borderColor: "#ffedd6",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",

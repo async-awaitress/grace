@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as firebase from "firebase";
 import { signIn } from "../../API/methods";
-import axios from "axios"
+import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
 export default function LoginScreen({ navigation }) {
@@ -18,24 +18,22 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-
     if (!email) {
       Alert.alert("Email field is required.");
     }
 
     if (!password) {
-       Alert.alert("Password field is required.");
+      Alert.alert("Password field is required.");
     }
 
     await signIn(email, password);
 
-    const currentUserID = firebase.auth().currentUser.uid
-    if(currentUserID){
-      navigation.replace("HomePage")
+    const currentUserID = firebase.auth().currentUser.uid;
+    if (currentUserID) {
+      navigation.replace("HomePage");
     }
     setEmail("");
     setPassword("");
-
   };
 
   return (
@@ -77,23 +75,6 @@ export default function LoginScreen({ navigation }) {
         <Text style={{ color: "black", fontSize: 13 }}>
           New to GRace?{" "}
           <Text style={{ fontWeight: "500", color: "red" }}>Sign Up</Text>
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{ alignSelf: "center", marginTop: 32 }}
-        onPress={() => navigation.navigate("GoogleSignIn")}
-      >
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri:
-              "https://cdn.shortpixel.ai/client/q_glossy,ret_img,w_960/https://voxytalksy.com/wp-content/uploads/2018/08/google-voxytalksy.png",
-          }}
-        />
-        <Text style={{ color: "black", fontSize: 13 }}>
-          Google{" "}
-          <Text style={{ fontWeight: "500", color: "red" }}>Sign In</Text>
         </Text>
       </TouchableOpacity>
     </View>
