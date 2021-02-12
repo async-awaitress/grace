@@ -5,22 +5,18 @@ import {
   Text,
   View,
   FlatList,
-  Button,
   ScrollView,
   TouchableOpacity,
   Image,
 } from "react-native";
 import * as firebase from "firebase";
-import { loggingOut } from "../../API/methods";
 import { useIsFocused } from "@react-navigation/native";
-import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 import apiKeys from "../../config/keys";
 import PendingChallengeComponent from "./PendingChallengeComponent";
 import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
 import ActiveChallengeComponent from "./ActiveChallengeComponent";
-import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
 
 // create collection in firebase
 if (!firebase.apps.length) {
@@ -41,8 +37,6 @@ export default function HomePage({ navigation }) {
   const [dailyCompletion, setDailyCompletion] = useState({});
   const [pendingFriendChallenges, setPendingFriendChallenges] = useState([]);
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
-  // const [value, setValue] = useState();
-  // console.log("pendingFriendChallenges", pendingFriendChallenges);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -99,14 +93,14 @@ export default function HomePage({ navigation }) {
     fetchFriendChallenges(currentUserUID);
   }, [isFocused]);
 
-  // listening for pending challenges from firebase
+  // listening for invites/pending challenges from firebase
   useEffect(() => {
     const unsubscribe = friendChallengeInvitesRef.onSnapshot(
       (querySnapshot) => {
         const nextFriendChallenges = querySnapshot
           // return array of the docs changes since the last snapshot
           .docChanges()
-          // we want to listen messages which are only added
+          // we want to listen challenges which are only added
           .filter(({ type }) => type === "added")
           // we listen to all pending friend challenges from the user (sender)
           .filter(({ doc }) => {
@@ -126,25 +120,18 @@ export default function HomePage({ navigation }) {
             const docId = doc.id;
             return { ...friendPendingChallenge, ...{ docId } };
           });
-
-        // the way to spread state
-        // setPendingFriendChallenges((currentState) => [
-        //   ...currentState,
-        //   ...nextFriendChallenges,
-        // ]);
         appendFriendChallenges(nextFriendChallenges);
-        // setPendingFriendChallenges(nextFriendChallenges);
       }
     );
 
     return () => unsubscribe();
   }, []);
 
-  // listening for pending challenges from firebase
+  // listening for accepted (modified) challenges from firebase
   useEffect(() => {
     const unsubscribe = friendChallengeInvitesRef.onSnapshot(
-      (querySnapshot) => {
-        const nextFriendChallenges = querySnapshot
+      async (querySnapshot) => {
+        const docIds = querySnapshot
           // return array of the docs changes since the last snapshot
           .docChanges()
           // we want to listen messages which are only added
@@ -153,96 +140,41 @@ export default function HomePage({ navigation }) {
           .filter(({ doc }) => {
             const currentUserUid = firebase.auth().currentUser.uid;
             const friendChallenge = doc.data();
-
             return (
               // listening to challenges I send and receive
               (friendChallenge.senderId === currentUserUid ||
                 friendChallenge.receiverId === currentUserUid) &&
-              friendChallenge.status === "pending"
+              friendChallenge.status === "active"
             );
           })
           .map(({ doc }) => {
-            // doc.data is method in doc object (unpack data)
-            const friendPendingChallenge = doc.data();
             const docId = doc.id;
-            return { ...friendPendingChallenge, ...{ docId } };
+            return docId;
           });
+        // removing pending challenge (which was accepted) from the state
+        if (docIds.length !== 0) {
+          removeAcceptedFriendChallengesFromState(docIds[0]);
 
-        // the way to spread state
-        // setPendingFriendChallenges((currentState) => [
-        //   ...currentState,
-        //   ...nextFriendChallenges,
-        // ]);
-        appendFriendChallenges(nextFriendChallenges);
-        // setPendingFriendChallenges(nextFriendChallenges);
+          // after every change from firebase trigger fetching friend challenges from postgres
+          const currentUserUid = firebase.auth().currentUser.uid;
+          await fetchFriendChallenges(currentUserUid);
+        }
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const appendFriendChallenges = useCallback((newChallenge) => {
-    // receive the previous message and the current one
+    // receive the previous challenge and the current one
     // setter from hook receive callback function
-    // setMessages(messages)
-    setPendingFriendChallenges((currentState) =>
-      // GiftedChat.append(previousMessages, messages)
-      [...currentState, ...newChallenge]
-    );
+    setPendingFriendChallenges((currentState) => [
+      ...currentState,
+      ...newChallenge,
+    ]);
   }, []);
-
-  /*
-  // listening for removing challenges from firebase
-  useEffect(() => {
-    const unsubscribe = friendChallengeInvitesRef.onSnapshot(
-      (querySnapshot) => {
-        const friendChallenges = querySnapshot
-          // return array of the docs changes since the last snapshot
-          .docChanges()
-          // .forEach((change) => {
-          //   if (change.type === "removed") {
-          //     console.log(removed);
-          //   }
-          // });
-          // we want to listen messages which are only removed
-          .filter(({ type }) => type === "removed")
-          // we listen to all pending friend challenges from the user (sender)
-          .filter(({ doc }) => {
-            const currentUserUid = firebase.auth().currentUser.uid;
-            const removedFriendChallenge = doc.data();
-            console.log("here", removedFriendChallenge);
-            return (
-              (removedFriendChallenge.senderId === currentUserUid ||
-                removedFriendChallenge.receiverId === currentUserUid) &&
-              removedFriendChallenge.status === "pending"
-            );
-          })
-          .map(({ doc }) => {
-            // doc.data is method in doc object (unpack data)
-            const friendPendingChallenge = doc.data();
-            // const docId = doc.id;
-            return friendPendingChallenge;
-          });
-        //
-        console.log("removed friend challenges");
-        console.log("friendChallenges", friendChallenges);
-        // setPendingFriendChallenges
-        // pendingFriendChallenges => old array
-        // removedFriendChallenges => new array (we want to exclued elements from this array)
-        // let updatedFriendChallenges = [];
-        // for (let challenge of removedFriendChallenges) {
-        //   if (!pendingFriendChallenges.include(challenge)) {
-        //     updatedFriendChallenges.push(challenge);
-        //   }
-        // }
-
-        // setPendingFriendChallenges(updatedFriendChallenges);
-      }
-    );
-    //
-    return () => unsubscribe();
-  }, []);
-*/
 
   const fetchPoints = async () => {
     try {
@@ -280,42 +212,35 @@ export default function HomePage({ navigation }) {
     console.log("FriendChallenge updated");
   };
 
-  ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
-  const onAccept = async (receiverId, senderId, challengeId) => {
-    try {
-      // add challenge to db
-      await EXPRESS_ROOT_PATH.post("/friendChallenges/add", {
-        receiverId: receiverId,
-        senderId: senderId,
-        challengeId: challengeId,
-      });
-
-      // get all friend challenges of the user (to set state of activeFriendChallenges)
-      await fetchFriendChallenges(currentUserUID);
-    } catch (error) {
-      console.log("friend challenge not added to db", error);
-    }
+  const removeAcceptedFriendChallengesFromState = (docIdToRemove) => {
+    setPendingFriendChallenges((challenges) =>
+      challenges.filter((challenge) => challenge.docId !== docIdToRemove)
+    );
   };
-
-  // const removeFromFirebase = async (docId) => {
-  //   try {
-  //     await friendChallengeInvitesRef.doc(docId).delete();
-  //     console.log("Document successfully deleted!");
-  //   } catch (error) {
-  //     console.error("Error removing document: ", error);
-  //   }
-  // };
 
   const updateChallengeInFirebase = async (docId) => {
     await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
     console.log("firebase updated");
   };
 
-  // const refresh = () => {
-  //   // re-renders the component
-  //   setPendingFriendChallenges([]);
-  //   // setValue({});
-  // };
+  ///// SEND REQUEST TO EXPRESS ROUTE TO POST FRIEND CHALLENGE IN DB
+  const onAccept = async (challenge) => {
+    const { receiverId, senderId, challengeId, docId } = challenge;
+    try {
+      // add challenge to postgress
+      await EXPRESS_ROOT_PATH.post("/friendChallenges/add", {
+        receiverId,
+        senderId,
+        challengeId,
+      });
+
+      // update object in firebase from status "pending" to "active"
+      await updateChallengeInFirebase(docId);
+
+    } catch (error) {
+      console.log("friend challenge not added to db", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -354,9 +279,6 @@ export default function HomePage({ navigation }) {
                 keyExtractor={(challenge) => challenge.id}
                 renderItem={({ item }) => (
                   <View style={styles.activeChallengeInfo}>
-                    {/* <Text style={styles.challengeText}>{item.title}</Text>
-                  <Text>{item.category}</Text> */}
-
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate("Challenge Tracker", item)
@@ -422,14 +344,7 @@ export default function HomePage({ navigation }) {
                       badge={item.badge}
                       onDecline={() => console.log("remove")}
                       onAccept={async () => {
-                        await onAccept(
-                          item.receiverId,
-                          item.senderId,
-                          item.challengeId
-                        );
-                        // removeFromFirebase(item.docId);
-                        await updateChallengeInFirebase(item.docId);
-                        // refresh();
+                        await onAccept(item);
                       }}
                     />
                   );

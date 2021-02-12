@@ -57,7 +57,6 @@ const FriendList = ({ navigation, route }) => {
       // save time in miliseconds
       createdAt: new Date().getTime(),
     });
-    console.log("invite sent");
   }
 
   return (
@@ -67,30 +66,27 @@ const FriendList = ({ navigation, route }) => {
         <Text style={styles.headerText}>Friend</Text>
       </View>
       <ScrollView>
-        <View style={styles.list}>
-          <FlatList
-            keyExtractor={(item) => {
-              return item.id;
-            }}
-            data={friends}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity
-                  onPress={(event) => {
-                    console.log("heree", item.uid);
-                    onPressInviteForChallenge(item.uid);
-                    navigation.navigate("Home", {
-                      challengeId: route.params.challengeId,
-                    });
-                  }}
-                >
-                  <Text>Invite {item.firstName} for challenge</Text>
-                </TouchableOpacity>
-              );
-            }}
-          ></FlatList>
-          {/* <Text style={styles.list}>Name</Text> */}
-        </View>
+        <FlatList
+          keyExtractor={(item) => {
+            return item.id;
+          }}
+          data={friends}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                style={styles.list}
+                onPress={(event) => {
+                  onPressInviteForChallenge(item.uid);
+                  navigation.navigate("Home", {
+                    challengeId: route.params.challengeId,
+                  });
+                }}
+              >
+                <Text>Invite {item.firstName} for challenge</Text>
+              </TouchableOpacity>
+            );
+          }}
+        ></FlatList>
       </ScrollView>
     </View>
   );
