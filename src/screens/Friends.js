@@ -14,15 +14,9 @@ import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
 const Friends = ({ navigation }) => {
-<<<<<<< HEAD
-  const [friends, setFriends] = useState([])
-  const [request, setRequest] = useState([])
-  const isFocused = useIsFocused()
-=======
   const [friends, setFriends] = useState([]);
   const [request, setRequest] = useState([]);
   const isFocused = useIsFocused();
->>>>>>> main
   let currentUserUID = firebase.auth().currentUser.uid;
 
   const WIDTH = Dimensions.get("window").width;
