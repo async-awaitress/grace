@@ -147,18 +147,20 @@ const Friends = ({ navigation }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.buttons}>
-                <View style={styles.accept}>
-                  <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
-                    <Feather name={"check-circle"} size={20} color={"blue"} />
-                  </TouchableOpacity>
+              {currentUserUID === item.friend.senderId ? (
+                <View style={styles.buttons}>
+                  <View style={styles.accept}>
+                    <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
+                      <Feather name={"check-circle"} size={20} color={"blue"} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.reject}>
+                    <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
+                      <Feather name={"x-circle"} size={20} color={"red"} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={styles.reject}>
-                  <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
-                    <Feather name={"x-circle"} size={20} color={"red"} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+              ) : null}
             </View>
           )}
         />
