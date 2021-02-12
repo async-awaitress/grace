@@ -13,7 +13,7 @@ const ActiveChallengeComponent = (props) => {
       </TouchableOpacity>
       {isCompleted ? (
         <TouchableOpacity
-          disabled
+          disabled={isCompleted}
           style={styles.completedButtonView}
           onPress={onComplete}
         >
