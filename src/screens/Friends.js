@@ -3,15 +3,15 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   Dimensions,
   TextInput,
   Alert,
+  ScrollView
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -104,67 +104,77 @@ const Friends = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <FlatList
-          data={friends}
-          keyExtractor={(friend, index) => index}
-          renderItem={({ item }) => (
-            <View style={styles.friendBox}>
-              <View>
-                <Image
-                  source={require("../../assets/profilePic.png")}
-                  style={{ transform: [{ scale: 0.4 }] }}
-                />
-              </View>
-              <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                <TouchableOpacity>
-                  <Text style={styles.friendText}>
-                    {item.firstName + " " + item.lastName}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
-      </View>
-      <View>
-        <Text>Pending Requests</Text>
-        <FlatList
-          data={request}
-          keyExtractor={(friend, index) => index}
-          renderItem={({ item }) => (
-            <View style={styles.friendBox}>
-              <View>
-                <Image
-                  source={require("../../assets/profilePic.png")}
-                  style={{ transform: [{ scale: 0.4 }] }}
-                />
-              </View>
-              <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                <TouchableOpacity>
-                  <Text style={styles.friendText}>
-                    {item.firstName + " " + item.lastName}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {currentUserUID === item.friend.senderId ? (
-                <View style={styles.buttons}>
-                  <View style={styles.accept}>
-                    <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
-                      <Feather name={"check-circle"} size={20} color={"blue"} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.reject}>
-                    <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
-                      <Feather name={"x-circle"} size={20} color={"red"} />
-                    </TouchableOpacity>
-                  </View>
+      <ScrollView>
+        <View>
+          <FlatList
+            data={friends}
+            keyExtractor={(friend, index) => index}
+            renderItem={({ item }) => (
+              <View style={styles.friendBox}>
+                <View>
+                  <Image
+                    source={require("../../assets/profilePic.png")}
+                    style={{ transform: [{ scale: 0.4 }] }}
+                  />
                 </View>
-              ) : null}
-            </View>
-          )}
-        />
-      </View>
+                <View style={[styles.friendName, { left: WIDTH / 5 }]}>
+                  <TouchableOpacity>
+                    <Text style={styles.friendText}>
+                      {item.firstName + " " + item.lastName}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          />
+        </View>
+        <View>
+          <View style={styles.pendingHeader}>
+            <Text style={styles.pendingHeaderText}>Pending Requests</Text>
+          </View>
+          <FlatList
+            data={request}
+            keyExtractor={(friend, index) => index}
+            renderItem={({ item }) => (
+              <View style={styles.friendBox}>
+                <View>
+                  <Image
+                    source={require("../../assets/profilePic.png")}
+                    style={{ transform: [{ scale: 0.4 }] }}
+                  />
+                </View>
+                <View style={[styles.pendingFriendName, { left: WIDTH / 5 }]}>
+                  <TouchableOpacity>
+                    <Text style={styles.friendText}>
+                      {item.firstName + " " + item.lastName}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {currentUserUID === item.friend.senderId ? (
+                  <View style={styles.buttons}>
+                    <View style={styles.accept}>
+                      <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
+                        <Feather
+                          name={"check-circle"}
+                          size={20}
+                          color={"blue"}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.reject}>
+                      <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
+                        <Feather name={"x-circle"} size={20} color={"red"} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <Text style={styles.pending}>Pending</Text>
+                )}
+              </View>
+            )}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -220,6 +230,17 @@ const styles = StyleSheet.create({
     zIndex: -1,
     backgroundColor: "#ff924c",
   },
+  pendingFriendName: {
+    borderWidth: 1,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 250,
+    height: 35,
+    borderRadius: 4,
+    zIndex: -1,
+    backgroundColor: "lightgrey",
+  },
   header: {
     backgroundColor: "#ff924c",
     paddingTop: 50,
@@ -252,6 +273,21 @@ const styles = StyleSheet.create({
   },
   reject: {
     paddingHorizontal: 10,
+  },
+  pending: {
+    marginTop: 60,
+    color: "grey",
+  },
+  pendingHeader: {
+    alignItems: "center",
+    backgroundColor: "#333333",
+    marginHorizontal: 10,
+    borderRadius: 5,
+  },
+  pendingHeaderText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
   },
 });
 
