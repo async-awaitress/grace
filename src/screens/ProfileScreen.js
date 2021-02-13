@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList, Button, Platform} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { loggingOut } from "../../API/methods";
 import { icons } from "./Icons/icons";
+import * as ImagePicker from 'expo-image-picker';
 
 const ProfileScreen = ({ navigation }) => {
+  const [image, setImage] = useState(null);
+
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
   const [completedChallenges, setCompletedChallenges] = useState([]);
@@ -38,10 +33,8 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     async function getCompletedChallenges() {
       try {
-        const res = await EXPRESS_ROOT_PATH.get(
-          `/challenges/completedChallenges/${currentUserUID}`
-        );
-        setCompletedChallenges(res.data);
+        const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
+        setCompletedChallenges(res.data)
       } catch (error) {
         next(error);
       }
@@ -73,7 +66,8 @@ const ProfileScreen = ({ navigation }) => {
       let currentUserUID = firebase.auth().currentUser.uid;
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
-        setUser(res.data);
+        setUser(res.data)
+        setImage(res.data.image)
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -84,6 +78,7 @@ const ProfileScreen = ({ navigation }) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   let date = new Date(user.createdAt);
   let joinedDate = date.toLocaleDateString(undefined, options);
+
 
   let status;
   if (user.totalPoints < 100) {
@@ -123,6 +118,66 @@ const ProfileScreen = ({ navigation }) => {
             alignSelf: "flex-end",
           }}
         />
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (Platform.OS !== 'web') {
+  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== 'granted') {
+  //         alert('Sorry, we need camera roll permissions to make this work!');
+  //       }
+  //     }
+  //   })();
+  // }, []);
+
+  const pickImage = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      const res = await EXPRESS_ROOT_PATH.put(
+          `/users/imageUpdate/${user.uid}`, {image}
+        );
+    }
+  };
+
+  // useEffect(() => {
+  //   async function seedImage() {
+  //     try {
+
+
+  //     } catch (error) {
+  //       console.log("get request failed", error);
+  //     }
+  //   }
+  //   seedImage();
+  // }, [isFocused]);
+
+
+
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  let date = new Date(user.createdAt)
+  let joinedDate = date.toLocaleDateString(undefined, options)
+  console.log(joinedDate);
+  console.log("points", user.totalPoints)
+
+
+  return (
+    <View style={styles.container}>
+      <View style={{width: 370, height: 230, backgroundColor: '#ffedd6', borderRadius: 20, borderWidth: 6, borderColor: "#9deaff", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#9deaff', shadowOpacity: 0.5}}>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
           <Text>{status}</Text>
           <Text
@@ -136,6 +191,7 @@ const ProfileScreen = ({ navigation }) => {
           {user.firstName} {user.lastName}
         </Text>
       </View>
+
 
       <View
         style={{
@@ -163,13 +219,6 @@ const ProfileScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={styles.ImageContainer}>
-        <Image
-          style={styles.tinyLogo}
-          source={require("../../assets/profilePic.png")}
-        />
-      </View>
-
       <View
         style={{
           width: 370,
@@ -194,6 +243,22 @@ const ProfileScreen = ({ navigation }) => {
             alignSelf: "flex-end",
           }}
         />
+
+      <View style={styles.ImageContainer}>
+        <Button title="image" onPress={pickImage} />
+        {user.image
+        ? (<Image source={{ uri: image }} style={{ borderRadius: 150 / 2, width: 150, height: 150 }} />)
+        : (<Image
+        style={{borderRadius: 150 / 2, height: 150, width: 150}}
+        source={require("../../assets/profileMain.png")}/>)
+        }
+      </View>
+
+
+      <View style={{width: 370, height: 210, backgroundColor: '#ffedd6', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
+      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
+        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
+
         <View>
           <Text style={{ padding: 6 }}>Badges Earned</Text>
         </View>
@@ -207,7 +272,7 @@ const ProfileScreen = ({ navigation }) => {
                 <TouchableOpacity>
                   <Image
                     source={icons[item.badge]}
-                    style={{ width: 50, height: 50 }}
+                    style={{ margin: 5, width: 50, height: 50 }}
                   />
                 </TouchableOpacity>
               </View>
@@ -272,6 +337,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
+    backgroundColor: "#ffedd6"
   },
 
   button: {
@@ -305,6 +371,7 @@ const styles = StyleSheet.create({
     height: "50%",
   },
   ImageContainer: {
+    flex: 1,
     borderRadius: 150 / 2,
     top: 170,
     position: "absolute",
@@ -326,13 +393,14 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     backgroundColor: "#ff87ab",
   },
-  activeChallengeContainer: {
+  completedChallenges: {
     display: "flex",
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
     height: 140,
     color: "white",
+    backgroundColor: "#ffedd6"
   },
 });
 
