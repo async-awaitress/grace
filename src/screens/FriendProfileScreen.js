@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList, Dimensions,} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios"
@@ -7,28 +7,23 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { loggingOut } from "../../API/methods";
 import { icons } from "./Icons/icons";
 
-const friendProfileScreen = ({ navigation }) => {
+export default function FriendProfileScreen ({ route, navigation }) {
 
-  const isFocused = useIsFocused();
-  const [user, setUser] = useState({});
   const [completedChallenges, setCompletedChallenges] = useState([])
+  const isFocused = useIsFocused();
 
+  const {
+    uid,
+    firstName,
+    totalPoints,
+    createdAt,
+    image
+  } = route.params
 
-  const handlePress = async () => {
-    await loggingOut()
-    firebase.auth().onAuthStateChanged((user) => {
-       if (!user) {
-         navigation.replace('Login')
-       }
-      })
-  }
-
-  // let currentUserUID = firebase.auth().currentUser.uid;
-  // console.log("UID", currentUserUID)
 
   useEffect(()=> {
     async function getCompletedChallenges() {
-      let currentUserUID = firebase.auth().currentUser.uid;
+      let currentUserUID = uid;
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/personalChallenges/${currentUserUID}`)
         setCompletedChallenges(res.data)
@@ -39,26 +34,11 @@ const friendProfileScreen = ({ navigation }) => {
     getCompletedChallenges();
   }, [isFocused])
 
-  useEffect(() => {
-    async function fetchUser() {
-      let currentUserUID = firebase.auth().currentUser.uid;
-      try {
-        const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
-        setUser(res.data)
-
-      } catch (error) {
-        console.log("get request failed", error);
-      }
-    }
-    fetchUser();
-  }, [isFocused]);
-
 
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  let date = new Date(user.createdAt)
+  let date = new Date(createdAt)
   let joinedDate = date.toLocaleDateString(undefined, options)
-  console.log(joinedDate);
-  console.log("points", user.totalPoints)
+
 
 
   return (
@@ -67,12 +47,12 @@ const friendProfileScreen = ({ navigation }) => {
       shadowColor: '#9deaff', shadowOpacity: 0.5}}>
         <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
-          <Text style={styles.totalPoints}>{`Total Points\n${user.totalPoints}`}</Text>
+          <Text style={styles.totalPoints}>{`Total Points\n${totalPoints}`}</Text>
         </View>
         <View>
           <Text style={styles.createdAt}>{`Joined Date\n${joinedDate}`}</Text>
         </View>
-          <Text style={styles.name}>{user.firstName}</Text>
+          <Text style={styles.name}>{firstName}</Text>
       </View>
 
 
@@ -89,9 +69,12 @@ const friendProfileScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.ImageContainer}>
-        <Image
-        style={styles.tinyLogo}
-        source={require("../../assets/profilePic.png")}/>
+        {(image)
+        ? (<Image source={{ uri: image }} style={{ borderRadius: 150 / 2, width: 150, height: 150 }} />)
+        : (<Image
+        style={{borderRadius: 150 / 2, height: 150, width: 150}}
+        source={require("../../assets/profileMain.png")}/>)
+        }
       </View>
 
 
@@ -123,18 +106,6 @@ const friendProfileScreen = ({ navigation }) => {
           />
         </ScrollView>
       </View>
-
-      <View style={{width: 70, height: 30, backgroundColor: 'black', margin: 2, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
-      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
-        <TouchableOpacity onPress={handlePress}>
-          <Text style={{color: "white"}}> Log out</Text>
-        </TouchableOpacity>
-      </View>
-      {/* <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Text style={styles.buttonText}>Log Out</Text>
-          </TouchableOpacity>
-      </View> */}
     </View>
   );
 };
@@ -215,5 +186,3 @@ const styles = StyleSheet.create({
     color: "white"
   },
 });
-
-export default friendProfileScreen;

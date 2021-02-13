@@ -12,7 +12,7 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
+import { NavigationHelpersContext, useIsFocused } from "@react-navigation/native";
 import { SearchBar } from "react-native-elements";
 
 const Friends = ({ navigation }) => {
@@ -134,7 +134,7 @@ const Friends = ({ navigation }) => {
                   />
                 </View>
                 <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() =>navigation.navigate('Friend Profile', item)}>
                     <Text style={styles.friendText}>
                       {item.firstName + " " + item.lastName}
                     </Text>

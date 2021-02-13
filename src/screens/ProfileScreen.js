@@ -34,6 +34,7 @@ const ProfileScreen = ({ navigation }) => {
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
         setCompletedChallenges(res.data)
+
       } catch (error) {
         next(error)
       }
@@ -49,7 +50,7 @@ const ProfileScreen = ({ navigation }) => {
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
         setUser(res.data)
-
+        setImage(res.data.image)
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -58,18 +59,24 @@ const ProfileScreen = ({ navigation }) => {
   }, [isFocused]);
 
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (Platform.OS !== 'web') {
+  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== 'granted') {
+  //         alert('Sorry, we need camera roll permissions to make this work!');
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
   const pickImage = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -82,7 +89,7 @@ const ProfileScreen = ({ navigation }) => {
     if (!result.cancelled) {
       setImage(result.uri);
       const res = await EXPRESS_ROOT_PATH.put(
-          `/users/imageUpdate/${currentUserUID}`, {image}
+          `/users/imageUpdate/${user.uid}`, {image}
         );
     }
   };
@@ -137,7 +144,7 @@ const ProfileScreen = ({ navigation }) => {
 
       <View style={styles.ImageContainer}>
         <Button title="image" onPress={pickImage} />
-        {(image)
+        {user.image
         ? (<Image source={{ uri: image }} style={{ borderRadius: 150 / 2, width: 150, height: 150 }} />)
         : (<Image
         style={{borderRadius: 150 / 2, height: 150, width: 150}}
