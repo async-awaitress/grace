@@ -7,13 +7,13 @@ import {
   Dimensions,
   TextInput,
   Alert,
-  ScrollView
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import { SearchBar } from "react-native-elements";
 
 const Friends = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
@@ -73,11 +73,8 @@ const Friends = ({ navigation }) => {
     }
   };
 
-  const searcher = async () => {
-    // Alert SHOULD NOT GO HERE.  This runs alert before the try catch.  But We're getting a network error and no alert when placing the alert inside of the try catch, so this placement makes sure that it runs and informs user
-    Alert.alert("Friend Added");
+  const newRequest = async () => {
     const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
-
     try {
       await EXPRESS_ROOT_PATH.put(`/users/friends/${currentUserUID}`, {
         receiverId: friend.data.uid,
@@ -85,6 +82,21 @@ const Friends = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
+
+    return friend;
+  };
+
+  const searcher = async () => {
+    const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
+    newRequest()
+    console.log('FRIEND', friend.data)
+    if (friend.data.email) {
+      Alert.alert("Friend Added");
+    } else {
+      Alert.alert(`No User With Email: ${email} Exists`);
+    }
+
+    setEmail("");
   };
 
   return (
@@ -93,22 +105,25 @@ const Friends = ({ navigation }) => {
         <Text style={styles.title}>FRIENDS</Text>
       </View>
       <View style={styles.friendSearch}>
-        <TextInput
+        <SearchBar
           style={styles.input}
           placeholder="   Find Friend By Email"
           onChangeText={(email) => setEmail(email)}
-        ></TextInput>
+          value={email}
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.searchBarInputContainer}
+        />
         <View style={styles.addFriendButton}>
           <TouchableOpacity onPress={searcher}>
             <Text style={styles.buttonText}>Add Friend</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <View>
         <View>
           <FlatList
             data={friends}
-            keyExtractor={(friend, index) => index}
+            keyExtractor={(friend) => friend.uid}
             renderItem={({ item }) => (
               <View style={styles.friendBox}>
                 <View>
@@ -134,7 +149,7 @@ const Friends = ({ navigation }) => {
           </View>
           <FlatList
             data={request}
-            keyExtractor={(friend, index) => index}
+            keyExtractor={(friend) => friend.uid}
             renderItem={({ item }) => (
               <View style={styles.friendBox}>
                 <View>
@@ -174,7 +189,7 @@ const Friends = ({ navigation }) => {
             )}
           />
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -288,6 +303,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
+  },
+  searchBarContainer: {
+    // backgroundColor: "#ffedd6",
+    borderBottomColor: "transparent",
+    borderTopColor: "transparent",
+    marginHorizontal: 20,
+    borderRadius: 5
+  },
+  searchBarInputContainer: {
+    // backgroundColor: "#ffedd6",
+    borderBottomColor: "transparent",
+    borderTopColor: "transparent",
+    marginVertical: 5
   },
 });
 
