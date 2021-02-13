@@ -64,13 +64,16 @@ export default function HomePage({ navigation }) {
           `/challenges/${currentUserUID}`
         );
         const challenges = res.data;
+        const activeChallenges = challenges.filter(
+          (challenge) => challenge.personalChallenge.completionStatus === "open"
+        );
         const dailyCompletionObjToSet = {};
-        challenges.forEach((challenge) => {
+        activeChallenges.forEach((challenge) => {
           dailyCompletionObjToSet[challenge.id] =
             challenge.personalChallenge.dailyStatus;
         });
         setDailyCompletion(dailyCompletionObjToSet);
-        setChallenges(res.data);
+        setChallenges(activeChallenges);
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -84,7 +87,10 @@ export default function HomePage({ navigation }) {
       const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
         `/friendChallenges/${currentUserUID}`
       );
-      setActiveFriendChallenges(allFriendChallenges.data);
+      const activeFriendChallenges = allFriendChallenges.data.filter(
+        (challenge) => challenge.completionStatus === "open"
+      );
+      setActiveFriendChallenges(activeFriendChallenges);
     } catch (error) {
       console.log("there was an error fetching the challenges", error);
     }

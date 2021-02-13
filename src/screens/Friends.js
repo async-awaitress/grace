@@ -7,6 +7,7 @@ import {
   Dimensions,
   TextInput,
   Alert,
+  ScrollView,
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
