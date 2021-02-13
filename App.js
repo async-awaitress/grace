@@ -23,6 +23,7 @@ import {
   ProfileScreen,
   RegistrationScreen,
   FriendList,
+  FriendProfileScreen
 } from "./src/screens";
 
 const Stack = createStackNavigator();
@@ -77,6 +78,12 @@ const ChallengeScreenNav = () => (
     <ChallengeStack.Screen
       name="Friend List"
       component={FriendList}
+      options={{ title: "" }}
+      backBehavior="order"
+    />
+    <ChallengeStack.Screen
+      name="Friend Profile"
+      component={FriendProfileScreen}
       options={{ title: "" }}
       backBehavior="order"
     />
@@ -184,6 +191,7 @@ export default function App() {
             headerShown: false,
           }}
         />
+
         <Stack.Screen name="GoogleSignIn" component={AuthScreen} />
         <Stack.Screen
           name="Personal Challenges"
@@ -202,6 +210,10 @@ export default function App() {
           component={ChallengeTrackerScreen}
         />
         <Stack.Screen name="Friend List" component={FriendList} />
+        <Stack.Screen
+          name="Friend Profile"
+          component={FriendProfileScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

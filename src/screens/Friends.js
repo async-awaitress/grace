@@ -99,6 +99,7 @@ const Friends = ({ navigation }) => {
     setEmail("");
   };
 
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -133,7 +134,7 @@ const Friends = ({ navigation }) => {
                   />
                 </View>
                 <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() =>navigation.navigate('Friend Profile', item)}>
                     <Text style={styles.friendText}>
                       {item.firstName + " " + item.lastName}
                     </Text>

@@ -13,3 +13,5 @@ export { default as HomeIcon } from "./Icons/HomeIcon";
 export { default as FriendsIcon } from "./Icons/FriendsIcon";
 export { default as UserIcon } from "./Icons/UserIcon";
 export { default as FriendList } from "./FriendList";
+export { default as FriendProfileScreen } from "./FriendProfileScreen";
+
