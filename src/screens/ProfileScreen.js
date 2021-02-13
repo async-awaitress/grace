@@ -1,53 +1,79 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
-import axios from "axios"
+import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { loggingOut } from "../../API/methods";
 import { icons } from "./Icons/icons";
 
 const ProfileScreen = ({ navigation }) => {
-
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
-  const [completedChallenges, setCompletedChallenges] = useState([])
-
+  const [completedChallenges, setCompletedChallenges] = useState([]);
+  const [completedFriendChallenges, setCompletedFriendChallenges] = useState(
+    []
+  );
 
   const handlePress = async () => {
-    await loggingOut()
+    await loggingOut();
     firebase.auth().onAuthStateChanged((user) => {
-       if (!user) {
-         navigation.replace('Login')
-       }
-      })
-  }
+      if (!user) {
+        navigation.replace("Login");
+      }
+    });
+  };
 
   // let currentUserUID = firebase.auth().currentUser.uid;
   // console.log("UID", currentUserUID)
-
-  useEffect(()=> {
+  let currentUserUID = firebase.auth().currentUser.uid;
+  useEffect(() => {
     async function getCompletedChallenges() {
-      let currentUserUID = firebase.auth().currentUser.uid;
       try {
-        const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
-        setCompletedChallenges(res.data)
+        const res = await EXPRESS_ROOT_PATH.get(
+          `/challenges/completedChallenges/${currentUserUID}`
+        );
+        setCompletedChallenges(res.data);
       } catch (error) {
-        next(error)
+        next(error);
       }
     }
     getCompletedChallenges();
-  }, [isFocused])
+  }, [isFocused]);
 
-  console.log("this is the badge data", completedChallenges)
+  // get all active friend challenges of the user
+  const fetchFriendChallenges = async (currentUserUID) => {
+    try {
+      const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
+        `/friendChallenges/${currentUserUID}`
+      );
+      const completedFriendChallenges = allFriendChallenges.data.filter(
+        (challenge) => challenge.completionStatus === "completed"
+      );
+      setCompletedFriendChallenges(completedFriendChallenges);
+    } catch (error) {
+      console.log("there was an error fetching the challenges", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriendChallenges(currentUserUID);
+  }, [isFocused]);
 
   useEffect(() => {
     async function fetchUser() {
       let currentUserUID = firebase.auth().currentUser.uid;
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
-        setUser(res.data)
-
+        setUser(res.data);
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -55,59 +81,124 @@ const ProfileScreen = ({ navigation }) => {
     fetchUser();
   }, [isFocused]);
 
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  let date = new Date(user.createdAt);
+  let joinedDate = date.toLocaleDateString(undefined, options);
 
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  let date = new Date(user.createdAt)
-  let joinedDate = date.toLocaleDateString(undefined, options)
-  console.log(joinedDate);
-  console.log("points", user.totalPoints)
-
+  let status;
+  if (user.totalPoints < 100) {
+    status = "Master Racer";
+  } else if (user.totalPoints < 200) {
+    status = "Grand Master Racer";
+  } else if (user.totalPoints < 200) {
+    status = "Arch Master Racer";
+  } else if (user.totalPoints < 200) {
+    status = "Supreme Master Racer";
+  } else {
+    status = "Ultimate Master Racer";
+  }
 
   return (
     <View style={styles.container}>
-      <View style={{width: 370, height: 230, backgroundColor: '#a7f9ef', borderRadius: 20, borderWidth: 6, borderColor: "#9deaff", shadowOffset:{  width: 10,  height: 10,  },
-      shadowColor: '#9deaff', shadowOpacity: 0.5}}>
-        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
+      <View
+        style={{
+          width: 370,
+          height: 230,
+          backgroundColor: "#a7f9ef",
+          borderRadius: 20,
+          borderWidth: 6,
+          borderColor: "#9deaff",
+          shadowOffset: { width: 10, height: 10 },
+          shadowColor: "#9deaff",
+          shadowOpacity: 0.5,
+        }}
+      >
+        <View
+          style={{
+            width: 40,
+            height: 20,
+            backgroundColor: "white",
+            borderRadius: 10,
+            margin: 10,
+            alignSelf: "flex-end",
+          }}
+        />
         <View>
-          <Text style={styles.totalPoints}>{`Total Points\n${user.totalPoints}`}</Text>
+          <Text>{status}</Text>
+          <Text
+            style={styles.totalPoints}
+          >{`Total Points\n${user.totalPoints}`}</Text>
         </View>
         <View>
           <Text style={styles.createdAt}>{`Joined Date\n${joinedDate}`}</Text>
         </View>
-          <Text style={styles.name}>{user.firstName}</Text>
+        <Text style={styles.name}>
+          {user.firstName} {user.lastName}
+        </Text>
       </View>
 
-
-
-      <View style={{width: 370, height: 230, backgroundColor: '#fdffb6', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#e4ffbb", shadowOffset:{  width: 10,  height: 10,  },
-      shadowColor: '#e4ffbb', shadowOpacity: 1.0}}>
-        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
-        <View>
-          <Text style={{padding: 6}}>My goals</Text>
-        </View>
-        <View>
-          <Text style={{padding: 6}}>Challenges Participated</Text>
-        </View>
+      <View
+        style={{
+          width: 370,
+          height: 230,
+          backgroundColor: "#fdffb6",
+          margin: 7,
+          borderRadius: 20,
+          borderWidth: 6,
+          borderColor: "#e4ffbb",
+          shadowOffset: { width: 10, height: 10 },
+          shadowColor: "#e4ffbb",
+          shadowOpacity: 1.0,
+        }}
+      >
+        <View
+          style={{
+            width: 40,
+            height: 20,
+            backgroundColor: "white",
+            borderRadius: 10,
+            margin: 10,
+            alignSelf: "flex-end",
+          }}
+        />
       </View>
 
       <View style={styles.ImageContainer}>
         <Image
-        style={styles.tinyLogo}
-        source={require("../../assets/profilePic.png")}/>
+          style={styles.tinyLogo}
+          source={require("../../assets/profilePic.png")}
+        />
       </View>
 
-
-      <View style={{width: 370, height: 210, backgroundColor: '#ff87ab', margin: 7, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
-      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
-        <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
+      <View
+        style={{
+          width: 370,
+          height: 210,
+          backgroundColor: "#ff87ab",
+          margin: 7,
+          borderRadius: 20,
+          borderWidth: 6,
+          borderColor: "#ff5d8f",
+          shadowOffset: { width: 10, height: 10 },
+          shadowColor: "#ff5d8f",
+          shadowOpacity: 0.5,
+        }}
+      >
+        <View
+          style={{
+            width: 40,
+            height: 20,
+            backgroundColor: "white",
+            borderRadius: 10,
+            margin: 10,
+            alignSelf: "flex-end",
+          }}
+        />
         <View>
-          <Text style={{padding: 6}}>Badges Earned</Text>
+          <Text style={{ padding: 6 }}>Badges Earned</Text>
         </View>
 
-        <ScrollView
-          style={styles.badgesEarned}
-          horizontal={true}
-          >
+        <ScrollView style={styles.badgesEarned} horizontal={true}>
           <FlatList
             horizontal
             data={completedChallenges}
@@ -123,13 +214,40 @@ const ProfileScreen = ({ navigation }) => {
             )}
             keyExtractor={(item, index) => index}
           />
+          <FlatList
+            horizontal
+            data={completedFriendChallenges}
+            renderItem={({ item }) => (
+              <View style={styles.completedChallenges}>
+                <TouchableOpacity>
+                  <Image
+                    source={icons[item.badge]}
+                    style={{ width: 50, height: 50 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item, index) => index}
+          />
         </ScrollView>
       </View>
 
-      <View style={{width: 70, height: 30, backgroundColor: 'black', margin: 2, borderRadius: 20, borderWidth: 6, borderColor: "#ff5d8f", shadowOffset:{  width: 10,  height: 10,  },
-      shadowColor: '#ff5d8f', shadowOpacity: 0.5}}>
+      <View
+        style={{
+          width: 70,
+          height: 30,
+          backgroundColor: "black",
+          margin: 2,
+          borderRadius: 20,
+          borderWidth: 6,
+          borderColor: "#ff5d8f",
+          shadowOffset: { width: 10, height: 10 },
+          shadowColor: "#ff5d8f",
+          shadowOpacity: 0.5,
+        }}
+      >
         <TouchableOpacity onPress={handlePress}>
-          <Text style={{color: "white"}}> Log out</Text>
+          <Text style={{ color: "white" }}> Log out</Text>
         </TouchableOpacity>
       </View>
       {/* <View style={styles.container}>
@@ -162,19 +280,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 30,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   createdAt: {
     textAlign: "right",
     paddingTop: 10,
     paddingRight: 6,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   totalPoints: {
-   textAlign: "right",
-   paddingTop: 10,
-   paddingRight: 6,
-   fontWeight: "bold"
+    textAlign: "right",
+    paddingTop: 10,
+    paddingRight: 6,
+    fontWeight: "bold",
   },
   name: {
     color: "black",
@@ -190,10 +308,10 @@ const styles = StyleSheet.create({
     borderRadius: 150 / 2,
     top: 170,
     position: "absolute",
-    shadowOffset:{  width: 10,  height: 10},
-    shadowColor: 'black',
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: "black",
     shadowOpacity: 0.5,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   badgesEarned: {
     display: "flex",
@@ -206,7 +324,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "white",
     borderRadius: 7,
-    backgroundColor: "#ff87ab"
+    backgroundColor: "#ff87ab",
   },
   activeChallengeContainer: {
     display: "flex",
@@ -214,7 +332,7 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
     width: 400,
     height: 140,
-    color: "white"
+    color: "white",
   },
 });
 

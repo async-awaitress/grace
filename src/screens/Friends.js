@@ -7,7 +7,7 @@ import {
   Dimensions,
   TextInput,
   Alert,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
@@ -77,7 +77,6 @@ const Friends = ({ navigation }) => {
     // Alert SHOULD NOT GO HERE.  This runs alert before the try catch.  But We're getting a network error and no alert when placing the alert inside of the try catch, so this placement makes sure that it runs and informs user
     Alert.alert("Friend Added");
     const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
-
     try {
       await EXPRESS_ROOT_PATH.put(`/users/friends/${currentUserUID}`, {
         receiverId: friend.data.uid,
