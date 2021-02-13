@@ -102,7 +102,7 @@ const Friends = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.tifriendftle}>FRIENDS</Text>
+        <Text style={styles.title}>FRIENDS</Text>
       </View>
       <View style={styles.friendSearch}>
         <SearchBar
@@ -110,6 +110,8 @@ const Friends = ({ navigation }) => {
           placeholder="   Find Friend By Email"
           onChangeText={(email) => setEmail(email)}
           value={email}
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.searchBarInputContainer}
         />
         <View style={styles.addFriendButton}>
           <TouchableOpacity onPress={searcher}>
@@ -301,6 +303,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
+  },
+  searchBarContainer: {
+    // backgroundColor: "#ffedd6",
+    borderBottomColor: "transparent",
+    borderTopColor: "transparent",
+    marginHorizontal: 20,
+    borderRadius: 5
+  },
+  searchBarInputContainer: {
+    // backgroundColor: "#ffedd6",
+    borderBottomColor: "transparent",
+    borderTopColor: "transparent",
+    marginVertical: 5
   },
 });
 
