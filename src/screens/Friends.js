@@ -12,7 +12,7 @@ import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-import { NavigationHelpersContext, useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { SearchBar } from "react-native-elements";
 
 const Friends = ({ navigation }) => {
