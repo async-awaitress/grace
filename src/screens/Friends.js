@@ -104,7 +104,7 @@ const Friends = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <View>
         <View>
           <FlatList
             data={friends}
@@ -174,7 +174,7 @@ const Friends = ({ navigation }) => {
             )}
           />
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
