@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Button } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { icons } from "./Icons/icons";
+import { Button } from "react-native-paper";
 
 const ReceiveChallengeComponent = (props) => {
   const { badge, onAccept, onDecline } = props;
@@ -14,18 +15,36 @@ const ReceiveChallengeComponent = (props) => {
       <View style={styles.ignoreButtonView}>
         <Text style={{ color: "white" }}>Ignore</Text>
       </View> */}
-
-      <Button title="Accept" onPress={onAccept}></Button>
-      <Button title="Decline" onPress={onDecline}></Button>
+      {/* <View styles={{ marginBottom: 5, borderWidth: 1 }}> */}
+      <Button
+        mode="contained"
+        onPress={onAccept}
+        compact
+        style={{ marginVertical: 2, width: 85 }}
+        labelStyle={{ fontSize: 10 }}
+      >
+        Accept
+      </Button>
+      <Button
+        mode="contained"
+        onPress={onDecline}
+        compact
+        color="tomato"
+        style={{ marginVertical: 2, width: 85 }}
+        labelStyle={{ fontSize: 10 }}
+      >
+        Decline
+      </Button>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: 70,
-    height: 70,
-    opacity: 0.5,
+    width: 60,
+    height: 60,
+    marginBottom: 5,
+    opacity: 0.3,
   },
   pendingChallengeInfo: {
     flexDirection: "column",

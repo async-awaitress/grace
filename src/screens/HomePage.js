@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  LogBox,
 } from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -38,6 +39,10 @@ export default function HomePage({ navigation }) {
   const [dailyCompletionFriends, setDailyCompletionFriends] = useState({});
   const [pendingFriendChallenges, setPendingFriendChallenges] = useState([]);
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
+
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
 
   useEffect(() => {
     async function getUserInfo() {
@@ -316,7 +321,7 @@ export default function HomePage({ navigation }) {
             ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
             <ScrollView
               style={styles.activeChallengeContainer}
-              // horizontal={true}
+              horizontal={true}
             >
               <FlatList
                 horizontal
@@ -362,10 +367,7 @@ export default function HomePage({ navigation }) {
             <Text>Your Active Friend Challenges</Text>
           </View>
 
-          <ScrollView
-            style={styles.activeChallengeContainer}
-            // horizontal={true}
-          >
+          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
             <FlatList
               horizontal
               data={activeFriendChallenges}
@@ -516,9 +518,9 @@ const styles = StyleSheet.create({
   activeChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: 20,
-    borderColor: "#ffedd6",
+    // borderColor: "#ffedd6",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -528,6 +530,14 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 170,
     width: 110,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   linkView: {
     alignItems: "center",
