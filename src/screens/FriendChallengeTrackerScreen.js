@@ -16,28 +16,41 @@ import { icons } from "./Icons/icons";
 
 const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [completed, setCompleted] = useState(
-    route.params.personalChallenge.dailyStatus
-  );
+  const [challenge, setChallenge] = useState({})
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
   const {
     id,
-    category,
-    description,
-    pointsPerDay,
-    title,
-    type,
+    senderId,
+    receiverId,
+    challengeId,
+    dailyStatusForSender,
+    dailyStatusForReceiver,
+    totalPointsToWin,
+    createdAt,
+    updatedAt,
     badge,
-    duration,
-    personalChallenge,
-    tips,
   } = route.params;
 
+  const [receiverCompleted, setReceiverCompleted] = useState(receiverCompleted);
+  const [senderCompleted, setSenderCompleted] = useState(senderCompleted);
+
+  useEffect(() => {
+    const getChallenge = async () => {
+      const currentChallenge = await EXPRESS_ROOT_PATH.get(
+        `/challenges/${challengeId}`
+      );
+      setChallenge(currentChallenge.data)
+    };
+    getChallenge()
+  }, []);
+
+  const {title, duration, pointsPerDay, description, tips } = challenge
+
   let now = new Date();
-  const lastUpdated = new Date(personalChallenge.updatedAt);
-  const created = new Date(personalChallenge.createdAt);
+  const lastUpdated = new Date(updatedAt);
+  const created = new Date(createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
   const exactDay = (now - created) / 86400000;
   const challengeData = [];
@@ -48,7 +61,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   for (let i = 0; i < duration; i++) {
     let section = { key: "", y: 1 };
     let color = incompleteColor;
-    if ((i === currentDay && personalChallenge.dailyStatus) || i < currentDay) {
+    if ((i === currentDay && dailyStatusForSender) || i < currentDay) {
       color = completeColor;
     }
     challengeData.push(section);
@@ -56,7 +69,10 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   }
 
   useEffect(async () => {
-    await updateChallenge(currentUserUID, id)(setCompleted(!completed));
+    await updateChallenge(
+      currentUserUID,
+      id
+    )(setReceiverCompleted(!receiverCompleted));
   }, []);
 
   const updateChallenge = async (userId, challengeId) => {
@@ -64,7 +80,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
     // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
-    if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
+    if (today === updatedDate + 1 && dailyStatusForReceiver) {
       console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
       try {
         const res = await EXPRESS_ROOT_PATH.put(
@@ -76,14 +92,14 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
         console.log(err);
       }
     }
-    if (today >= updatedDate + 2 && !personalChallenge.dailyStatus) {
+    if (today >= updatedDate + 2 && !dailyStatusForReceiver) {
       try {
         const res = await EXPRESS_ROOT_PATH.put(
           `/personalChallenges/failPersonalChallenge/${challengeId}`,
           { uid: userId }
         );
         // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
+        const dailyStatus = res.data.dailyStatusForReceiver;
       } catch (err) {
         console.log(err);
       }
@@ -94,7 +110,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
-    if (!personalChallenge.dailyStatus && today < updatedDate + 3) {
+    if (!dailyStatusForReceiver && today < updatedDate + 3) {
       try {
         const res = await EXPRESS_ROOT_PATH.put(
           `/personalChallenges/updatePersonalChallenge/${challengeId}`,
@@ -129,7 +145,9 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
       <View style={{ position: "absolute", top: 131, left: 142 }}>
         <TouchableOpacity
           onPress={() =>
-            completeChallenge(currentUserUID, id).then(setCompleted(!completed))
+            completeChallenge(currentUserUID, id).then(
+              setReceiverCompleted(!receiverCompleted)
+            )
           }
         >
           <Image
@@ -141,7 +159,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
       <View style={styles.daysCounter}>
         <Text style={styles.daysCounterText}>
           Day {currentDay + 1} of {duration}
-          {personalChallenge.dailyStatus ? ` Complete` : ` Incomplete`}
+          {dailyStatusForReceiver ? ` Complete` : ` Incomplete`}
         </Text>
       </View>
       <View style={styles.descriptionBox}>
