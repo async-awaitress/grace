@@ -8,8 +8,8 @@ const PendingChallengeComponent = (props) => {
   return (
     <View style={styles.pendingChallengeInfo}>
       <Image source={icons[badge]} style={styles.image} />
-      <Button mode="contained" compact disabled>
-        Pending
+      <Button mode="outlined" compact disabled labelStyle={{ fontSize: 9 }}>
+        Invite Sent
       </Button>
       {/* <View style={styles.pendingButtonView}>
         <Text style={{ color: "white" }}>Pending</Text>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 170,
+    height: 160,
     width: 110,
 
     shadowColor: "#000",

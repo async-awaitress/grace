@@ -67,8 +67,7 @@ const FriendList = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Choose</Text>
-        <Text style={styles.headerText}>Friend</Text>
+        <Text style={styles.headerText}>Choose Friend</Text>
       </View>
       <ScrollView>
         <FlatList
@@ -131,13 +130,14 @@ const styles = StyleSheet.create({
     padding: 5,
     width: "100%",
     textAlign: "center",
+    height: 100,
   },
   headerText: {
     fontSize: 30,
     color: "white",
     marginTop: 5,
     fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     textAlign: "center",
   },
   friendBox: {

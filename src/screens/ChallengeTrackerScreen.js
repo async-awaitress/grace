@@ -14,6 +14,7 @@ import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import Svg from "react-native-svg";
 import { icons } from "./Icons/icons";
+import { Button } from "react-native-paper";
 
 const ChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -61,40 +62,37 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const updateChallenge = async (userId, challengeId) => {
-    const now = new Date();
-    const today = now.getDate();
-    const updatedDate = lastUpdated.getDate();
-    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
-    if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
-      console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
-      try {
-        const res = await EXPRESS_ROOT_PATH.put(
-          `/personalChallenges/resetPersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-      } catch (err) {
-        console.log(err);
+      const now = new Date();
+      const today = now.getDate();
+      const updatedDate = lastUpdated.getDate();
+      // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
+      if (today === updatedDate + 1 && personalChallenge.dailyStatus) {
+        console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
+        try {
+          const res = await EXPRESS_ROOT_PATH.put(
+            `/personalChallenges/resetPersonalChallenge/${challengeId}`,
+            { uid: userId }
+          );
+        } catch (err) {
+          console.log(err);
+        }
       }
-    }
-    if (today >= updatedDate + 2 && !personalChallenge.dailyStatus) {
-      try {
-        const res = await EXPRESS_ROOT_PATH.put(
-          `/personalChallenges/failPersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatus;
-      } catch (err) {
-        console.log(err);
+      if (today >= updatedDate + 2 && !personalChallenge.dailyStatus) {
+        try {
+          const res = await EXPRESS_ROOT_PATH.put(
+            `/personalChallenges/failPersonalChallenge/${challengeId}`,
+            { uid: userId }
+          );
+
+          const dailyStatus = res.data.dailyStatus;
+        } catch (err) {
+          console.log(err);
+        }
       }
-    }
-  };
-    updateChallenge(currentUserUID, id)
-    setCompleted(!completed)
+    };
+    updateChallenge(currentUserUID, id);
+    setCompleted(!completed);
   }, []);
-
-
 
   const completeChallenge = async (userId, challengeId) => {
     const now = new Date();
@@ -106,7 +104,6 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           `/personalChallenges/updatePersonalChallenge/${challengeId}`,
           { uid: userId }
         );
-        // dailyStatus = "true"
       } catch (error) {
         console.log("update request failed", error);
       }
@@ -115,8 +112,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingVertical: HEIGHT / 13.9 }]}>
-        <Text style={styles.title}>{title}</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{title}</Text>
       </View>
       <Svg height="50" width="200">
         <VictoryPie
@@ -135,11 +132,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       <View
         style={{ position: "absolute", top: HEIGHT / 4.22, left: WIDTH / 3.24 }}
       >
-        <TouchableOpacity
-          onPress={() =>
-            completeChallenge(currentUserUID, id)
-          }
-        >
+        <TouchableOpacity onPress={() => completeChallenge(currentUserUID, id)}>
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
             source={icons[badge]}
@@ -156,11 +149,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         style={[
           styles.descriptionBox,
           {
-            margin: HEIGHT/30,
-            paddingHorizontal: WIDTH/25,
-            paddingVertical: HEIGHT/40,
-            width: WIDTH/ 1.1,
-            top: HEIGHT/4,
+            margin: HEIGHT / 30,
+            paddingHorizontal: WIDTH / 25,
+            paddingVertical: HEIGHT / 40,
+            width: WIDTH / 1.1,
+            top: HEIGHT / 4,
           },
         ]}
       >
@@ -171,31 +164,46 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           <View style={styles.tips}>
             <Text style={styles.popupText}>{tips}</Text>
             <View style={styles.close}>
-              <TouchableOpacity onPress={() => setModalOpen(false)}>
-                <Text style={styles.button}>Close</Text>
-              </TouchableOpacity>
+              <Button
+                color="#689451"
+                mode="contained"
+                onPress={() => setModalOpen(false)}
+              >
+                Close
+              </Button>
             </View>
           </View>
         </Modal>
       </View>
       <View style={[styles.toggleTips, { top: HEIGHT / 4 }]}>
-        <TouchableOpacity onPress={() => setModalOpen(true)}>
-          <Text style={styles.button}>Tips?</Text>
-        </TouchableOpacity>
+        <Button
+          color="#689451"
+          mode="contained"
+          onPress={() => setModalOpen(true)}
+        >
+          Tips
+        </Button>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 21,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 5,
-    color: "#ffffff",
+  header: {
+    backgroundColor: "#689451",
+    paddingTop: 35,
+    padding: 10,
+    width: "100%",
+    textAlign: "center",
+    height: 100,
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
     fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
+    textAlign: "center",
+    textTransform: "capitalize",
   },
   container: {
     flex: 1,
@@ -213,16 +221,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   toggleTips: {
-    backgroundColor: "#689451",
     borderRadius: 5,
-    padding: 5,
-    borderWidth: 1,
   },
   close: {
-    backgroundColor: "#689451",
+    marginTop: 30,
     borderRadius: 5,
-    padding: 5,
-    borderWidth: 1,
   },
   button: {
     fontSize: 17,
@@ -251,12 +254,6 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 17,
-  },
-  header: {
-    backgroundColor: "#689451",
-    width: "100%",
-    textAlign: "center",
-    alignItems: "center",
   },
 });
 

@@ -35,8 +35,8 @@ const FriendChallengesScreen = ({ navigation }) => {
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Friend</Text>
-        <Text style={styles.headerText}>Challenges</Text>
+        <Text style={styles.headerText}>Friend Challenges</Text>
+        {/* <Text style={styles.headerText}>Challenges</Text> */}
       </View>
       <ScrollView>
         <View style={styles.container}>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#689451",
+    height: 100,
     paddingTop: 35,
     padding: 5,
     width: "100%",
@@ -87,18 +88,26 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 5,
     fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     textAlign: "center",
   },
   list: {
     flexDirection: "row",
     padding: 10,
-    margin: 10,
-    borderWidth: 1,
-    backgroundColor: "#f9f1f1",
+    marginVertical: 10,
+    marginHorizontal: 20,
+    backgroundColor: "white",
     justifyContent: "space-between",
     borderRadius: 20,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   challengeTitle: {
     fontSize: 25,
