@@ -122,10 +122,7 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      const res = await EXPRESS_ROOT_PATH.put(
-        `/users/imageUpdate/${user.uid}`,
-        { image }
-      );
+      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image });
     }
   };
   {
