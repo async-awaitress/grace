@@ -50,7 +50,7 @@ export default function RegistrationScreen({ navigation }) {
         uid: currentUserUID,
         firstName,
         lastName,
-        email
+        email: email.toLocaleLowerCase()
       });
       navigation.replace("HomePage");
       emptyState();

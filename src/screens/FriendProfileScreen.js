@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList, Dimensions,} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
-import axios from "axios"
 import { EXPRESS_ROOT_PATH } from "../api/grace";
-import { loggingOut } from "../../API/methods";
 import { icons } from "./Icons/icons";
 
 export default function FriendProfileScreen ({ route, navigation }) {
 
   const [completedChallenges, setCompletedChallenges] = useState([])
+  const [completedFriendChallenges, setCompletedFriendChallenges] = useState([])
   const isFocused = useIsFocused();
 
   const {
     uid,
     firstName,
+    lastName,
     totalPoints,
     createdAt,
     image
@@ -25,21 +25,49 @@ export default function FriendProfileScreen ({ route, navigation }) {
     async function getCompletedChallenges() {
       let currentUserUID = uid;
       try {
-        const res = await EXPRESS_ROOT_PATH.get(`/personalChallenges/${currentUserUID}`)
+        const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
         setCompletedChallenges(res.data)
       } catch (error) {
-
+        console.log(error)
       }
     }
     getCompletedChallenges();
   }, [isFocused])
 
+  useEffect(() => {
+    const fetchFriendChallenges = async () => {
+      let currentUserUID = uid;
+      try {
+        const allFriendChallenges = await EXPRESS_ROOT_PATH.get(
+          `/friendChallenges/${currentUserUID}`
+        );
+        const completedFriendChallenges = allFriendChallenges.data.filter(
+          (challenge) => challenge.completionStatus === "completed"
+        );
+        setCompletedFriendChallenges(completedFriendChallenges);
+      } catch (error) {
+        console.log("there was an error fetching the challenges", error);
+      }
+    };
+    fetchFriendChallenges();
+  }, [isFocused]);
 
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   let date = new Date(createdAt)
   let joinedDate = date.toLocaleDateString(undefined, options)
 
-
+  let status;
+  if (totalPoints < 100) {
+    status = "Master Racer";
+  } else if (totalPoints < 200) {
+    status = "Grand Master Racer";
+  } else if (totalPoints < 200) {
+    status = "Arch Master Racer";
+  } else if (totalPoints < 200) {
+    status = "Supreme Master Racer";
+  } else {
+    status = "Ultimate Master Racer";
+  }
 
   return (
     <View style={styles.container}>
@@ -47,12 +75,15 @@ export default function FriendProfileScreen ({ route, navigation }) {
       shadowColor: '#9deaff', shadowOpacity: 0.5}}>
         <View style={{width: 40, height: 20, backgroundColor: 'white', borderRadius: 10, margin: 10, alignSelf: "flex-end"}}/>
         <View>
-          <Text style={styles.totalPoints}>{`Total Points\n${totalPoints}`}</Text>
+          <Text>{status}</Text>
+          <Text
+            style={styles.totalPoints}
+          >{`Total Points\n${totalPoints}`}</Text>
         </View>
         <View>
           <Text style={styles.createdAt}>{`Joined Date\n${joinedDate}`}</Text>
         </View>
-          <Text style={styles.name}>{firstName}</Text>
+          <Text style={styles.name}>{firstName} {lastName}</Text>
       </View>
 
 
@@ -97,7 +128,23 @@ export default function FriendProfileScreen ({ route, navigation }) {
                 <TouchableOpacity>
                   <Image
                     source={icons[item.badge]}
-                    style={{ width: 50, height: 50 }}
+                    style={{ margin: 5, width: 50, height: 50 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item, index) => index}
+          />
+
+          <FlatList
+            horizontal
+            data={completedFriendChallenges}
+            renderItem={({ item }) => (
+              <View style={styles.completedChallenges}>
+                <TouchableOpacity>
+                  <Image
+                    source={icons[item.badge]}
+                    style={{ margin: 5, width: 50, height: 50 }}
                   />
                 </TouchableOpacity>
               </View>
