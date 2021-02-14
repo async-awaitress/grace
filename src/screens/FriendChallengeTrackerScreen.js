@@ -39,7 +39,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   useEffect(() => {
     async function getChallenge () {
       const currentChallenge = await EXPRESS_ROOT_PATH.get(
-        `/challenges/${challengeId}`
+        `/challenges/singlechallenge/${challengeId}`
       );
       setChallenge(currentChallenge.data)
     };
