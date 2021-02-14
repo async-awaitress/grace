@@ -21,7 +21,7 @@ import { Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(image);
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
   const [completedChallenges, setCompletedChallenges] = useState([]);
@@ -186,7 +186,7 @@ const ProfileScreen = ({ navigation }) => {
           edit photo
         </Button>
         {user.image ? (
-          <Image source={{ uri: image }} style={styles.profileImg} />
+          <Image source={{ uri: user.image }} style={styles.profileImg} />
         ) : (
           <Image
             style={styles.profileImg}
