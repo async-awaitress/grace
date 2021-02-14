@@ -16,7 +16,7 @@ import { icons } from "./Icons/icons";
 
 const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [challenge, setChallenge] = useState({})
+  const [challenge, setChallenge] = useState({});
 
   let currentUserUID = firebase.auth().currentUser.uid;
 
@@ -39,19 +39,19 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const [senderCompleted, setSenderCompleted] = useState(senderCompleted);
 
   useEffect(() => {
-    async function getChallenge () {
+    async function getChallenge() {
       const currentChallenge = await EXPRESS_ROOT_PATH.get(
         `/challenges/singlechallenge/${challengeId}`
       );
-      setChallenge(currentChallenge.data)
-    };
-    getChallenge()
+      setChallenge(currentChallenge.data);
+    }
+    getChallenge();
   }, []);
 
-  const {title, duration, pointsPerDay, description, tips } = challenge
+  const { title, duration, pointsPerDay, description, tips } = challenge;
 
   let now = new Date();
-  const lastUpdated = new Date(updatedAt);
+  // const lastUpdated = new Date(updatedAt);
   const created = new Date(createdAt);
   const currentDay = Math.floor((now - created) / 86400000);
   const exactDay = (now - created) / 86400000;
@@ -70,43 +70,69 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     colors.push(color);
   }
 
-  // useEffect(async () => {
-  //   await updateChallenge(
-  //     currentUserUID,
-  //     id
-  //   )(setReceiverCompleted(!receiverCompleted));
-  // }, []);
+  useEffect(() => {
+    const updateChallenge = async () => {
+      let canUpdate = false;
+      let lastUpdated;
+      const now = new Date();
+      const today = now.getDate();
+      // const updatedDate = lastUpdated.getDate();
+      // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
 
-  const updateChallenge = async (userId, challengeId) => {
-    const now = new Date();
-    const today = now.getDate();
-    const updatedDate = lastUpdated.getDate();
-    // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
-    if (today === updatedDate + 1 && dailyStatusForReceiver) {
-      console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
-      try {
-        const res = await EXPRESS_ROOT_PATH.put(
-          `/personalChallenges/resetPersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-      } catch (err) {
-        console.log(err);
+      if (currentUserUID === senderId) {
+        lastUpdated = senderUpdated.getDate();
+        if (lastUpdated > today) {
+          canUpdate = true;
+        }
       }
-    }
-    if (today >= updatedDate + 2 && !dailyStatusForReceiver) {
-      try {
-        const res = await EXPRESS_ROOT_PATH.put(
-          `/personalChallenges/failPersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-        const dailyStatus = res.data.dailyStatusForReceiver;
-      } catch (err) {
-        console.log(err);
+
+      if (currentUserUID === receiverId) {
+        lastUpdated = receiverUpdated.getDate();
+        if (lastUpdated > today) {
+          canUpdate = true;
+        }
       }
+
+      if (canUpdate) {
+        await EXPRESS_ROOT_PATH.put(
+          `/friendchallenges/update/${challengeId}/${currentUserUID}`
+        );
+      }
+
+      // if (today === updatedDate + 1 && dailyStatusForReceiver) {
+      //   console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
+      //   try {
+      //     const res = await EXPRESS_ROOT_PATH.put(
+      //       `/personalChallenges/resetPersonalChallenge/${challengeId}`,
+      //       { uid: userId }
+      //     );
+      //     // dailyStatus = "true"
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
+      // if (today >= updatedDate + 2 && !dailyStatusForReceiver) {
+      //   try {
+      //     const res = await EXPRESS_ROOT_PATH.put(
+      //       `/personalChallenges/failPersonalChallenge/${challengeId}`,
+      //       { uid: userId }
+      //     );
+      //     // dailyStatus = "true"
+      //     const dailyStatus = res.data.dailyStatusForReceiver;
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
+    };
+    updateChallenge();
+    if (currentUserUID === senderId) {
+      setSenderCompleted(!senderCompleted);
     }
-  };
+
+    if (currentUserUID === receiverId) {
+      setReceiverCompleted(!receiverCompleted);
+    }
+  }, []);
 
   const completeChallenge = async (userId, challengeId) => {
     const now = new Date();
