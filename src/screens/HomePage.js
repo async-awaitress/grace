@@ -498,6 +498,7 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir-Book",
     // fontFamily: "Bodoni 72",
     textAlign: "center",
+    textTransform: "capitalize"
   },
 
   nameText: {

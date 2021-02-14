@@ -8,7 +8,7 @@ const ActiveChallengeComponent = (props) => {
   return (
     <View style={styles.activeChallengeInfo}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Challenge Tracker", challenge)}
+        onPress={() => navigation.navigate("Friend Challenge Tracker", challenge)}
       >
         <Image source={icons[badge]} style={styles.image} />
       </TouchableOpacity>
