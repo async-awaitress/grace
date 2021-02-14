@@ -37,7 +37,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const [senderCompleted, setSenderCompleted] = useState(senderCompleted);
 
   useEffect(() => {
-    const getChallenge = async () => {
+    async function getChallenge () {
       const currentChallenge = await EXPRESS_ROOT_PATH.get(
         `/challenges/${challengeId}`
       );
@@ -68,12 +68,12 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     colors.push(color);
   }
 
-  useEffect(async () => {
-    await updateChallenge(
-      currentUserUID,
-      id
-    )(setReceiverCompleted(!receiverCompleted));
-  }, []);
+  // useEffect(async () => {
+  //   await updateChallenge(
+  //     currentUserUID,
+  //     id
+  //   )(setReceiverCompleted(!receiverCompleted));
+  // }, []);
 
   const updateChallenge = async (userId, challengeId) => {
     const now = new Date();
