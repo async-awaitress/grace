@@ -115,7 +115,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingVertical: HEIGHT / 13.5 }]}>
+      <View style={[styles.header, { paddingVertical: HEIGHT / 13.9 }]}>
         <Text style={styles.title}>{title}</Text>
       </View>
       <Svg height="50" width="200">
@@ -137,7 +137,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       >
         <TouchableOpacity
           onPress={() =>
-            completeChallenge(currentUserUID, id).then(setCompleted(!completed))
+            completeChallenge(currentUserUID, id)
           }
         >
           <Image
