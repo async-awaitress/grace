@@ -21,7 +21,7 @@ import { Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(image);
   const isFocused = useIsFocused();
   const [user, setUser] = useState({});
   const [completedChallenges, setCompletedChallenges] = useState([]);
@@ -29,8 +29,7 @@ const ProfileScreen = ({ navigation }) => {
     []
   );
 
-
- const handlePress = async () => {
+  const handlePress = async () => {
     await loggingOut();
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
@@ -107,7 +106,7 @@ const ProfileScreen = ({ navigation }) => {
   const pickImage = async () => {
     if (Platform.OS !== "web") {
       const {
-        status
+        status,
       } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
@@ -122,12 +121,9 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      await EXPRESS_ROOT_PATH.put(
-          `/users/imageUpdate/${user.uid}`, {image}
-        );
-    };
-  }
-
+      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -186,7 +182,7 @@ const ProfileScreen = ({ navigation }) => {
           edit photo
         </Button>
         {user.image ? (
-          <Image source={{ uri: image }} style={styles.profileImg} />
+          <Image source={{ uri: user.image }} style={styles.profileImg} />
         ) : (
           <Image
             style={styles.profileImg}

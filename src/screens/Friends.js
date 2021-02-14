@@ -100,6 +100,11 @@ const Friends = ({ navigation }) => {
       await EXPRESS_ROOT_PATH.put(`/users/friends/${currentUserUID}`, {
         receiverId: friend.data.uid,
       });
+      const respond = await EXPRESS_ROOT_PATH.get(
+        `/users/friends/requests/${currentUserUID}`
+      );
+      const friendRequests = respond.data;
+      setRequest(friendRequests);
     } catch (error) {
       console.log(error);
     }
@@ -156,7 +161,9 @@ const Friends = ({ navigation }) => {
                 />
               </View>
               <View style={[styles.pendingFriendName, { left: WIDTH / 5 }]}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Friend Profile", item)}
+                >
                   <Text style={styles.pendingFriendNameText}>
                     {item.firstName + " " + item.lastName}
                   </Text>
