@@ -120,7 +120,7 @@ const Friends = ({ navigation }) => {
         <SearchBar
           style={styles.input}
           placeholder="   Find Friend By Email"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(email) => setEmail(email.toLowerCase())}
           value={email}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
