@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     color: "#ffffff",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
   },
   container: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     height: 1000,
     alignItems: "center",
     position: "relative",
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
   },
   infoContainer: {
     borderWidth: 1,

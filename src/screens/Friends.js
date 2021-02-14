@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
   },
   buttons: {
     flexDirection: "row",
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     color: "#ffffff",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
   },
   accept: {
@@ -319,14 +319,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   searchBarContainer: {
-    // backgroundColor: "#ffedd6",
+    // backgroundColor: "#f2f7f3",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
     marginHorizontal: 20,
     borderRadius: 5,
   },
   searchBarInputContainer: {
-    // backgroundColor: "#ffedd6",
+    // backgroundColor: "#f2f7f3",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
     marginVertical: 5,
