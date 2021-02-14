@@ -133,7 +133,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       </Svg>
 
       <View
-        style={{ position: "absolute", top: HEIGHT / 4.06, left: WIDTH / 3.24 }}
+        style={{ position: "absolute", top: HEIGHT / 4.22, left: WIDTH / 3.24 }}
       >
         <TouchableOpacity
           onPress={() =>
@@ -189,7 +189,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 26.3,
+    fontSize: 21,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
