@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     margin: 5,
     // borderWidth: 2,
     borderRadius: 20,
-    // borderColor: "#ffedd6",
+    // borderColor: "#f2f7f3",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",

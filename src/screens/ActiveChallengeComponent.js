@@ -25,7 +25,7 @@ const ActiveChallengeComponent = (props) => {
           compact
           disabled={isCompleted}
           onPress={onComplete}
-          color="orange"
+          color="#689451"
           style={{ marginVertical: 2, width: 85 }}
           labelStyle={{ fontSize: 11 }}
         >
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     margin: 5,
     // borderWidth: 2,
     borderRadius: 20,
-    // borderColor: "#ffedd6",
+    // borderColor: "#f2f7f3",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   completedButtonView: {
-    backgroundColor: "orange",
+    backgroundColor: "#689451",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

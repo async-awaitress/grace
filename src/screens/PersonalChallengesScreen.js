@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
     height: 1500,
   },
   list: {
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 35,
     padding: 5,
     width: "100%",
@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
     textAlign: "center",
   },
   challengeTitle: {
     fontSize: 25,
     fontWeight: "300",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
   },
   badge: {
     height: 70,

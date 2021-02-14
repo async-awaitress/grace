@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   acceptButtonView: {
-    backgroundColor: "green",
+    backgroundColor: "#689451",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

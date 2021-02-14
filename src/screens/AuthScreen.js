@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import * as GoogleSignIn from 'expo-google-sign-in';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 export default class AuthScreen extends React.Component {
   state = { user: null };
@@ -9,8 +9,9 @@ export default class AuthScreen extends React.Component {
   }
   initAsync = async () => {
     await GoogleSignIn.initAsync({
-//wondering whether I can get the clientId without writing it here directly. I think GoogleService-info.plist should be in .gitignored!!!
-    clientId: '226134016336-o0gtq1ppdouodlvmqq3ndjka47rjtvks.apps.googleusercontent.com',
+      //wondering whether I can get the clientId without writing it here directly. I think GoogleService-info.plist should be in .gitignored!!!
+      clientId:
+        "226134016336-o0gtq1ppdouodlvmqq3ndjka47rjtvks.apps.googleusercontent.com",
     });
     this._syncUserWithStateAsync();
   };
@@ -26,11 +27,11 @@ export default class AuthScreen extends React.Component {
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
-      if (type === 'success') {
+      if (type === "success") {
         this._syncUserWithStateAsync();
       }
     } catch ({ message }) {
-      alert('login: Error:' + message);
+      alert("login: Error:" + message);
     }
   };
   onPress = () => {
@@ -41,16 +42,15 @@ export default class AuthScreen extends React.Component {
     }
   };
   render() {
-
     return (
       <View>
         <TouchableOpacity style={styles.button} onPress={this.onPress}>
-          <Text style={{color: "green", fontWeight: "500"}}>
-           Google Sign In
+          <Text style={{ color: "#689451", fontWeight: "500" }}>
+            Google Sign In
           </Text>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
@@ -62,5 +62,5 @@ const styles = StyleSheet.create({
     height: 52,
     alignItems: "center",
     justifyContent: "center",
-  }
-})
+  },
+});

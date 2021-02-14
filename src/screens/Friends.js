@@ -115,7 +115,7 @@ const Friends = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>FRIENDS</Text>
+        <Text style={styles.title}>Friends</Text>
       </View>
       <View style={styles.friendSearch}>
         <SearchBar
@@ -141,7 +141,7 @@ const Friends = ({ navigation }) => {
               <View style={styles.friendBox}>
                 <View>
                   <Image
-                    source={require("../../assets/profilePic.png")}
+                    source={require("../../assets/profileMain.png")}
                     style={{ transform: [{ scale: 0.4 }] }}
                   />
                 </View>
@@ -169,13 +169,19 @@ const Friends = ({ navigation }) => {
               <View style={styles.friendBox}>
                 <View>
                   <Image
-                    source={require("../../assets/profilePic.png")}
-                    style={{ transform: [{ scale: 0.4 }] }}
+                    source={require("../../assets/profileMain.png")}
+                    style={{
+                      transform: [{ scale: 0.7 }],
+                      borderRadius: 100 / 2,
+                      height: 100,
+                      width: 100,
+                      borderWidth: 2,
+                    }}
                   />
                 </View>
                 <View style={[styles.pendingFriendName, { left: WIDTH / 5 }]}>
                   <TouchableOpacity>
-                    <Text style={styles.friendText}>
+                    <Text style={styles.pendingFriendNameText}>
                       {item.firstName + " " + item.lastName}
                     </Text>
                   </TouchableOpacity>
@@ -210,18 +216,31 @@ const Friends = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    fontFamily: "Avenir-Book",
+    flex: 1,
+    backgroundColor: "#f2f7f3",
+  },
+  header: {
+    backgroundColor: "#689451",
+    paddingTop: 50,
+    width: "100%",
+    textAlign: "center",
+    alignItems: "center",
+    height: 140,
+    fontFamily: "Avenir-Book",
+  },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginLeft: 15,
     marginTop: 80,
     textAlign: "center",
     color: "white",
+    fontFamily: "Avenir-Book",
+    textTransform: "lowercase",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#ffedd6",
-  },
+
   buttons: {
     flexDirection: "row",
     marginTop: 60,
@@ -237,8 +256,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    borderWidth: 1,
-    backgroundColor: "orange",
+    // borderWidth: 1,
+    backgroundColor: "#689451",
     fontSize: 20,
     fontWeight: "bold",
     borderRadius: 5,
@@ -248,54 +267,72 @@ const styles = StyleSheet.create({
   friendText: {
     fontSize: 20,
     fontStyle: "italic",
+    textTransform: "capitalize",
+    color: "#f2f7f3",
   },
   friendName: {
-    borderWidth: 1,
+    // borderWidth: 1,
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
-    borderRadius: 4,
+    borderRadius: 6,
     zIndex: -1,
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
+    shadowColor: "#689451",
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   pendingFriendName: {
-    borderWidth: 1,
+    // borderWidth: 1,
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
-    borderRadius: 4,
+    borderRadius: 6,
     zIndex: -1,
     backgroundColor: "lightgrey",
+    shadowColor: "gray",
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
-  header: {
-    backgroundColor: "#ff924c",
-    paddingTop: 50,
-    width: "100%",
-    textAlign: "center",
-    alignItems: "center",
+  pendingFriendNameText: {
+    fontSize: 20,
+    fontStyle: "italic",
+    textTransform: "capitalize",
+    color: "#363533",
   },
-  input: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderWidth: StyleSheet.hairlineWidth,
-    height: 40,
-    color: "black",
-    marginHorizontal: 40,
-    marginTop: 30,
-    marginBottom: 10,
-    borderRadius: 10,
-  },
+
+  // input: {
+  //   backgroundColor: "white",
+  //   borderColor: "black",
+  //   borderWidth: StyleSheet.hairlineWidth,
+  //   height: 40,
+  //   color: "black",
+  //   marginHorizontal: 40,
+  //   marginTop: 30,
+  //   marginBottom: 10,
+  //   borderRadius: 10,
+  // },
   title: {
     fontSize: 26.3,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
     color: "#ffffff",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
   },
   accept: {
@@ -309,29 +346,31 @@ const styles = StyleSheet.create({
     color: "grey",
   },
   pendingHeader: {
+    fontFamily: "Avenir-Book",
     alignItems: "center",
     backgroundColor: "#333333",
     marginHorizontal: 10,
     borderRadius: 5,
   },
   pendingHeaderText: {
+    fontFamily: "Avenir-Book",
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
   },
-  searchBarContainer: {
-    // backgroundColor: "#ffedd6",
-    borderBottomColor: "transparent",
-    borderTopColor: "transparent",
-    marginHorizontal: 20,
-    borderRadius: 5,
-  },
-  searchBarInputContainer: {
-    // backgroundColor: "#ffedd6",
-    borderBottomColor: "transparent",
-    borderTopColor: "transparent",
-    marginVertical: 5,
-  },
+  // searchBarContainer: {
+  //   // backgroundColor: "#f2f7f3",
+  //   borderBottomColor: "transparent",
+  //   borderTopColor: "transparent",
+  //   marginHorizontal: 20,
+  //   borderRadius: 5,
+  // },
+  // searchBarInputContainer: {
+  //   // backgroundColor: "#f2f7f3",
+  //   borderBottomColor: "transparent",
+  //   borderTopColor: "transparent",
+  //   marginVertical: 5,
+  // },
 });
 
 export default Friends;
