@@ -38,7 +38,10 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>Welcome to GRace</Text>
+      <Image
+        source={require("../../assets/GRaceLogo.png")}
+        style={styles.logo}
+      />
 
       <View style={styles.form}>
         <View>
@@ -85,13 +88,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  greeting: {
+  logo: {
     paddingTop: 30,
     paddingBottom: 30,
     marginTop: 32,
-    fontSize: 18,
-    fontWeight: "400",
-    textAlign: "center",
+    width: 350,
+    height: 350,
+    alignSelf: "center",
   },
   errorMessage: {
     height: 72,
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 30,
-    backgroundColor: "#f4978e",
+    backgroundColor: "#5eab72",
     borderRadius: 4,
     height: 52,
     alignItems: "center",
