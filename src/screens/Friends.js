@@ -31,11 +31,20 @@ const Friends = ({ navigation }) => {
       const res = await EXPRESS_ROOT_PATH.get(
         `/users/friends/accepted/${currentUserUID}`
       );
-      const friends = res.data;
-      setFriends(friends);
+      const friendsArray = res.data;
+      setFriends(friendsArray);
     }
     getFriends();
   }, [isFocused]);
+
+
+  const getUpdatedFriends = async () => {
+      const res = await EXPRESS_ROOT_PATH.get(
+        `/users/friends/accepted/${currentUserUID}`
+      );
+      const friendsArray = res.data;
+      setFriends(friendsArray);
+    }
 
   useEffect(() => {
     async function getRequest() {
@@ -107,7 +116,6 @@ const Friends = ({ navigation }) => {
     } else {
       Alert.alert(`No User With Email: ${email} Exists`);
     }
-
     setEmail("");
   };
 
@@ -141,7 +149,7 @@ const Friends = ({ navigation }) => {
                 <View>
                   <Image
                     source={require("../../assets/profileMain.png")}
-                    style={{ transform: [{ scale: 0.4 }] }}
+                    style={{ borderRadius: 800 / 2, transform: [{ scale: 0.3 }] }}
                   />
                 </View>
                 <View style={[styles.friendName, { left: WIDTH / 5 }]}>

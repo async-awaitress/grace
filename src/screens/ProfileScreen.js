@@ -29,7 +29,8 @@ const ProfileScreen = ({ navigation }) => {
     []
   );
 
-  const handlePress = async () => {
+
+ const handlePress = async () => {
     await loggingOut();
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
@@ -38,8 +39,19 @@ const ProfileScreen = ({ navigation }) => {
     });
   };
 
-  // let currentUserUID = firebase.auth().currentUser.uid;
-  // console.log("UID", currentUserUID)
+  useEffect(() => {
+    async function fetchUser() {
+      let currentUserUID = firebase.auth().currentUser.uid;
+      try {
+        const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
+        setUser(res.data);
+        //setImage(res.data.image);
+      } catch (error) {
+        console.log("get request failed", error);
+      }
+    }
+    fetchUser();
+  }, [isFocused]);
 
   useEffect(() => {
     async function getCompletedChallenges() {
@@ -50,7 +62,7 @@ const ProfileScreen = ({ navigation }) => {
         );
         setCompletedChallenges(res.data);
       } catch (error) {
-        next(error);
+        console.log(error);
       }
     }
     getCompletedChallenges();
@@ -73,20 +85,6 @@ const ProfileScreen = ({ navigation }) => {
       }
     };
     fetchFriendChallenges();
-  }, [isFocused]);
-
-  useEffect(() => {
-    async function fetchUser() {
-      let currentUserUID = firebase.auth().currentUser.uid;
-      try {
-        const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
-        setUser(res.data);
-        setImage(res.data.image);
-      } catch (error) {
-        console.log("get request failed", error);
-      }
-    }
-    fetchUser();
   }, [isFocused]);
 
   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -124,36 +122,12 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image });
-    }
-  };
-  {
-    /* // useEffect(() => {
-  //   (async () => {
-  //     if (Platform.OS !== 'web') {
-  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //       if (status !== 'granted') {
-  //         alert('Sorry, we need camera roll permissions to make this work!');
-  //       }
-  //     }
-  //   })();
-  // }, []); */
+      await EXPRESS_ROOT_PATH.put(
+          `/users/imageUpdate/${user.uid}`, {image}
+        );
+    };
   }
 
-  {
-    /* 
-  // useEffect(() => {
-  //   async function seedImage() {
-  //     try {
-
-
-  //     } catch (error) {
-  //       console.log("get request failed", error);
-  //     }
-  //   }
-  //   seedImage();
-  // }, [isFocused]); */
-  }
 
   return (
     <View style={styles.container}>
