@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { icons } from "./Icons/icons";
+import { Button } from "react-native-paper";
 
 const ActiveChallengeComponent = (props) => {
   const { badge, isCompleted, onComplete, challenge, navigation } = props;
@@ -12,20 +13,43 @@ const ActiveChallengeComponent = (props) => {
         <Image source={icons[badge]} style={styles.image} />
       </TouchableOpacity>
       {isCompleted ? (
-        <TouchableOpacity
+        // <TouchableOpacity
+        //   disabled={isCompleted}
+        //   style={styles.completedButtonView}
+        //   onPress={onComplete}
+        // >
+        //   <Text>Done!</Text>
+        // </TouchableOpacity>
+        <Button
+          mode="contained"
+          compact
           disabled={isCompleted}
-          style={styles.completedButtonView}
           onPress={onComplete}
+          color="orange"
+          style={{ marginVertical: 2, width: 85 }}
+          labelStyle={{ fontSize: 11 }}
         >
-          <Text>Done!</Text>
-        </TouchableOpacity>
+          Done!
+        </Button>
       ) : (
-        <TouchableOpacity
-          style={styles.completeButtonView}
+        // <TouchableOpacity
+        //   style={styles.completeButtonView}
+        //   onPress={onComplete}
+        // >
+        //   <Text>Complete</Text>
+        // </TouchableOpacity>
+        <Button
+          mode="contained"
+          compact
+          disabled={isCompleted}
           onPress={onComplete}
+          style={{ width: 85 }}
+          color="lightgreen"
+          style={{ marginVertical: 2, width: 85 }}
+          labelStyle={{ fontSize: 11 }}
         >
-          <Text>Complete</Text>
-        </TouchableOpacity>
+          Complete
+        </Button>
       )}
     </View>
   );
@@ -57,8 +81,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
+    marginBottom: 20,
   },
   completeButtonView: {
     backgroundColor: "lightgreen",

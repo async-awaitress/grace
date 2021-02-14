@@ -1,23 +1,29 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { icons } from "./Icons/icons";
+import { Button } from "react-native-paper";
 
 const PendingChallengeComponent = (props) => {
   const { badge } = props;
   return (
     <View style={styles.pendingChallengeInfo}>
       <Image source={icons[badge]} style={styles.image} />
-      <View style={styles.pendingButtonView}>
+      <Button mode="contained" compact disabled>
+        Pending
+      </Button>
+      {/* <View style={styles.pendingButtonView}>
         <Text style={{ color: "white" }}>Pending</Text>
-      </View>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
+    marginBottom: 20,
+    opacity: 0.3,
   },
   pendingChallengeInfo: {
     flexDirection: "column",
@@ -34,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 170,
     width: 110,
-    opacity: 0.5,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

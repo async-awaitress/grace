@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  LogBox,
 } from "react-native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
@@ -14,6 +15,10 @@ import { icons } from "./Icons/icons";
 
 const PersonalChallengesScreen = ({ navigation }) => {
   const [challenges, setChallenges] = useState([]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,10 +44,7 @@ const PersonalChallengesScreen = ({ navigation }) => {
             data={challenges.filter(
               (challenge) => challenge.type === "personal"
             )}
-            // keyExtractor={(challenge) => challenge.id}
-            keyExtractor={(item) => {
-              return item.id;
-            }}
+            keyExtractor={(challenge) => challenge.id.toString()}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
@@ -78,12 +80,22 @@ const styles = StyleSheet.create({
   list: {
     flexDirection: "row",
     padding: 10,
-    margin: 10,
-    borderWidth: 1,
-    backgroundColor: "#f9f1f1",
+    marginVertical: 10,
+    marginHorizontal: 20,
+    // borderWidth: 1,
+    // backgroundColor: "#f9f1f1",
+    backgroundColor: "white",
     justifyContent: "space-between",
     borderRadius: 20,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   header: {
     backgroundColor: "#ff924c",
