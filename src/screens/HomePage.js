@@ -151,7 +151,8 @@ export default function HomePage({ navigation }) {
               // listening to challenges I send and receive
               (friendChallenge.senderId === currentUserUid ||
                 friendChallenge.receiverId === currentUserUid) &&
-              friendChallenge.status === "active"
+              (friendChallenge.status === "active" ||
+                friendChallenge.status === "declined")
             );
           })
           .map(({ doc }) => {
@@ -258,8 +259,8 @@ export default function HomePage({ navigation }) {
     );
   };
 
-  const updateChallengeInFirebase = async (docId) => {
-    await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
+  const updateChallengeInFirebase = async (docId, status) => {
+    await friendChallengeInvitesRef.doc(docId).update({ status: status });
     console.log("firebase updated");
   };
 
@@ -275,10 +276,15 @@ export default function HomePage({ navigation }) {
       });
 
       // update object in firebase from status "pending" to "active"
-      await updateChallengeInFirebase(docId);
+      await updateChallengeInFirebase(docId, "active");
     } catch (error) {
       console.log("friend challenge not added to db", error);
     }
+  };
+
+  const onDecline = async (challenge) => {
+    const { docId } = challenge;
+    await updateChallengeInFirebase(docId, "declined");
   };
 
   return (
@@ -389,9 +395,9 @@ export default function HomePage({ navigation }) {
                   return (
                     <ReceiveChallengeComponent
                       badge={item.badge}
-                      onDecline={() => console.log("remove")}
-                      onAccept={async () => {
-                        await onAccept(item);
+                      onDecline={() => onDecline(item)}
+                      onAccept={() => {
+                        onAccept(item);
                       }}
                     />
                   );
