@@ -7,6 +7,7 @@ import {
   Dimensions,
   TextInput,
   Alert,
+  ScrollView,
 } from "react-native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import * as firebase from "firebase";
@@ -55,6 +56,17 @@ const Friends = ({ navigation }) => {
         senderId,
         statusOfFriendship,
       });
+
+      const res = await EXPRESS_ROOT_PATH.get(
+        `/users/friends/accepted/${currentUserUID}`
+      );
+      setFriends(res.data);
+
+      const respond = await EXPRESS_ROOT_PATH.get(
+        `/users/friends/requests/${currentUserUID}`
+      );
+      const friendRequests = respond.data;
+      setRequest(friendRequests);
     } catch (error) {
       console.log(error);
     }
@@ -88,8 +100,8 @@ const Friends = ({ navigation }) => {
 
   const searcher = async () => {
     const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
-    newRequest()
-    console.log('FRIEND', friend.data)
+    newRequest();
+    console.log("FRIEND", friend.data);
     if (friend.data.email) {
       Alert.alert("Friend Added");
     } else {
@@ -109,7 +121,7 @@ const Friends = ({ navigation }) => {
         <SearchBar
           style={styles.input}
           placeholder="   Find Friend By Email"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(email) => setEmail(email.toLowerCase())}
           value={email}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
@@ -134,7 +146,9 @@ const Friends = ({ navigation }) => {
                   />
                 </View>
                 <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Friend Profile", item)}
+                  >
                     <Text style={styles.friendText}>
                       {item.firstName + " " + item.lastName}
                     </Text>
@@ -310,13 +324,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
     marginHorizontal: 20,
-    borderRadius: 5
+    borderRadius: 5,
   },
   searchBarInputContainer: {
     // backgroundColor: "#ffedd6",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
-    marginVertical: 5
+    marginVertical: 5,
   },
 });
 
