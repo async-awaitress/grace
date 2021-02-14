@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  LogBox,
 } from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -40,6 +41,10 @@ export default function HomePage({ navigation }) {
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
 
   useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
+
+  useEffect(() => {
     async function getUserInfo() {
       let doc = await firebase
         .firestore()
@@ -55,7 +60,7 @@ export default function HomePage({ navigation }) {
       }
     }
     getUserInfo();
-  });
+  }, []);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -151,7 +156,8 @@ export default function HomePage({ navigation }) {
               // listening to challenges I send and receive
               (friendChallenge.senderId === currentUserUid ||
                 friendChallenge.receiverId === currentUserUid) &&
-              friendChallenge.status === "active"
+              (friendChallenge.status === "active" ||
+                friendChallenge.status === "declined")
             );
           })
           .map(({ doc }) => {
@@ -258,8 +264,8 @@ export default function HomePage({ navigation }) {
     );
   };
 
-  const updateChallengeInFirebase = async (docId) => {
-    await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
+  const updateChallengeInFirebase = async (docId, status) => {
+    await friendChallengeInvitesRef.doc(docId).update({ status: status });
     console.log("firebase updated");
   };
 
@@ -275,10 +281,15 @@ export default function HomePage({ navigation }) {
       });
 
       // update object in firebase from status "pending" to "active"
-      await updateChallengeInFirebase(docId);
+      await updateChallengeInFirebase(docId, "active");
     } catch (error) {
       console.log("friend challenge not added to db", error);
     }
+  };
+
+  const onDecline = async (challenge) => {
+    const { docId } = challenge;
+    await updateChallengeInFirebase(docId, "declined");
   };
 
   return (
@@ -310,12 +321,12 @@ export default function HomePage({ navigation }) {
             ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
             <ScrollView
               style={styles.activeChallengeContainer}
-              // horizontal={true}
+              horizontal={true}
             >
               <FlatList
                 horizontal
                 data={challenges}
-                keyExtractor={(challenge) => challenge.id}
+                keyExtractor={(challenge) => challenge.id.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.activeChallengeInfo}>
                     <TouchableOpacity
@@ -360,7 +371,7 @@ export default function HomePage({ navigation }) {
             <FlatList
               horizontal
               data={activeFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.id}
+              keyExtractor={(friendChallenge) => friendChallenge.id.toString()}
               renderItem={({ item }) => (
                 <ActiveChallengeComponent
                   badge={item.badge}
@@ -389,9 +400,9 @@ export default function HomePage({ navigation }) {
                   return (
                     <ReceiveChallengeComponent
                       badge={item.badge}
-                      onDecline={() => console.log("remove")}
-                      onAccept={async () => {
-                        await onAccept(item);
+                      onDecline={() => onDecline(item)}
+                      onAccept={() => {
+                        onAccept(item);
                       }}
                     />
                   );
@@ -507,9 +518,9 @@ const styles = StyleSheet.create({
   activeChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: 20,
-    borderColor: "#ffedd6",
+    // borderColor: "#ffedd6",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -519,6 +530,14 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 170,
     width: 110,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   linkView: {
     alignItems: "center",
