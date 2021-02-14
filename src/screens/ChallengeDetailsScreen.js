@@ -177,7 +177,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 50,
     padding: 5,
     width: "100%",

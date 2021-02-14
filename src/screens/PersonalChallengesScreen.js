@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 35,
     padding: 5,
     width: "100%",
