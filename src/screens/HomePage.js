@@ -482,6 +482,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     textAlign: "center",
+    height: 140,
     // fontFamily: "Bodoni 72",
     // fontFamily: "Georgia",
   },
@@ -584,7 +585,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   completedButtonView: {
-    backgroundColor: "orange",
+    backgroundColor: "#689451",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,

@@ -109,7 +109,7 @@ const ProfileScreen = ({ navigation }) => {
   const pickImage = async () => {
     if (Platform.OS !== "web") {
       const {
-        status,
+        status
       } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
