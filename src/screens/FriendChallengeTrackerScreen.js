@@ -28,6 +28,8 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     dailyStatusForSender,
     dailyStatusForReceiver,
     totalPointsToWin,
+    senderUpdated,
+    receiverUpdated,
     createdAt,
     updatedAt,
     badge,
