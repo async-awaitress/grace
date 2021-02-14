@@ -93,8 +93,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Challenge</Text>
-        <Text style={styles.headerText}>Details</Text>
+        <Text style={styles.headerText}>Challenge Details</Text>
       </View>
       <ScrollView>
         <View style={styles.container}>
@@ -178,17 +177,18 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#689451",
-    paddingTop: 50,
+    paddingTop: 35,
     padding: 5,
     width: "100%",
     textAlign: "center",
+    height: 100,
   },
   headerText: {
     fontSize: 30,
     color: "white",
     marginTop: 5,
     fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     textAlign: "center",
   },
   container: {

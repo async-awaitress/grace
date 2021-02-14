@@ -8,18 +8,13 @@ const ActiveChallengeComponent = (props) => {
   return (
     <View style={styles.activeChallengeInfo}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Friend Challenge Tracker", challenge)}
+        onPress={() =>
+          navigation.navigate("Friend Challenge Tracker", challenge)
+        }
       >
         <Image source={icons[badge]} style={styles.image} />
       </TouchableOpacity>
       {isCompleted ? (
-        // <TouchableOpacity
-        //   disabled={isCompleted}
-        //   style={styles.completedButtonView}
-        //   onPress={onComplete}
-        // >
-        //   <Text>Done!</Text>
-        // </TouchableOpacity>
         <Button
           mode="contained"
           compact
@@ -32,12 +27,6 @@ const ActiveChallengeComponent = (props) => {
           Done!
         </Button>
       ) : (
-        // <TouchableOpacity
-        //   style={styles.completeButtonView}
-        //   onPress={onComplete}
-        // >
-        //   <Text>Complete</Text>
-        // </TouchableOpacity>
         <Button
           mode="contained"
           compact
@@ -69,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 170,
+    height: 160,
     width: 110,
     shadowColor: "#000",
     shadowOffset: {

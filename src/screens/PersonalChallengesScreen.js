@@ -35,8 +35,7 @@ const PersonalChallengesScreen = ({ navigation }) => {
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Personal</Text>
-        <Text style={styles.headerText}>Challenges</Text>
+        <Text style={styles.headerText}>Personal Challenges</Text>
       </View>
       <ScrollView>
         <View style={styles.container}>
@@ -82,8 +81,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     marginHorizontal: 20,
-    // borderWidth: 1,
-    // backgroundColor: "#f9f1f1",
     backgroundColor: "white",
     justifyContent: "space-between",
     borderRadius: 20,
@@ -103,13 +100,14 @@ const styles = StyleSheet.create({
     padding: 5,
     width: "100%",
     textAlign: "center",
+    height: 100,
   },
   headerText: {
     fontSize: 30,
     color: "white",
     marginTop: 5,
     fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     textAlign: "center",
   },
   challengeTitle: {

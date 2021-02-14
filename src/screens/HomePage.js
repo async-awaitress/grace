@@ -18,6 +18,7 @@ import apiKeys from "../../config/keys";
 import PendingChallengeComponent from "./PendingChallengeComponent";
 import ReceiveChallengeComponent from "./ReceiveChallengeComponent";
 import ActiveChallengeComponent from "./ActiveChallengeComponent";
+import { Button } from "react-native-paper";
 
 // create collection in firebase
 if (!firebase.apps.length) {
@@ -295,17 +296,33 @@ export default function HomePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Welcome,</Text>
-        <Text style={styles.headerText}>{firstName}!</Text>
+        <Text style={styles.headerText}>Welcome, {firstName}!</Text>
+      </View>
+      <Text style={styles.activeChallengesHeader}>
+        Browse Sustainability Challenges
+      </Text>
+      <View style={styles.linkView}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Personal Challenges", { challenges })
+          }
+        >
+          <Text style={styles.linkViewText}>Challenge Yourself</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.linkView}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Friend Challenges")}
+        >
+          <Text style={styles.linkViewText}>Challenge Your Friends</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView>
         {challenges.length === 0 ? (
-          <Text style={styles.activeChallengesHeader}>
-            You have no active challenges
-          </Text>
+          <Text style={styles.activeChallengesHeader}></Text>
         ) : (
           <Text style={styles.activeChallengesHeader}>
-            Your Active Challenges
+            Your Active Personal Challenges
           </Text>
         )}
         <View style={styles.challengesContainer}>
@@ -336,25 +353,35 @@ export default function HomePage({ navigation }) {
                     >
                       <Image
                         source={icons[item.badge]}
-                        style={{ width: 70, height: 70 }}
+                        style={{ width: 60, height: 60, marginBottom: 16 }}
                       />
                     </TouchableOpacity>
-
-                    <TouchableOpacity
-                      disabled={dailyCompletion[item.id]}
-                      style={
-                        dailyCompletion[item.id]
-                          ? styles.completedButtonView
-                          : styles.completeButtonView
-                      }
-                      onPress={() => updateChallenge(currentUserUID, item.id)}
-                    >
-                      {dailyCompletion[item.id] ? (
-                        <Text>Done!</Text>
-                      ) : (
-                        <Text>Complete</Text>
-                      )}
-                    </TouchableOpacity>
+                    {dailyCompletion[item.id] ? (
+                      <Button
+                        mode="contained"
+                        compact
+                        disabled={dailyCompletion[item.id]}
+                        onPress={() => updateChallenge(currentUserUID, item.id)}
+                        color="#689451"
+                        style={{ marginVertical: 2, width: 85 }}
+                        labelStyle={{ fontSize: 11 }}
+                      >
+                        Done!
+                      </Button>
+                    ) : (
+                      <Button
+                        mode="contained"
+                        compact
+                        disabled={dailyCompletion[item.id]}
+                        onPress={() => updateChallenge(currentUserUID, item.id)}
+                        style={{ width: 85 }}
+                        color="lightgreen"
+                        style={{ marginVertical: 2, width: 85 }}
+                        labelStyle={{ fontSize: 11 }}
+                      >
+                        Complete
+                      </Button>
+                    )}
                   </View>
                 )}
               />
@@ -362,9 +389,11 @@ export default function HomePage({ navigation }) {
           )}
 
           {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
-          {/* <View style={styles.containerForFriendChallenges}></View> */}
+
           <View style={{ marginTop: 20 }}>
-            <Text>Your Active Friend Challenges</Text>
+            <Text style={styles.activeChallengesHeaderLine2}>
+              Your Active Friend Challenges
+            </Text>
           </View>
 
           <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
@@ -410,52 +439,8 @@ export default function HomePage({ navigation }) {
               }}
             />
           </ScrollView>
-
-          {/* ////// FRIEND PENDING CHALLENGES CONTAINER ///// */}
-          {/* <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
-            <FlatList
-              horizontal
-              data={pendingFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.docId}
-              renderItem={({ item }) => {
-                if (item.senderId === currentUserUID) {
-                  return <PendingChallengeComponent badge={item.badge} />;
-                } else {
-                  return (
-                    <ReceiveChallengeComponent
-                      badge={item.badge}
-                      onDecline={() => console.log("remove")}
-                      onAccept={async () => {
-                        await onAccept(item);
-                      }}
-                    />
-                  );
-                }
-              }}
-            />
-          </ScrollView> */}
         </View>
         {/* ///////////////// */}
-
-        <Text style={styles.activeChallengesHeader}>Browse Challenges</Text>
-        <View style={styles.linkView}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Personal Challenges", { challenges })
-            }
-          >
-            <Text style={styles.linkViewText}>
-              View All Personal Challenges
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.linkView}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Friend Challenges")}
-          >
-            <Text style={styles.linkViewText}>View All Friend Challenges</Text>
-          </TouchableOpacity>
-        </View>
 
         <StatusBar style="auto" />
         <View>
@@ -482,23 +467,15 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     textAlign: "center",
-    height: 140,
-    // fontFamily: "Bodoni 72",
-    // fontFamily: "Georgia",
+    height: 100,
   },
   headerText: {
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    // fontFamily: "Georgia",
-    // fontFamily: "Thonburi",
-
-    // fontFamily: "Hiragino Sans",
-    // fontFamily: "American Typewriter",
     fontFamily: "Avenir-Book",
-    // fontFamily: "Bodoni 72",
     textAlign: "center",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
   },
 
   nameText: {
@@ -541,9 +518,7 @@ const styles = StyleSheet.create({
   activeChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    // borderWidth: 2,
     borderRadius: 20,
-    // borderColor: "#f2f7f3",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -551,7 +526,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 170,
+    height: 160,
     width: 110,
     shadowColor: "#000",
     shadowOffset: {
@@ -572,6 +547,9 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderColor: "#689451",
     width: 380,
+    shadowOffset: { width: 5, height: 5 },
+    shadowColor: "#689451",
+    shadowOpacity: 0.5,
   },
   linkViewText: {
     fontSize: 20,

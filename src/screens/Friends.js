@@ -128,7 +128,7 @@ const Friends = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Friends</Text>
+        <Text style={styles.headerTitle}>Friends</Text>
       </View>
       <View style={styles.friendSearch}>
         <SearchBar
@@ -231,22 +231,18 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#689451",
-    paddingTop: 50,
+    paddingTop: 35,
     width: "100%",
     textAlign: "center",
     alignItems: "center",
-    height: 140,
-    fontFamily: "Avenir-Book",
+    height: 100,
     marginBottom: 20,
   },
-  title: {
-    fontSize: 32,
-    marginLeft: 15,
-    marginTop: 80,
-    textAlign: "center",
-    color: "white",
+  headerTitle: {
+    fontSize: 30,
+    marginTop: 5,
+    color: "#ffffff",
     fontFamily: "Avenir-Book",
-    textTransform: "lowercase",
   },
   searchBarContainer: {
     backgroundColor: "#b6d1b6",
@@ -266,7 +262,14 @@ const styles = StyleSheet.create({
     width: 300,
     color: "#363533",
   },
-
+  title: {
+    fontSize: 26.3,
+    fontWeight: "bold",
+    marginLeft: 15,
+    marginBottom: 5,
+    color: "#ffffff",
+    fontFamily: "Avenir-Book",
+  },
   buttons: {
     flexDirection: "row",
     marginTop: 60,
@@ -358,15 +361,6 @@ const styles = StyleSheet.create({
   pendingFriendPhoto: {
     transform: [{ scale: 0.3 }],
     borderRadius: 120,
-  },
-  title: {
-    fontSize: 26.3,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 5,
-    color: "#ffffff",
-    fontFamily: "Avenir-Book",
-    textTransform: "uppercase",
   },
   accept: {
     paddingHorizontal: 10,

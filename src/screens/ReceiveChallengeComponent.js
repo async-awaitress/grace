@@ -17,16 +17,17 @@ const ReceiveChallengeComponent = (props) => {
       </View> */}
       {/* <View styles={{ marginBottom: 5, borderWidth: 1 }}> */}
       <Button
-        mode="contained"
+        mode="outlined"
         onPress={onAccept}
         compact
+        color="green"
         style={{ marginVertical: 2, width: 85 }}
         labelStyle={{ fontSize: 10 }}
       >
         Accept
       </Button>
       <Button
-        mode="contained"
+        mode="outlined"
         onPress={onDecline}
         compact
         color="tomato"
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     padding: 10,
-    height: 170,
+    height: 160,
     width: 110,
     shadowColor: "#000",
     shadowOffset: {
