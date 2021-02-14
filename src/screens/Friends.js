@@ -116,8 +116,8 @@ const Friends = ({ navigation }) => {
     } else {
       Alert.alert(`No User With Email: ${email} Exists`);
     }
+
     setEmail("");
-    forceUpdate();
   };
 
   return (
@@ -202,11 +202,9 @@ const Friends = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Friend Profile", item)}
                   >
-                    <View>
-                      <Text style={styles.friendText}>
-                        {item.firstName + " " + item.lastName}
-                      </Text>
-                    </View>
+                    <Text style={styles.friendText}>
+                      {item.firstName + " " + item.lastName}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
