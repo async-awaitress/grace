@@ -117,6 +117,7 @@ const Friends = ({ navigation }) => {
       Alert.alert(`No User With Email: ${email} Exists`);
     }
     setEmail("");
+    forceUpdate()
   };
 
   return (

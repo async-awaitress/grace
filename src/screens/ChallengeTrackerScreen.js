@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Dimensions,
 } from "react-native";
 import { VictoryPie } from "victory-native";
 import * as firebase from "firebase";
@@ -21,6 +22,9 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   );
 
   let currentUserUID = firebase.auth().currentUser.uid;
+
+  const WIDTH = Dimensions.get("window").width;
+  const HEIGHT = Dimensions.get("window").height;
 
   const {
     id,
@@ -55,11 +59,8 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
     colors.push(color);
   }
 
-  useEffect(async () => {
-    await updateChallenge(currentUserUID, id)(setCompleted(!completed));
-  }, []);
-
-  const updateChallenge = async (userId, challengeId) => {
+  useEffect(() => {
+    const updateChallenge = async (userId, challengeId) => {
     const now = new Date();
     const today = now.getDate();
     const updatedDate = lastUpdated.getDate();
@@ -89,6 +90,11 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       }
     }
   };
+    updateChallenge(currentUserUID, id)
+    setCompleted(!completed)
+  }, []);
+
+
 
   const completeChallenge = async (userId, challengeId) => {
     const now = new Date();
@@ -109,7 +115,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingVertical: HEIGHT / 13.9 }]}>
         <Text style={styles.title}>{title}</Text>
       </View>
       <Svg height="50" width="200">
@@ -126,10 +132,12 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 131, left: 142 }}>
+      <View
+        style={{ position: "absolute", top: HEIGHT / 4.22, left: WIDTH / 3.24 }}
+      >
         <TouchableOpacity
           onPress={() =>
-            completeChallenge(currentUserUID, id).then(setCompleted(!completed))
+            completeChallenge(currentUserUID, id)
           }
         >
           <Image
@@ -144,7 +152,18 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           {personalChallenge.dailyStatus ? ` Complete` : ` Incomplete`}
         </Text>
       </View>
-      <View style={styles.descriptionBox}>
+      <View
+        style={[
+          styles.descriptionBox,
+          {
+            margin: HEIGHT/30,
+            paddingHorizontal: WIDTH/25,
+            paddingVertical: HEIGHT/40,
+            width: WIDTH/ 1.1,
+            top: HEIGHT/4,
+          },
+        ]}
+      >
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
       <View>
@@ -159,7 +178,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           </View>
         </Modal>
       </View>
-      <View style={styles.toggleTips}>
+      <View style={[styles.toggleTips, { top: HEIGHT / 4 }]}>
         <TouchableOpacity onPress={() => setModalOpen(true)}>
           <Text style={styles.button}>Tips?</Text>
         </TouchableOpacity>
@@ -170,7 +189,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 26.3,
+    fontSize: 21,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
@@ -180,21 +199,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: 1000,
     alignItems: "center",
     position: "relative",
     backgroundColor: "#f2f7f3",
-  },
-  infoContainer: {
-    borderWidth: 1,
-    width: "80%",
-    top: 200,
-  },
-  descriptionHeader: {
-    top: 175,
-  },
-  descriptionHeaderText: {
-    fontSize: 25,
   },
   tips: {
     alignItems: "center",
@@ -206,7 +213,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   toggleTips: {
-    top: 200,
     backgroundColor: "#689451",
     borderRadius: 5,
     padding: 5,
@@ -240,12 +246,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     borderWidth: 2,
-    marginTop: 10,
-    padding: 10,
     borderRadius: 15,
-    width: 350,
-    paddingHorizontal: 5,
-    top: 150,
     borderColor: "#689451",
   },
   descriptionText: {
@@ -253,8 +254,6 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#689451",
-    paddingTop: 50,
-    padding: 15,
     width: "100%",
     textAlign: "center",
     alignItems: "center",
