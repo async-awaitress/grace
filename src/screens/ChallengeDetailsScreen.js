@@ -143,7 +143,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
                         onPress: () =>
                           navigation.navigate("Friend List", {
                             challengeId: id,
-                            badge
+                            badge,
                           }),
                       },
                     ]
@@ -177,7 +177,7 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 50,
     padding: 5,
     width: "100%",
@@ -187,13 +187,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
     textAlign: "center",
   },
   container: {
     alignItems: "center",
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
     height: 1000,
   },
   challengeContainer: {
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     fontSize: 35,
     fontWeight: "bold",
     width: "80%",
@@ -226,13 +226,13 @@ const styles = StyleSheet.create({
     height: 100,
   },
   statsText: {
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     fontSize: 20,
     margin: 5,
   },
 
   descriptionText: {
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     padding: 20,
     fontSize: 20,
     textAlign: "center",
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   buttonText: {
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     fontSize: 20,
     textAlign: "center",
   },

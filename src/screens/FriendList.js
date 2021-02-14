@@ -108,7 +108,7 @@ const FriendList = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
   },
   containerForList: {
     paddingTop: 30,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 60,
   },
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 35,
     padding: 5,
     width: "100%",
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
     textAlign: "center",
   },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 4,
     zIndex: -1,
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
   },
 });
 

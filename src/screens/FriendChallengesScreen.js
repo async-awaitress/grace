@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  LogBox,
 } from "react-native";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
@@ -14,6 +15,10 @@ import { icons } from "./Icons/icons";
 
 const FriendChallengesScreen = ({ navigation }) => {
   const [challenges, setChallenges] = useState([]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -36,23 +41,19 @@ const FriendChallengesScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.container}>
           <FlatList
-            data={challenges}
-            keyExtractor={(challenge) => challenge.id}
+            data={challenges.filter((challenge) => challenge.type === "friend")}
+            keyExtractor={(challenge) => challenge.id.toString()}
             renderItem={({ item }) => {
-              if (item.type === "friend") {
-                return (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("Challenge Details", item)
-                    }
-                  >
-                    <View style={styles.list}>
-                      <Text style={styles.challengeTitle}>{item.title}</Text>
-                      <Image source={icons[item.badge]} style={styles.badge} />
-                    </View>
-                  </TouchableOpacity>
-                );
-              }
+              return (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Challenge Details", item)}
+                >
+                  <View style={styles.list}>
+                    <Text style={styles.challengeTitle}>{item.title}</Text>
+                    <Image source={icons[item.badge]} style={styles.badge} />
+                  </View>
+                </TouchableOpacity>
+              );
             }}
           ></FlatList>
         </View>
@@ -71,11 +72,11 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
     height: 2000,
   },
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 35,
     padding: 5,
     width: "100%",
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
     textAlign: "center",
   },
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   challengeTitle: {
     fontSize: 25,
     fontWeight: "300",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
   },
   badge: {
     height: 70,

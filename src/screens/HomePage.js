@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  LogBox,
 } from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -40,6 +41,10 @@ export default function HomePage({ navigation }) {
   const [activeFriendChallenges, setActiveFriendChallenges] = useState([]);
 
   useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
+
+  useEffect(() => {
     async function getUserInfo() {
       let doc = await firebase
         .firestore()
@@ -55,7 +60,7 @@ export default function HomePage({ navigation }) {
       }
     }
     getUserInfo();
-  });
+  }, []);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -151,7 +156,8 @@ export default function HomePage({ navigation }) {
               // listening to challenges I send and receive
               (friendChallenge.senderId === currentUserUid ||
                 friendChallenge.receiverId === currentUserUid) &&
-              friendChallenge.status === "active"
+              (friendChallenge.status === "active" ||
+                friendChallenge.status === "declined")
             );
           })
           .map(({ doc }) => {
@@ -258,8 +264,8 @@ export default function HomePage({ navigation }) {
     );
   };
 
-  const updateChallengeInFirebase = async (docId) => {
-    await friendChallengeInvitesRef.doc(docId).update({ status: "active" });
+  const updateChallengeInFirebase = async (docId, status) => {
+    await friendChallengeInvitesRef.doc(docId).update({ status: status });
     console.log("firebase updated");
   };
 
@@ -275,10 +281,15 @@ export default function HomePage({ navigation }) {
       });
 
       // update object in firebase from status "pending" to "active"
-      await updateChallengeInFirebase(docId);
+      await updateChallengeInFirebase(docId, "active");
     } catch (error) {
       console.log("friend challenge not added to db", error);
     }
+  };
+
+  const onDecline = async (challenge) => {
+    const { docId } = challenge;
+    await updateChallengeInFirebase(docId, "declined");
   };
 
   return (
@@ -310,12 +321,12 @@ export default function HomePage({ navigation }) {
             ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
             <ScrollView
               style={styles.activeChallengeContainer}
-              // horizontal={true}
+              horizontal={true}
             >
               <FlatList
                 horizontal
                 data={challenges}
-                keyExtractor={(challenge) => challenge.id}
+                keyExtractor={(challenge) => challenge.id.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.activeChallengeInfo}>
                     <TouchableOpacity
@@ -360,7 +371,7 @@ export default function HomePage({ navigation }) {
             <FlatList
               horizontal
               data={activeFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.id}
+              keyExtractor={(friendChallenge) => friendChallenge.id.toString()}
               renderItem={({ item }) => (
                 <ActiveChallengeComponent
                   badge={item.badge}
@@ -389,9 +400,9 @@ export default function HomePage({ navigation }) {
                   return (
                     <ReceiveChallengeComponent
                       badge={item.badge}
-                      onDecline={() => console.log("remove")}
-                      onAccept={async () => {
-                        await onAccept(item);
+                      onDecline={() => onDecline(item)}
+                      onAccept={() => {
+                        onAccept(item);
                       }}
                     />
                   );
@@ -460,24 +471,42 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
     alignItems: "center",
     justifyContent: "center",
     justifyContent: "space-around",
   },
   header: {
-    backgroundColor: "#ff924c",
-    paddingTop: 40,
-    padding: 15,
+    backgroundColor: "#689451",
+    paddingTop: 35,
+    padding: 10,
     width: "100%",
     textAlign: "center",
+    height: 140,
+    // fontFamily: "Bodoni 72",
+    // fontFamily: "Georgia",
   },
   headerText: {
     fontSize: 30,
     color: "white",
     marginTop: 5,
-    fontFamily: "Bradley Hand",
-    textTransform: "uppercase",
+    // fontFamily: "Georgia",
+    // fontFamily: "Thonburi",
+
+    // fontFamily: "Hiragino Sans",
+    // fontFamily: "American Typewriter",
+    fontFamily: "Avenir-Book",
+    // fontFamily: "Bodoni 72",
+    textAlign: "center",
+    textTransform: "capitalize"
+  },
+
+  nameText: {
+    textTransform: "capitalize",
+    fontSize: 30,
+    color: "white",
+    marginTop: 5,
+    // fontFamily: "Avenir-Book",
     textAlign: "center",
   },
   activeChallengeContainer: {
@@ -485,11 +514,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "space-between",
     width: 400,
-    height: 180,
+    height: 175,
   },
-
   challengesContainer: {
-    backgroundColor: "#f9f1f1",
+    backgroundColor: "#e1f2e5",
     flexDirection: "column",
     flex: 1,
     display: "flex",
@@ -499,17 +527,23 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
   },
   activeChallengesHeader: {
-    fontSize: 20,
-    fontFamily: "Bradley Hand",
+    fontSize: 25,
+    fontFamily: "Avenir-Book",
     marginVertical: 10,
     textAlign: "center",
+  },
+  activeChallengesHeaderLine2: {
+    fontSize: 25,
+    fontFamily: "Avenir-Book",
+    textAlign: "center",
+    marginBottom: 5,
   },
   activeChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: 20,
-    borderColor: "#ffedd6",
+    // borderColor: "#f2f7f3",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",
@@ -519,20 +553,29 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 170,
     width: 110,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
   linkView: {
     alignItems: "center",
-    paddingVertical: 10,
+    alignContent: "center",
+    paddingVertical: 8,
     margin: 20,
-    backgroundColor: "#f9f1f1",
+    backgroundColor: "#f4f7f2",
     borderWidth: 2,
     borderRadius: 40,
-    borderColor: "green",
-    width: 350,
+    borderColor: "#689451",
+    width: 380,
   },
   linkViewText: {
     fontSize: 20,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
   },
   completeButtonView: {
     backgroundColor: "lightgreen",
@@ -543,7 +586,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   completedButtonView: {
-    backgroundColor: "orange",
+    backgroundColor: "#689451",
     borderWidth: 1,
     borderRadius: 10,
     padding: 2,
@@ -553,13 +596,13 @@ const styles = StyleSheet.create({
   totalPointsText: {
     fontSize: 28,
     paddingBottom: 5,
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textAlign: "center",
   },
   totalPointsNum: {
     fontSize: 70,
     paddingBottom: 30,
     textAlign: "center",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
   },
 });

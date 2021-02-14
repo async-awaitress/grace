@@ -42,7 +42,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
   const exactDay = (now - created) / 86400000;
   const challengeData = [];
   const colors = [];
-  const completeColor = "#ff924c";
+  const completeColor = "#689451";
   const incompleteColor = "#999";
 
   for (let i = 0; i < duration; i++) {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     color: "#ffffff",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Avenir-Book",
     textTransform: "uppercase",
   },
   container: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     height: 1000,
     alignItems: "center",
     position: "relative",
-    backgroundColor: "#ffedd6",
+    backgroundColor: "#f2f7f3",
   },
   infoContainer: {
     borderWidth: 1,
@@ -207,13 +207,13 @@ const styles = StyleSheet.create({
   },
   toggleTips: {
     top: 200,
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     borderRadius: 5,
     padding: 5,
     borderWidth: 1,
   },
   close: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     borderRadius: 5,
     padding: 5,
     borderWidth: 1,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   modal: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
   },
   descriptionBox: {
     display: "flex",
@@ -246,13 +246,13 @@ const styles = StyleSheet.create({
     width: 350,
     paddingHorizontal: 5,
     top: 150,
-    borderColor: "#ff924c",
+    borderColor: "#689451",
   },
   descriptionText: {
     fontSize: 17,
   },
   header: {
-    backgroundColor: "#ff924c",
+    backgroundColor: "#689451",
     paddingTop: 50,
     padding: 15,
     width: "100%",
