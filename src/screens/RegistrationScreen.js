@@ -13,7 +13,6 @@ import { registration } from "../../API/methods";
 import axios from "axios";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 
-
 export default function RegistrationScreen({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,8 +35,8 @@ export default function RegistrationScreen({ navigation }) {
       Alert.alert("Email field is required.");
     } else if (!password) {
       Alert.alert("Password field is required.");
-    } else if (password.length < 6){
-      Alert.alert("Password needs to be at least six characters long")
+    } else if (password.length < 6) {
+      Alert.alert("Password needs to be at least six characters long");
     } else if (!confirmPassword) {
       setPassword("");
       Alert.alert("Confirm password field is required.");
@@ -50,7 +49,7 @@ export default function RegistrationScreen({ navigation }) {
         uid: currentUserUID,
         firstName,
         lastName,
-        email
+        email,
       });
       navigation.replace("HomePage");
       emptyState();
@@ -92,7 +91,9 @@ export default function RegistrationScreen({ navigation }) {
           ></TextInput>
         </View>
         <View style={{ marginTop: 5 }}>
-          <Text style={styles.inputTitle}>Password (minimum 6 characters required)</Text>
+          <Text style={styles.inputTitle}>
+            Password (minimum 6 characters required)
+          </Text>
           <TextInput
             style={styles.input}
             secureTextEntry
@@ -117,14 +118,14 @@ export default function RegistrationScreen({ navigation }) {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={{ color: "green", fontWeight: "500" }}>Sign up</Text>
+        <Text style={{ color: "#689451", fontWeight: "500" }}>Sign up</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={{ alignSelf: "center", marginTop: 32 }}
         onPress={() => navigation.navigate("Login")}
       >
-        <Text style={{ color: "green", fontSize: 13 }}>
+        <Text style={{ color: "#689451", fontSize: 13 }}>
           Already have an account?
           <Text style={{ fontWeight: "500", color: "red" }}> Log In</Text>
         </Text>

@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   inputTitle: {
     alignItems: "center",
     justifyContent: "center",
-    color: "green",
+    color: "#689451",
     fontSize: 10,
     textTransform: "uppercase",
   },
   input: {
-    borderBottomColor: "green",
+    borderBottomColor: "#689451",
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 40,
     color: "black",
