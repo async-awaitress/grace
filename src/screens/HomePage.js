@@ -55,7 +55,7 @@ export default function HomePage({ navigation }) {
       }
     }
     getUserInfo();
-  });
+  }, []);
 
   useEffect(() => {
     async function fetchChallenges() {
@@ -321,7 +321,7 @@ export default function HomePage({ navigation }) {
               <FlatList
                 horizontal
                 data={challenges}
-                keyExtractor={(challenge) => challenge.id}
+                keyExtractor={(challenge) => challenge.id.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.activeChallengeInfo}>
                     <TouchableOpacity
@@ -362,11 +362,14 @@ export default function HomePage({ navigation }) {
             <Text>Your Active Friend Challenges</Text>
           </View>
 
-          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
+          <ScrollView
+            style={styles.activeChallengeContainer}
+            // horizontal={true}
+          >
             <FlatList
               horizontal
               data={activeFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.id}
+              keyExtractor={(friendChallenge) => friendChallenge.id.toString()}
               renderItem={({ item }) => (
                 <ActiveChallengeComponent
                   badge={item.badge}
