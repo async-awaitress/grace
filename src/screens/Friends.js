@@ -89,8 +89,8 @@ const Friends = ({ navigation }) => {
 
   const searcher = async () => {
     const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
-    newRequest()
-    console.log('FRIEND', friend.data)
+    newRequest();
+    console.log("FRIEND", friend.data);
     if (friend.data.email) {
       Alert.alert("Friend Added");
     } else {
@@ -99,7 +99,6 @@ const Friends = ({ navigation }) => {
 
     setEmail("");
   };
-
 
   return (
     <View style={styles.container}>
@@ -110,7 +109,7 @@ const Friends = ({ navigation }) => {
         <SearchBar
           style={styles.input}
           placeholder="   Find Friend By Email"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(email) => setEmail(email.toLowerCase())}
           value={email}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
@@ -135,7 +134,9 @@ const Friends = ({ navigation }) => {
                   />
                 </View>
                 <View style={[styles.friendName, { left: WIDTH / 5 }]}>
-                  <TouchableOpacity onPress={() =>navigation.navigate('Friend Profile', item)}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Friend Profile", item)}
+                  >
                     <Text style={styles.friendText}>
                       {item.firstName + " " + item.lastName}
                     </Text>
@@ -311,13 +312,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
     marginHorizontal: 20,
-    borderRadius: 5
+    borderRadius: 5,
   },
   searchBarInputContainer: {
     // backgroundColor: "#ffedd6",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
-    marginVertical: 5
+    marginVertical: 5,
   },
 });
 
