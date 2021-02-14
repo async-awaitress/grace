@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Dimensions,
 } from "react-native";
 import { VictoryPie } from "victory-native";
 import * as firebase from "firebase";
@@ -19,6 +20,9 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const [challenge, setChallenge] = useState({});
 
   let currentUserUID = firebase.auth().currentUser.uid;
+
+  const WIDTH = Dimensions.get("window").width;
+  const HEIGHT = Dimensions.get("window").height;
 
   const {
     id,
@@ -60,14 +64,28 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
   const completeColor = "#ff924c";
   const incompleteColor = "#999";
 
-  for (let i = 0; i < duration; i++) {
-    let section = { key: "", y: 1 };
-    let color = incompleteColor;
-    if ((i === currentDay && dailyStatusForSender) || i < currentDay) {
-      color = completeColor;
+  if (currentUserUID === senderId) {
+    for (let i = 0; i < duration; i++) {
+      let section = { key: "", y: 1 };
+      let color = incompleteColor;
+      if ((i === currentDay && dailyStatusForSender) || i < currentDay) {
+        color = completeColor;
+      }
+      challengeData.push(section);
+      colors.push(color);
     }
-    challengeData.push(section);
-    colors.push(color);
+  }
+
+  if (currentUserUID === receiverId) {
+    for (let i = 0; i < duration; i++) {
+      let section = { key: "", y: 1 };
+      let color = incompleteColor;
+      if ((i === currentDay && dailyStatusForReceiver) || i < currentDay) {
+        color = completeColor;
+      }
+      challengeData.push(section);
+      colors.push(color);
+    }
   }
 
   useEffect(() => {
@@ -134,22 +152,44 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     }
   }, []);
 
-  const completeChallenge = async (userId, challengeId) => {
-    const now = new Date();
-    const today = now.getDate();
-    const updatedDate = lastUpdated.getDate();
-    if (!dailyStatusForReceiver && today < updatedDate + 3) {
-      try {
-        const res = await EXPRESS_ROOT_PATH.put(
-          `/personalChallenges/updatePersonalChallenge/${challengeId}`,
-          { uid: userId }
-        );
-        // dailyStatus = "true"
-      } catch (error) {
-        console.log("update request failed", error);
-      }
-    }
+  const RecieverStatusView = () => {
+    return (
+      <View style={styles.daysCounter}>
+        <Text style={styles.daysCounterText}>
+          Day {currentDay + 1} of {duration}
+          {dailyStatusForReceiver ? ` Complete` : ` Incomplete`}
+        </Text>
+      </View>
+    );
   };
+
+  const SenderStatusView = () => {
+    return (
+      <View style={styles.daysCounter}>
+        <Text style={styles.daysCounterText}>
+          Day {currentDay + 1} of {duration}
+          {dailyStatusForSender ? ` Complete` : ` Incomplete`}
+        </Text>
+      </View>
+    );
+  };
+
+  // const completeChallenge = async (userId, challengeId) => {
+  //   const now = new Date();
+  //   const today = now.getDate();
+  //   const updatedDate = lastUpdated.getDate();
+  //   if (!dailyStatusForReceiver && today < updatedDate + 3) {
+  //     try {
+  //       const res = await EXPRESS_ROOT_PATH.put(
+  //         `/personalChallenges/updatePersonalChallenge/${challengeId}`,
+  //         { uid: userId }
+  //       );
+  //       // dailyStatus = "true"
+  //     } catch (error) {
+  //       console.log("update request failed", error);
+  //     }
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -170,13 +210,13 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
         />
       </Svg>
 
-      <View style={{ position: "absolute", top: 131, left: 142 }}>
+      <View style={{ position: "absolute", top: HEIGHT/4.06, left: WIDTH/3.24 }}>
         <TouchableOpacity
-          onPress={() =>
-            completeChallenge(currentUserUID, id).then(
-              setReceiverCompleted(!receiverCompleted)
-            )
-          }
+        // onPress={() =>
+        //   completeChallenge(currentUserUID, id).then(
+        //     setReceiverCompleted(!receiverCompleted)
+        //   )
+        // }
         >
           <Image
             style={{ transform: [{ scale: 0.65 }] }}
@@ -184,12 +224,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.daysCounter}>
-        <Text style={styles.daysCounterText}>
-          Day {currentDay + 1} of {duration}
-          {dailyStatusForReceiver ? ` Complete` : ` Incomplete`}
-        </Text>
-      </View>
+      {currentUserUID === senderId ? SenderStatusView() : RecieverStatusView()}
       <View style={styles.descriptionBox}>
         <Text style={styles.descriptionText}>{description}</Text>
       </View>
