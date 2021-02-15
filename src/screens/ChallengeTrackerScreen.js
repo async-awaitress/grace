@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
   },
   popupText: {
     fontSize: 20,
+    fontFamily: "Avenir-Book",
   },
   toggleTips: {
     borderRadius: 5,
@@ -254,6 +255,7 @@ const styles = StyleSheet.create({
   daysCounterText: {
     fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   modal: {
     backgroundColor: "#689451",
@@ -268,6 +270,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 17,
+    fontFamily: "Avenir-Book",
   },
 });
 

@@ -509,14 +509,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "capitalize",
   },
-  nameText: {
-    textTransform: "capitalize",
-    fontSize: 30,
-    color: "white",
-    marginTop: 5,
-    // fontFamily: "Avenir-Book",
-    textAlign: "center",
-  },
   foot: {
     marginTop: 10,
     height: 50,

@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#f2f7f3",
+    fontFamily: "Avenir-Book",
   },
   friendPhoto: {
     transform: [{ scale: 0.37 }],
