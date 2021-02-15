@@ -20,7 +20,6 @@ import { Button } from "react-native-paper";
 const Friends = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
   const [request, setRequest] = useState([]);
-  const [pending, setPending] = useState(false)
   const [email, setEmail] = useState("");
   const isFocused = useIsFocused();
   let currentUserUID = firebase.auth().currentUser.uid;
@@ -148,17 +147,9 @@ const Friends = ({ navigation }) => {
       </View>
       <View>
         <View style={styles.pendingHeader}>
-          <TouchableOpacity onPress={() => setPending(true)}>
-            <Text style={styles.pendingHeaderText}>Pending Requests</Text>
-          </TouchableOpacity>
+          <Text style={styles.pendingHeaderText}>Pending Requests</Text>
         </View>
-        <View style={styles.pendingHeader}>
-          <TouchableOpacity onPress={() => setPending(false)}>
-            <Text style={styles.pendingHeaderText}>Friend List</Text>
-          </TouchableOpacity>
-        </View>
-        {(pending) ?
-        (<FlatList
+        <FlatList
           data={request}
           keyExtractor={(friend) => friend.uid}
           renderItem={({ item }) => (
@@ -196,8 +187,14 @@ const Friends = ({ navigation }) => {
               )}
             </View>
           )}
-        />)
-        : (<FlatList
+        />
+      </View>
+      <View>
+        <View style={styles.pendingHeader}>
+          <Text style={styles.pendingHeaderText}>Friend List</Text>
+        </View>
+        <View>
+          <FlatList
             data={friends}
             keyExtractor={(friend) => friend.uid}
             renderItem={({ item }) => (
@@ -219,18 +216,9 @@ const Friends = ({ navigation }) => {
                 </View>
               </View>
             )}
-          />)
-        }
-
+          />
+        </View>
       </View>
-      {/* <View>
-        <View style={styles.pendingHeader}>
-          <Text style={styles.pendingHeaderText}>Friend List</Text>
-        </View>
-        <View>
-
-        </View>
-      </View> */}
     </View>
   );
 };
@@ -310,11 +298,11 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#f2f7f3",
-    fontFamily: "Avenir-Book",
+    textAlign: "left",
+    paddingLeft: 60,
   },
   friendName: {
     position: "absolute",
-    alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
@@ -349,7 +337,6 @@ const styles = StyleSheet.create({
   },
   pendingFriendName: {
     position: "absolute",
-    alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
@@ -370,10 +357,11 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#363533",
-    fontFamily: "Avenir-Book",
+    textAlign: "left",
+    paddingLeft: 60,
   },
   pendingFriendPhoto: {
-    transform: [{ scale: 0.37 }],
+    transform: [{ scale: 0.3 }],
     borderRadius: 120,
   },
   accept: {
