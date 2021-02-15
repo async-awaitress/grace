@@ -44,7 +44,7 @@ const ProfileScreen = ({ navigation }) => {
       try {
         const res = await EXPRESS_ROOT_PATH.get(`/users/${currentUserUID}`);
         setUser(res.data);
-        //setImage(res.data.image);
+        setImage(res.data.image);
       } catch (error) {
         console.log("get request failed", error);
       }
@@ -121,8 +121,11 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image });
+      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image: result.uri });
+
     }
+    const {data} = await EXPRESS_ROOT_PATH.get(`/users/imageUpdate/${user.uid}`)
+    setImage(data.image)
   };
 
   return (
@@ -182,7 +185,7 @@ const ProfileScreen = ({ navigation }) => {
           edit photo
         </Button>
         {user.image ? (
-          <Image source={{ uri: user.image }} style={styles.profileImg} />
+          <Image source={{ uri: image }} style={styles.profileImg} />
         ) : (
           <Image
             style={styles.profileImg}
