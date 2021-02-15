@@ -16,7 +16,7 @@ import Svg from "react-native-svg";
 import { icons } from "./Icons/icons";
 import { Button } from "react-native-paper";
 
-const ChallengeTrackerScreen = ({ route, navigation }) => {
+const ChallengeTrackerScreen = ({ route, navigation: { setParams } }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [completed, setCompleted] = useState(
     route.params.personalChallenge.dailyStatus
@@ -108,6 +108,18 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         console.log("update request failed", error);
       }
     }
+    setParams({
+      personalChallenge: {
+        dailyStatus: completed,
+        completionStatus: personalChallenge.completionStatus,
+        totalPointsEarned: personalChallenge.totalPointsEarned,
+        totalPointsToWin: personalChallenge.totalPointsToWin,
+        createdAt: personalChallenge.createdAt,
+        updatedAt: personalChallenge.updatedAt,
+        userUid: personalChallenge.userUid,
+        challengeId: personalChallenge.challengeId,
+      },
+    });
   };
 
   return (

@@ -293,6 +293,39 @@ export default function HomePage({ navigation }) {
     await updateChallengeInFirebase(docId, "declined");
   };
 
+      useEffect(() => {
+      const updateChallenge = async (userId, challengeId) => {
+        const currentChallenge = challenges.filter(challenge => challenge.challengeId === challengeId)
+        const now = new Date();
+        const today = now.getDate();
+        const lastUpdated = new Date (currentChallenge.updatedAt)
+        const updatedDate = lastUpdated.getDate();
+        // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
+        if (today === updatedDate + 1 && currentChallenge.personalChallenge.dailyStatus) {
+          console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
+          try {
+            const res = await EXPRESS_ROOT_PATH.put(
+              `/personalChallenges/resetPersonalChallenge/${challengeId}`,
+              { uid: userId }
+            );
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        if (today >= updatedDate + 2 && !currentChallenge.personalChallenge.dailyStatus) {
+          try {
+            const res = await EXPRESS_ROOT_PATH.put(
+              `/personalChallenges/failPersonalChallenge/${challengeId}`,
+              { uid: userId }
+            );
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      };
+      challenges.map((challenge) => updateChallenge(currentUserUID, challenge.id));
+    }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
