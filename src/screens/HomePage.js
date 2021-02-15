@@ -298,6 +298,10 @@ export default function HomePage({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Welcome, {firstName}!</Text>
       </View>
+      <Image
+        style={styles.foot}
+        source={require("../../assets/GRaceFoot.png")}
+      />
       <Text style={styles.activeChallengesHeader}>
         Browse Sustainability Challenges
       </Text>
@@ -307,7 +311,7 @@ export default function HomePage({ navigation }) {
             navigation.navigate("Personal Challenges", { challenges })
           }
         >
-          <Text style={styles.linkViewText}>Challenge Yourself</Text>
+          <Text style={styles.linkViewText}>Challenge Your Self</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.linkView}>
@@ -317,25 +321,26 @@ export default function HomePage({ navigation }) {
           <Text style={styles.linkViewText}>Challenge Your Friends</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <View style={{ alignItems: "center" }}>
         {challenges.length === 0 ? (
           <Text style={styles.activeChallengesHeader}></Text>
         ) : (
           <Text style={styles.activeChallengesHeader}>
-            Your Active Personal Challenges
+            Active Personal Challenges
           </Text>
         )}
-        <View style={styles.challengesContainer}>
-          {challenges.length === 0 ? (
-            <Image
-              style={{ height: 80, width: 400 }}
-              source={{
-                uri:
-                  "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
-              }}
-            />
-          ) : (
-            ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
+
+        {challenges.length === 0 ? (
+          <Image
+            style={{ height: 80, width: 400 }}
+            source={{
+              uri:
+                "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
+            }}
+          />
+        ) : (
+          ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
+          <View style={styles.challengesContainer}>
             <ScrollView
               style={styles.activeChallengeContainer}
               horizontal={true}
@@ -386,68 +391,95 @@ export default function HomePage({ navigation }) {
                 )}
               />
             </ScrollView>
-          )}
+          </View>
+        )}
 
-          {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
-
+        {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
+        {activeFriendChallenges.length === 0 &&
+        pendingFriendChallenges.length === 0 ? (
+          <Text style={styles.activeChallengesHeader}></Text>
+        ) : (
           <View style={{ marginTop: 20 }}>
             <Text style={styles.activeChallengesHeaderLine2}>
-              Your Active Friend Challenges
+              Active Friend Challenges
             </Text>
           </View>
+        )}
 
-          <ScrollView style={styles.activeChallengeContainer} horizontal={true}>
-            <FlatList
-              horizontal
-              data={activeFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.id.toString()}
-              renderItem={({ item }) => (
-                <ActiveChallengeComponent
-                  badge={item.badge}
-                  isCompleted={dailyCompletionFriends[item.id]}
-                  onComplete={() =>
-                    updateFriendChallenge(
-                      currentUserUID,
-                      item.id,
-                      item.senderId,
-                      item.receiverId
-                    )
-                  }
-                  challenge={item}
-                  navigation={navigation}
-                />
-              )}
-            />
-            <FlatList
-              horizontal
-              data={pendingFriendChallenges}
-              keyExtractor={(friendChallenge) => friendChallenge.docId}
-              renderItem={({ item }) => {
-                if (item.senderId === currentUserUID) {
-                  return <PendingChallengeComponent badge={item.badge} />;
-                } else {
-                  return (
-                    <ReceiveChallengeComponent
-                      badge={item.badge}
-                      onDecline={() => onDecline(item)}
-                      onAccept={() => {
-                        onAccept(item);
-                      }}
-                    />
-                  );
+        {activeFriendChallenges.length === 0 &&
+        pendingFriendChallenges.length === 0 ? (
+          <Image
+            style={{
+              height: 80,
+              width: 400,
+              transform: [{ rotateX: "180deg" }],
+            }}
+            source={{
+              uri:
+                "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
+            }}
+          />
+        ) : (
+          <View style={styles.challengesContainer}>
+            <ScrollView
+              style={styles.activeChallengeContainer}
+              horizontal={true}
+            >
+              <FlatList
+                horizontal
+                data={activeFriendChallenges}
+                keyExtractor={(friendChallenge) =>
+                  friendChallenge.id.toString()
                 }
-              }}
-            />
-          </ScrollView>
-        </View>
-        {/* ///////////////// */}
+                renderItem={({ item }) => (
+                  <ActiveChallengeComponent
+                    badge={item.badge}
+                    isCompleted={dailyCompletionFriends[item.id]}
+                    onComplete={() =>
+                      updateFriendChallenge(
+                        currentUserUID,
+                        item.id,
+                        item.senderId,
+                        item.receiverId
+                      )
+                    }
+                    challenge={item}
+                    navigation={navigation}
+                  />
+                )}
+              />
+              <FlatList
+                horizontal
+                data={pendingFriendChallenges}
+                keyExtractor={(friendChallenge) => friendChallenge.docId}
+                renderItem={({ item }) => {
+                  if (item.senderId === currentUserUID) {
+                    return <PendingChallengeComponent badge={item.badge} />;
+                  } else {
+                    return (
+                      <ReceiveChallengeComponent
+                        badge={item.badge}
+                        onDecline={() => onDecline(item)}
+                        onAccept={() => {
+                          onAccept(item);
+                        }}
+                      />
+                    );
+                  }
+                }}
+              />
+            </ScrollView>
+          </View>
+        )}
+      </View>
 
-        <StatusBar style="auto" />
-        <View>
-          <Text style={styles.totalPointsText}>Your Total Points</Text>
-          <Text style={styles.totalPointsNum}>{user.totalPoints}</Text>
-        </View>
-      </ScrollView>
+      {/* ///////////////// */}
+
+      <StatusBar style="auto" />
+      {/* <View>
+        <Text style={styles.totalPointsText}>Total Points</Text>
+        <Text style={styles.totalPointsNum}>{user.totalPoints}</Text>
+      </View> */}
     </View>
   );
 }
@@ -472,19 +504,15 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     color: "white",
-    marginTop: 5,
+    marginTop: 10,
     fontFamily: "Avenir-Book",
     textAlign: "center",
     textTransform: "capitalize",
   },
-
-  nameText: {
-    textTransform: "capitalize",
-    fontSize: 30,
-    color: "white",
-    marginTop: 5,
-    // fontFamily: "Avenir-Book",
-    textAlign: "center",
+  foot: {
+    marginTop: 10,
+    height: 50,
+    width: 50,
   },
   activeChallengeContainer: {
     display: "flex",
@@ -496,17 +524,15 @@ const styles = StyleSheet.create({
   challengesContainer: {
     backgroundColor: "#e1f2e5",
     flexDirection: "column",
-    flex: 1,
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
     alignContent: "space-between",
+    height: 175,
+    width: 400,
   },
   activeChallengesHeader: {
     fontSize: 25,
     fontFamily: "Avenir-Book",
     marginVertical: 10,
+    paddingTop: 10,
     textAlign: "center",
   },
   activeChallengesHeaderLine2: {
@@ -546,7 +572,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     borderColor: "#689451",
-    width: 380,
+    width: 300,
     shadowOffset: { width: 5, height: 5 },
     shadowColor: "#689451",
     shadowOpacity: 0.5,
@@ -572,13 +598,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   totalPointsText: {
+    paddingTop: 30,
     fontSize: 28,
     paddingBottom: 5,
     fontFamily: "Avenir-Book",
     textAlign: "center",
   },
   totalPointsNum: {
-    fontSize: 70,
+    fontSize: 60,
     paddingBottom: 30,
     textAlign: "center",
     fontFamily: "Avenir-Book",

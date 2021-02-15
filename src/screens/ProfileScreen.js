@@ -126,37 +126,15 @@ const ProfileScreen = ({ navigation }) => {
     });
 
     if (!result.cancelled) {
-      const uriToBlob = (uri) => {
-
-        return new Promise((resolve, reject) => {
-
-          const xhr = new XMLHttpRequest();
-
-          xhr.onload = function() {
-            // return the blob
-            resolve(xhr.response);
-          };
-
-          xhr.onerror = function() {
-            // something went wrong
-            reject(new Error('uriToBlob failed'));
-          };
-
-          // this helps us get a blob
-          xhr.responseType = 'blob';
-
-          xhr.open('GET', uri, true);
-          xhr.send(null);
-        });
-      }
-      let imageData = uriToBlob(result.uri)
       setImage(result.uri);
-
-      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, { image: imageData });
-      const {data} = await EXPRESS_ROOT_PATH.get(`/users/${user.uid}`)
-      const image = data.image
-      setImage(Base64ArrayBuffer.encode(image))
+      await EXPRESS_ROOT_PATH.put(`/users/imageUpdate/${user.uid}`, {
+        image: result.uri,
+      });
     }
+    const { data } = await EXPRESS_ROOT_PATH.get(
+      `/users/imageUpdate/${user.uid}`
+    );
+    setImage(data.image);
   };
 
   return (
@@ -273,6 +251,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     color: "#363533",
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   name: {
     color: "#689451",
@@ -282,6 +261,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     textTransform: "capitalize",
+    fontFamily: "Avenir-Book",
   },
   title: {
     fontSize: 18,
@@ -325,6 +305,7 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     fontSize: 25,
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
   numberBox: {
     borderRadius: 10,
@@ -342,6 +323,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     fontSize: 25,
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
   badgeImg: {
     margin: 5,
@@ -370,6 +352,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 11,
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
 });
 

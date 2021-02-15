@@ -77,8 +77,8 @@ const FriendList = ({ navigation, route }) => {
             <View style={styles.friendBox}>
               <View>
                 <Image
-                  source={require("../../assets/profilePic.png")}
-                  style={{ transform: [{ scale: 0.4 }] }}
+                  source={require("../../assets/profileMain.png")}
+                  style={styles.friendPhoto}
                 />
               </View>
               <View style={[styles.friendName, { left: WIDTH / 5 }]}>
@@ -91,8 +91,7 @@ const FriendList = ({ navigation, route }) => {
                   }}
                 >
                   <Text style={styles.friendText}>
-                    Challenge
-                    {" " + item.firstName + " " + item.lastName}
+                    {item.firstName + " " + item.lastName}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -149,17 +148,31 @@ const styles = StyleSheet.create({
   friendText: {
     fontSize: 20,
     fontStyle: "italic",
+    textTransform: "capitalize",
+    color: "#f2f7f3",
+    fontFamily: "Avenir-Book",
+  },
+  friendPhoto: {
+    transform: [{ scale: 0.37 }],
+    borderRadius: 120,
   },
   friendName: {
-    borderWidth: 1,
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
-    borderRadius: 4,
+    borderRadius: 6,
     zIndex: -1,
     backgroundColor: "#689451",
+    shadowColor: "#689451",
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2.0,
+    elevation: 2,
   },
 });
 

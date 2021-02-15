@@ -264,6 +264,7 @@ const styles = StyleSheet.create({
   },
   tipsText: {
     textAlign: "center",
+    fontFamily: "Avenir-Book",
   },
 });
 
