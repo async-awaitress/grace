@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     color: "#363533",
   },
   pendingFriendPhoto: {
-    transform: [{ scale: 0.3 }],
+    transform: [{ scale: 0.37 }],
     borderRadius: 120,
   },
   accept: {
