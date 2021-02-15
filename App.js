@@ -24,12 +24,13 @@ import {
   RegistrationScreen,
   FriendList,
   FriendProfileScreen,
-  FriendChallengeTrackerScreen
+  FriendChallengeTrackerScreen,
 } from "./src/screens";
 
 const Stack = createStackNavigator();
 const ChallengeStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
+const FriendStack = createStackNavigator();
 
 //nav between home, challenge list, challenge details and tracker
 const ChallengeScreenNav = () => (
@@ -88,13 +89,37 @@ const ChallengeScreenNav = () => (
       options={{ title: "" }}
       backBehavior="order"
     />
-    <ChallengeStack.Screen
+  </ChallengeStack.Navigator>
+);
+
+//nav between home, challenge list, challenge details and tracker
+const FriendStackNav = () => (
+  <FriendStack.Navigator
+    initialRouteName="Home"
+    screenOptions={{
+      title: "",
+      headerBackAllowFontScaling: true,
+      headerBackTitleStyle: {
+        fontSize: 16,
+      },
+      headerTransparent: true,
+      headerTintColor: "white",
+    }}
+  >
+    <FriendStack.Screen
+      name="Friends"
+      component={Friends}
+      options={{
+        title: "",
+      }}
+    />
+    <FriendStack.Screen
       name="Friend Profile"
       component={FriendProfileScreen}
       options={{ title: "" }}
       backBehavior="order"
     />
-  </ChallengeStack.Navigator>
+  </FriendStack.Navigator>
 );
 
 //bottom nav bar
@@ -135,7 +160,7 @@ const TabsScreenNav = () => (
     />
     <Tabs.Screen
       name="Friends"
-      component={Friends}
+      component={FriendStackNav}
       options={{
         tabBarIcon: ({ focused, color }) => {
           color = focused ? "#689451" : "#383db8";
