@@ -49,7 +49,7 @@ export default function RegistrationScreen({ navigation }) {
         uid: currentUserUID,
         firstName,
         lastName,
-        email: email.toLocaleLowerCase()
+        email: email.toLocaleLowerCase(),
       });
       navigation.replace("HomePage");
       emptyState();
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     textAlign: "center",
+    fontFamily: "Avenir-Book",
   },
   form: {
     marginBottom: 40,
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 10,
     textTransform: "uppercase",
+    fontFamily: "Avenir-Book",
   },
   input: {
     borderBottomColor: "blue",

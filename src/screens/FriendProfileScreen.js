@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList, Dimensions,} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import * as firebase from "firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 
-export default function FriendProfileScreen ({ route, navigation }) {
-
-  const [completedChallenges, setCompletedChallenges] = useState([])
-  const [completedFriendChallenges, setCompletedFriendChallenges] = useState([])
+export default function FriendProfileScreen({ route, navigation }) {
+  const [completedChallenges, setCompletedChallenges] = useState([]);
+  const [completedFriendChallenges, setCompletedFriendChallenges] = useState(
+    []
+  );
   const isFocused = useIsFocused();
 
   const {
@@ -17,22 +27,23 @@ export default function FriendProfileScreen ({ route, navigation }) {
     lastName,
     totalPoints,
     createdAt,
-    image
-  } = route.params
+    image,
+  } = route.params;
 
-
-  useEffect(()=> {
+  useEffect(() => {
     async function getCompletedChallenges() {
       let currentUserUID = uid;
       try {
-        const res = await EXPRESS_ROOT_PATH.get(`/challenges/completedChallenges/${currentUserUID}`)
-        setCompletedChallenges(res.data)
+        const res = await EXPRESS_ROOT_PATH.get(
+          `/challenges/completedChallenges/${currentUserUID}`
+        );
+        setCompletedChallenges(res.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
     getCompletedChallenges();
-  }, [isFocused])
+  }, [isFocused]);
 
   useEffect(() => {
     const fetchFriendChallenges = async () => {
@@ -52,9 +63,9 @@ export default function FriendProfileScreen ({ route, navigation }) {
     fetchFriendChallenges();
   }, [isFocused]);
 
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  let date = new Date(createdAt)
-  let joinedDate = date.toLocaleDateString(undefined, options)
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  let date = new Date(createdAt);
+  let joinedDate = date.toLocaleDateString(undefined, options);
 
   let status;
   if (totalPoints < 100) {
@@ -69,9 +80,11 @@ export default function FriendProfileScreen ({ route, navigation }) {
     status = "Ultimate Master Racer";
   }
 
-
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{firstName}'s Profile</Text>
+      </View>
       <View style={styles.topBox}>
         {/* <View style={styles.shine} /> */}
         <Text style={styles.status}>{status}</Text>
@@ -133,15 +146,28 @@ export default function FriendProfileScreen ({ route, navigation }) {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    top: 40,
-    paddingTop: 40,
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
+  },
+  header: {
+    backgroundColor: "#689451",
+    paddingTop: 35,
+    padding: 10,
+    width: "100%",
+    textAlign: "center",
+    height: 100,
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 10,
+    fontFamily: "Avenir-Book",
+    textAlign: "center",
   },
 
   topBox: {
@@ -163,6 +189,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     color: "#363533",
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   name: {
     color: "#689451",
@@ -172,18 +199,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     textTransform: "capitalize",
+    fontFamily: "Avenir-Book",
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 5,
+    fontFamily: "Avenir-Book",
   },
 
   ImageContainer: {
     flex: 1,
     borderRadius: 150 / 2,
-    top: 170,
+    top: 250,
     position: "absolute",
     shadowOffset: { width: 5, height: 5 },
     shadowColor: "#689451",
@@ -215,6 +244,7 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     fontSize: 25,
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
   numberBox: {
     borderRadius: 10,
@@ -232,6 +262,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     fontSize: 25,
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
   badgeImg: {
     margin: 5,
@@ -256,10 +287,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   createdAt: {
+    fontFamily: "Avenir-Book",
     textAlign: "center",
     marginBottom: 5,
     fontSize: 11,
     color: "#363533",
   },
 });
-

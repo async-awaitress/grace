@@ -11,9 +11,6 @@ const PendingChallengeComponent = (props) => {
       <Button mode="outlined" compact disabled labelStyle={{ fontSize: 9 }}>
         Invite Sent
       </Button>
-      {/* <View style={styles.pendingButtonView}>
-        <Text style={{ color: "white" }}>Pending</Text>
-      </View> */}
     </View>
   );
 };
@@ -28,9 +25,7 @@ const styles = StyleSheet.create({
   pendingChallengeInfo: {
     flexDirection: "column",
     margin: 5,
-    // borderWidth: 2,
     borderRadius: 20,
-    // borderColor: "#f2f7f3",
     backgroundColor: "white",
     display: "flex",
     flexWrap: "wrap",

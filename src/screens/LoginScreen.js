@@ -65,19 +65,18 @@ export default function LoginScreen({ navigation }) {
           ></TextInput>
         </View>
       </View>
-      {/* also, below, onPress, it should navigate to our homePage, which the list of challenges page,but not sure whether I can add another onPress for navigation. Maybe there is a way to enter the navigate in the handler function above. */}
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={{ color: "black", fontWeight: "500" }}>Sign in</Text>
+        <Text style={styles.signIn}>Sign in</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={{ alignSelf: "center", marginTop: 32 }}
         onPress={() => navigation.navigate("Registration")}
       >
-        <Text style={{ color: "black", fontSize: 13 }}>
-          New to GRace?{" "}
-          <Text style={{ fontWeight: "500", color: "red" }}>Sign Up</Text>
+        <Text style={styles.signUp}>
+          New to GRace?
+          <Text style={styles.singUpText}> Sign Up</Text>
         </Text>
       </TouchableOpacity>
     </View>
@@ -138,4 +137,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  signUp: { color: "black", fontSize: 13, fontFamily: "Avenir-Book" },
+  singUpText: {
+    fontWeight: "500",
+    color: "red",
+    fontFamily: "Avenir-Book",
+  },
+  signIn: { color: "black", fontWeight: "500" },
 });
