@@ -82,6 +82,9 @@ export default function FriendProfileScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{firstName}'s Profile</Text>
+      </View>
       <View style={styles.topBox}>
         {/* <View style={styles.shine} /> */}
         <Text style={styles.status}>{status}</Text>
@@ -147,11 +150,24 @@ export default function FriendProfileScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    top: 40,
-    paddingTop: 40,
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
+  },
+  header: {
+    backgroundColor: "#689451",
+    paddingTop: 35,
+    padding: 10,
+    width: "100%",
+    textAlign: "center",
+    height: 100,
+  },
+  headerText: {
+    fontSize: 30,
+    color: "white",
+    marginTop: 10,
+    fontFamily: "Avenir-Book",
+    textAlign: "center",
   },
 
   topBox: {
@@ -196,7 +212,7 @@ const styles = StyleSheet.create({
   ImageContainer: {
     flex: 1,
     borderRadius: 150 / 2,
-    top: 170,
+    top: 250,
     position: "absolute",
     shadowOffset: { width: 5, height: 5 },
     shadowColor: "#689451",
