@@ -298,10 +298,11 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#f2f7f3",
+    textAlign: "left",
+    paddingLeft: 60,
   },
   friendName: {
     position: "absolute",
-    alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
@@ -336,7 +337,6 @@ const styles = StyleSheet.create({
   },
   pendingFriendName: {
     position: "absolute",
-    alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
@@ -357,6 +357,8 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#363533",
+    textAlign: "left",
+    paddingLeft: 60,
   },
   pendingFriendPhoto: {
     transform: [{ scale: 0.3 }],
