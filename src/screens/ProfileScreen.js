@@ -8,7 +8,7 @@ import {
   ScrollView,
   FlatList,
   Platform,
-  Dimensions
+  Dimensions,
   // Button,
 } from "react-native";
 import * as firebase from "firebase";
@@ -20,10 +20,10 @@ import { icons } from "./Icons/icons";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
-import Base64ArrayBuffer from 'base64-arraybuffer'
+import Base64ArrayBuffer from "base64-arraybuffer";
 
- const WIDTH = Dimensions.get("window").width;
- const HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 const ProfileScreen = ({ navigation }) => {
   const [image, setImage] = useState(image);
   const isFocused = useIsFocused();
@@ -32,8 +32,6 @@ const ProfileScreen = ({ navigation }) => {
   const [completedFriendChallenges, setCompletedFriendChallenges] = useState(
     []
   );
-
-
 
   const handlePress = async () => {
     await loggingOut();
@@ -98,15 +96,19 @@ const ProfileScreen = ({ navigation }) => {
 
   let status;
   if (user.totalPoints < 100) {
-    status = "Master Racer";
+    status = "Pico Racer";
   } else if (user.totalPoints < 200) {
-    status = "Grand Master Racer";
+    status = "Nano Racer";
   } else if (user.totalPoints < 400) {
-    status = "Arch Master Racer";
+    status = "Micro Racer";
   } else if (user.totalPoints < 600) {
-    status = "Supreme Master Racer";
+    status = "Mili Racer";
+  } else if (user.totalPoints < 800) {
+    status = "Deci Racer";
+  } else if (user.totalPoints < 1000) {
+    status = "Deka Racer";
   } else {
-    status = "Ultimate Master Racer";
+    status = "Hecta Racer";
   }
 
   const pickImage = async () => {
@@ -122,7 +124,7 @@ const ProfileScreen = ({ navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1
+      quality: 1,
     });
 
     if (!result.cancelled) {
@@ -139,82 +141,91 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{height: 2000}}>
-      <ScrollView vertical>
-      <View style={styles.topBox}>
-        {/* <View style={styles.shine} /> */}
-        <Text style={styles.status}>{status}</Text>
-        <Text style={styles.name}>
-          {user.firstName} {user.lastName}
-        </Text>
-      </View>
+      <View style={{ height: 2000 }}>
+        <ScrollView vertical>
+          <View style={styles.topBox}>
+            {/* <View style={styles.shine} /> */}
+            <Text style={styles.status}>{status}</Text>
+            <Text style={styles.name}>
+              {user.firstName} {user.lastName}
+            </Text>
+          </View>
 
-      <View style={styles.midBox}>
-        <Text style={styles.totalPoints}>Total Points</Text>
+          <View style={styles.midBox}>
+            <Text style={styles.totalPoints}>Total Points</Text>
 
-        <View style={styles.numberBox}>
-          <Text style={styles.totalPointsNumber}>{user.totalPoints}</Text>
-        </View>
-        <Text style={styles.badgesEarned}>Badges Earned</Text>
+            <View style={styles.numberBox}>
+              <Text style={styles.totalPointsNumber}>{user.totalPoints}</Text>
+            </View>
+            <Text style={styles.badgesEarned}>Badges Earned</Text>
 
-        {/* <View style={styles.shine} /> */}
+            {/* <View style={styles.shine} /> */}
 
-        <ScrollView horizontal={true}>
-          <FlatList
-            horizontal
-            data={completedChallenges}
-            renderItem={({ item }) => (
-              <View style={styles.completedChallenges}>
-                <TouchableOpacity>
-                  <Image source={icons[item.badge]} style={styles.badgeImg} />
-                </TouchableOpacity>
-              </View>
+            <ScrollView horizontal={true}>
+              <FlatList
+                horizontal
+                data={completedChallenges}
+                renderItem={({ item }) => (
+                  <View style={styles.completedChallenges}>
+                    <TouchableOpacity>
+                      <Image
+                        source={icons[item.badge]}
+                        style={styles.badgeImg}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                keyExtractor={(item, index) => index}
+              />
+
+              <FlatList
+                horizontal
+                data={completedFriendChallenges}
+                renderItem={({ item }) => (
+                  <View>
+                    <TouchableOpacity>
+                      <Image
+                        source={icons[item.badge]}
+                        style={styles.badgeImg}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                keyExtractor={(item, index) => index}
+              />
+            </ScrollView>
+
+            <Text style={styles.createdAt}>{`Join Date: ${joinedDate}`}</Text>
+          </View>
+
+          <View style={styles.ImageContainer}>
+            <Button onPress={pickImage} mode="text" color="gray">
+              <Feather name="edit" size={20} />
+              edit photo
+            </Button>
+            {user.image ? (
+              <Image
+                source={{ uri: `data:image/jpg;base64,${image}` }}
+                style={styles.profileImg}
+              />
+            ) : (
+              <Image
+                style={styles.profileImg}
+                source={require("../../assets/profileMain.png")}
+              />
             )}
-            keyExtractor={(item, index) => index}
-          />
+          </View>
 
-          <FlatList
-            horizontal
-            data={completedFriendChallenges}
-            renderItem={({ item }) => (
-              <View>
-                <TouchableOpacity>
-                  <Image source={icons[item.badge]} style={styles.badgeImg} />
-                </TouchableOpacity>
-              </View>
-            )}
-            keyExtractor={(item, index) => index}
-          />
+          <Button
+            // mode="contained"
+            color="#689451"
+            onPress={handlePress}
+            style={{ marginTop: 5 }}
+          >
+            Log out
+          </Button>
         </ScrollView>
-
-        <Text style={styles.createdAt}>{`Join Date: ${joinedDate}`}</Text>
       </View>
-
-      <View style={styles.ImageContainer}>
-        <Button onPress={pickImage} mode="text" color="gray">
-          <Feather name="edit" size={20} />
-          edit photo
-        </Button>
-        {user.image ? (
-          <Image source={{uri:`data:image/jpg;base64,${image}` }} style={styles.profileImg} />
-        ) : (
-          <Image
-            style={styles.profileImg}
-            source={require("../../assets/profileMain.png")}
-          />
-        )}
-      </View>
-
-      <Button
-        // mode="contained"
-        color="#689451"
-        onPress={handlePress}
-        style={{ marginTop: 5 }}
-      >
-        Log out
-      </Button>
-    </ScrollView>
-    </View>
     </View>
   );
 };
@@ -227,15 +238,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
-    height: 3000
+    height: 3000,
   },
 
   topBox: {
     display: "flex",
     alignItems: "center",
     alignSelf: "center",
-    width: 0.9*WIDTH,
-    height: 0.27*HEIGHT,
+    width: 0.9 * WIDTH,
+    height: 0.27 * HEIGHT,
     backgroundColor: "#e1f2e5",
     borderRadius: 20,
     borderWidth: 1,
@@ -290,8 +301,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     borderColor: "#689451",
-    width: 0.9*WIDTH,
-    height: 0.5*HEIGHT,
+    width: 0.9 * WIDTH,
+    height: 0.5 * HEIGHT,
     backgroundColor: "#e1f2e5",
     margin: 7,
     borderRadius: 20,
