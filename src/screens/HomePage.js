@@ -476,10 +476,10 @@ export default function HomePage({ navigation }) {
       {/* ///////////////// */}
 
       <StatusBar style="auto" />
-      <View>
+      {/* <View>
         <Text style={styles.totalPointsText}>Total Points</Text>
         <Text style={styles.totalPointsNum}>{user.totalPoints}</Text>
-      </View>
+      </View> */}
     </View>
   );
 }
