@@ -16,7 +16,7 @@ import Svg from "react-native-svg";
 import { icons } from "./Icons/icons";
 import { Button } from "react-native-paper";
 
-const ChallengeTrackerScreen = ({ route, navigation }) => {
+const ChallengeTrackerScreen = ({ route, navigation: { setParams } }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [completed, setCompleted] = useState(
     route.params.personalChallenge.dailyStatus
@@ -108,6 +108,18 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
         console.log("update request failed", error);
       }
     }
+    setParams({
+      personalChallenge: {
+        dailyStatus: completed,
+        completionStatus: personalChallenge.completionStatus,
+        totalPointsEarned: personalChallenge.totalPointsEarned,
+        totalPointsToWin: personalChallenge.totalPointsToWin,
+        createdAt: personalChallenge.createdAt,
+        updatedAt: personalChallenge.updatedAt,
+        userUid: personalChallenge.userUid,
+        challengeId: personalChallenge.challengeId,
+      },
+    });
   };
 
   return (
@@ -115,7 +127,14 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
       <View style={styles.header}>
         <Text style={styles.headerText}>{title}</Text>
       </View>
-      <Svg height="50" width="200">
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          top: HEIGHT / 28,
+        }}
+      >
         <VictoryPie
           padAngle={5}
           // use to hide labels
@@ -127,18 +146,25 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           data={challengeData}
           colorScale={colors}
         />
-      </Svg>
 
-      <View
-        style={{ position: "absolute", top: HEIGHT / 4.22, left: WIDTH / 3.24 }}
-      >
-        <TouchableOpacity onPress={() => completeChallenge(currentUserUID, id)}>
-          <Image
-            style={{ transform: [{ scale: 0.65 }] }}
-            source={icons[badge]}
-          />
-        </TouchableOpacity>
+        <View
+          style={{
+            position: "absolute",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => completeChallenge(currentUserUID, id)}
+          >
+            <Image
+              style={{
+                transform: [{ scale: 0.65 }],
+              }}
+              source={icons[badge]}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
+
       <View style={styles.daysCounter}>
         <Text style={styles.daysCounterText}>
           Day {currentDay + 1} of {duration}
@@ -153,7 +179,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
             paddingHorizontal: WIDTH / 25,
             paddingVertical: HEIGHT / 40,
             width: WIDTH / 1.1,
-            top: HEIGHT / 4,
+            top: HEIGHT / 5,
           },
         ]}
       >
@@ -175,7 +201,7 @@ const ChallengeTrackerScreen = ({ route, navigation }) => {
           </View>
         </Modal>
       </View>
-      <View style={[styles.toggleTips, { top: HEIGHT / 4 }]}>
+      <View style={[styles.toggleTips, { top: HEIGHT / 5 }]}>
         <Button
           color="#689451"
           mode="contained"
@@ -215,10 +241,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    margin: 50,
+    padding: 20,
   },
   popupText: {
     fontSize: 20,
+    fontFamily: "Avenir-Book",
   },
   toggleTips: {
     borderRadius: 5,
@@ -235,11 +262,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   daysCounter: {
-    top: 130,
+    top: 50,
   },
   daysCounterText: {
     fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   modal: {
     backgroundColor: "#689451",
@@ -254,6 +282,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 17,
+    fontFamily: "Avenir-Book",
   },
 });
 
