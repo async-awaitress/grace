@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir-Book",
     textAlign: "center",
     textTransform: "capitalize",
+
   },
   container: {
     flex: 1,
@@ -312,6 +313,7 @@ const styles = StyleSheet.create({
   },
   popupText: {
     fontSize: 20,
+    fontFamily: "Avenir-Book",
   },
   toggleTips: {
     padding: 5,
@@ -321,10 +323,12 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 17,
+    fontFamily: "Avenir-Book",
   },
   resetButton: {
     fontSize: 50,
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   daysCounter: {
     top: 50,
@@ -332,6 +336,7 @@ const styles = StyleSheet.create({
   daysCounterText: {
     fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "Avenir-Book",
   },
   modal: {
     backgroundColor: "#ff924c",
@@ -351,6 +356,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 17,
+    fontFamily: "Avenir-Book",
   },
 });
 

@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#f2f7f3",
+    fontFamily: "Avenir-Book",
   },
   friendName: {
     position: "absolute",
@@ -357,6 +358,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textTransform: "capitalize",
     color: "#363533",
+    fontFamily: "Avenir-Book",
   },
   pendingFriendPhoto: {
     transform: [{ scale: 0.37 }],
