@@ -117,13 +117,9 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
           <TouchableOpacity
             onPress={async () => {
-              // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
               if (type === "personal") {
                 await addPersonalChallengeHandler(currentUserUID, id);
               }
-              // else {
-              //   await addFriendChallengeHandler(currentUserUID, id)
-              // }
               {
                 if (type === "personal") {
                   Alert.alert("Challenge Accepted!", "You Got This!", [
