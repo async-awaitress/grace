@@ -14,6 +14,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { EXPRESS_ROOT_PATH } from "../api/grace";
 import { icons } from "./Icons/icons";
 
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
+
 export default function FriendProfileScreen({ route, navigation }) {
   const [completedChallenges, setCompletedChallenges] = useState([]);
   const [completedFriendChallenges, setCompletedFriendChallenges] = useState(
@@ -172,8 +175,8 @@ const styles = StyleSheet.create({
 
   topBox: {
     display: "flex",
-    width: 370,
-    height: 230,
+    width: 0.9*WIDTH,
+    height: 0.27*HEIGHT,
     backgroundColor: "#e1f2e5",
     borderRadius: 20,
     borderWidth: 1,
@@ -229,8 +232,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     borderColor: "#689451",
-    width: 370,
-    height: 420,
+    width: 0.9*WIDTH,
+    height: 0.45*HEIGHT,
     backgroundColor: "#e1f2e5",
     margin: 7,
     borderRadius: 20,

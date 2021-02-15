@@ -8,6 +8,7 @@ import {
   ScrollView,
   FlatList,
   Platform,
+  Dimensions
   // Button,
 } from "react-native";
 import * as firebase from "firebase";
@@ -19,7 +20,10 @@ import { icons } from "./Icons/icons";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
+import Base64ArrayBuffer from 'base64-arraybuffer'
 
+ const WIDTH = Dimensions.get("window").width;
+ const HEIGHT = Dimensions.get("window").height;
 const ProfileScreen = ({ navigation }) => {
   const [image, setImage] = useState(image);
   const isFocused = useIsFocused();
@@ -28,6 +32,8 @@ const ProfileScreen = ({ navigation }) => {
   const [completedFriendChallenges, setCompletedFriendChallenges] = useState(
     []
   );
+
+
 
   const handlePress = async () => {
     await loggingOut();
@@ -116,7 +122,7 @@ const ProfileScreen = ({ navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 1
     });
 
     if (!result.cancelled) {
@@ -133,6 +139,8 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={{height: 2000}}>
+      <ScrollView vertical>
       <View style={styles.topBox}>
         {/* <View style={styles.shine} /> */}
         <Text style={styles.status}>{status}</Text>
@@ -188,7 +196,7 @@ const ProfileScreen = ({ navigation }) => {
           edit photo
         </Button>
         {user.image ? (
-          <Image source={{ uri: image }} style={styles.profileImg} />
+          <Image source={{uri:`data:image/jpg;base64,${image}` }} style={styles.profileImg} />
         ) : (
           <Image
             style={styles.profileImg}
@@ -198,30 +206,36 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <Button
-        mode="contained"
+        // mode="contained"
         color="#689451"
         onPress={handlePress}
         style={{ marginTop: 5 }}
       >
         Log out
       </Button>
+    </ScrollView>
+    </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    top: 40,
-    paddingTop: 40,
+    top: 20,
+    paddingTop: 20,
+    display: "flex",
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
+    height: 3000
   },
 
   topBox: {
     display: "flex",
-    width: 370,
-    height: 230,
+    alignItems: "center",
+    alignSelf: "center",
+    width: 0.9*WIDTH,
+    height: 0.27*HEIGHT,
     backgroundColor: "#e1f2e5",
     borderRadius: 20,
     borderWidth: 1,
@@ -229,7 +243,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 5, height: 5 },
     shadowColor: "#689451",
     shadowOpacity: 0.5,
-    margin: 5,
+    margin: 10,
   },
   status: {
     fontSize: 30,
@@ -259,7 +273,7 @@ const styles = StyleSheet.create({
   ImageContainer: {
     flex: 1,
     borderRadius: 150 / 2,
-    top: 170,
+    top: 130,
     position: "absolute",
     shadowOffset: { width: 5, height: 5 },
     shadowColor: "#689451",
@@ -276,8 +290,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     borderColor: "#689451",
-    width: 370,
-    height: 420,
+    width: 0.9*WIDTH,
+    height: 0.5*HEIGHT,
     backgroundColor: "#e1f2e5",
     margin: 7,
     borderRadius: 20,
