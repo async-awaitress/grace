@@ -16,7 +16,7 @@ import Svg from "react-native-svg";
 import { icons } from "./Icons/icons";
 import { Button } from "react-native-paper";
 
-const FriendChallengeTrackerScreen = ({ route, navigation }) => {
+const FriendChallengeTrackerScreen = ({ route, navigation: { setParams } }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [challenge, setChallenge] = useState({});
 
@@ -117,31 +117,6 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
           `/friendchallenges/update/${challengeId}/${currentUserUID}`
         );
       }
-
-      // if (today === updatedDate + 1 && dailyStatusForReceiver) {
-      //   console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
-      //   try {
-      //     const res = await EXPRESS_ROOT_PATH.put(
-      //       `/personalChallenges/resetPersonalChallenge/${challengeId}`,
-      //       { uid: userId }
-      //     );
-      //     // dailyStatus = "true"
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // }
-      // if (today >= updatedDate + 2 && !dailyStatusForReceiver) {
-      //   try {
-      //     const res = await EXPRESS_ROOT_PATH.put(
-      //       `/personalChallenges/failPersonalChallenge/${challengeId}`,
-      //       { uid: userId }
-      //     );
-      //     // dailyStatus = "true"
-      //     const dailyStatus = res.data.dailyStatusForReceiver;
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // }
     };
     updateChallenge();
     if (currentUserUID === senderId) {
@@ -175,22 +150,29 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
     );
   };
 
-  // const completeChallenge = async (userId, challengeId) => {
-  //   const now = new Date();
-  //   const today = now.getDate();
-  //   const updatedDate = lastUpdated.getDate();
-  //   if (!dailyStatusForReceiver && today < updatedDate + 3) {
-  //     try {
-  //       const res = await EXPRESS_ROOT_PATH.put(
-  //         `/personalChallenges/updatePersonalChallenge/${challengeId}`,
-  //         { uid: userId }
-  //       );
-  //       // dailyStatus = "true"
-  //     } catch (error) {
-  //       console.log("update request failed", error);
-  //     }
-  //   }
-  // };
+  const completeChallenge = async (userId, challengeId) => {
+    await EXPRESS_ROOT_PATH.put(
+      `/friendchallenges/update/${challengeId}/${currentUserUID}`
+    );
+
+    if (currentUserUID === senderId) {
+      if (!dailyStatusForSender) {
+        setSenderCompleted(true);
+        setParams({
+          dailyStatusForSender: senderCompleted,
+        });
+      }
+    }
+
+    if (currentUserUID === receiverId) {
+      if (!dailyStatusForReceiver) {
+        setReceiverCompleted(true)
+        setParams({
+          dailyStatusForReceiver: receiverCompleted,
+        });
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -224,11 +206,7 @@ const FriendChallengeTrackerScreen = ({ route, navigation }) => {
           }}
         >
           <TouchableOpacity
-          // onPress={() =>
-          //   completeChallenge(currentUserUID, id).then(
-          //     setReceiverCompleted(!receiverCompleted)
-          //   )
-          // }
+            onPress={() => completeChallenge(currentUserUID, id)}
           >
             <Image
               style={{ transform: [{ scale: 0.65 }] }}
@@ -297,7 +275,6 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir-Book",
     textAlign: "center",
     textTransform: "capitalize",
-
   },
   container: {
     flex: 1,
