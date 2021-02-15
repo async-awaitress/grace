@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   challengeTitle: {
-    fontSize: 25,
+    fontSize: 24,
     fontWeight: "300",
     fontFamily: "Avenir-Book",
   },
