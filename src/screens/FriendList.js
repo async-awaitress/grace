@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     color: "#f2f7f3",
     fontFamily: "Avenir-Book",
     textAlign: "left",
-    paddingLeft: 60,
+    paddingLeft: 80,
   },
   friendPhoto: {
     transform: [{ scale: 0.37 }],
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   friendName: {
     position: "absolute",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
     width: 250,
     height: 35,
