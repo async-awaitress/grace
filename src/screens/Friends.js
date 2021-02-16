@@ -46,14 +46,15 @@ const Friends = ({ navigation }) => {
     setFriends(friendsArray);
   };
 
+  const getRequest = async () => {
+    const res = await EXPRESS_ROOT_PATH.get(
+      `/users/friends/requests/${currentUserUID}`
+    );
+    const friendRequests = res.data;
+    setRequest(friendRequests);
+  };
+
   useEffect(() => {
-    async function getRequest() {
-      const res = await EXPRESS_ROOT_PATH.get(
-        `/users/friends/requests/${currentUserUID}`
-      );
-      const friendRequests = res.data;
-      setRequest(friendRequests);
-    }
     getRequest();
   }, [isFocused]);
 
@@ -95,18 +96,22 @@ const Friends = ({ navigation }) => {
   };
 
   const newRequest = async () => {
-    const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
     try {
+      const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
+      console.log("we have a friend");
       await EXPRESS_ROOT_PATH.put(`/users/friends/${currentUserUID}`, {
         receiverId: friend.data.uid,
       });
+      console.log("we hit line 102");
       const respond = await EXPRESS_ROOT_PATH.get(
         `/users/friends/requests/${currentUserUID}`
       );
+      console.log("we hit line 106");
       const friendRequests = respond.data;
+      console.log("friendRequests", friendRequests);
       setRequest(friendRequests);
     } catch (error) {
-      console.log(error);
+      console.log("we got an error on line 111", error);
     }
 
     return friend;
@@ -114,15 +119,16 @@ const Friends = ({ navigation }) => {
 
   const searcher = async () => {
     const friend = await EXPRESS_ROOT_PATH.get(`/users/email/${email}`);
-    newRequest();
-    console.log("FRIEND", friend.data);
+
     if (friend.data.email) {
       Alert.alert("Friend Request Sent!");
+      newRequest();
     } else {
       Alert.alert(`No User With Email: ${email} Exists`);
     }
-
     setEmail("");
+    console.log(request);
+    // setRequest(friend);
   };
 
   return (
@@ -145,57 +151,13 @@ const Friends = ({ navigation }) => {
           </Button>
         </View>
       </View>
-      <View>
-        <View style={styles.pendingHeader}>
-          <Text style={styles.pendingHeaderText}>Pending Requests</Text>
-        </View>
-        <FlatList
-          data={request}
-          keyExtractor={(friend) => friend.uid}
-          renderItem={({ item }) => (
-            <View style={styles.friendBox}>
-              <View>
-                <Image
-                  source={require("../../assets/profileMain.png")}
-                  style={styles.pendingFriendPhoto}
-                />
-              </View>
-              <View style={[styles.pendingFriendName, { left: WIDTH / 5 }]}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Friend Profile", item)}
-                >
-                  <Text style={styles.pendingFriendNameText}>
-                    {item.firstName + " " + item.lastName}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {currentUserUID === item.friend.senderId ? (
-                <View style={styles.buttons}>
-                  <View style={styles.accept}>
-                    <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
-                      <Feather name={"check-circle"} size={20} color={"blue"} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.reject}>
-                    <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
-                      <Feather name={"x-circle"} size={20} color={"red"} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <Text style={styles.pending}>Pending</Text>
-              )}
-            </View>
-          )}
-        />
-      </View>
-      <View>
-        <View style={styles.pendingHeader}>
-          <Text style={styles.pendingHeaderText}>Friend List</Text>
-        </View>
+      <ScrollView bounce={false}>
         <View>
+          <View style={styles.pendingHeader}>
+            <Text style={styles.pendingHeaderText}>Pending Requests</Text>
+          </View>
           <FlatList
-            data={friends}
+            data={request}
             keyExtractor={(friend) => friend.uid}
             renderItem={({ item }) => (
               <View style={styles.friendBox}>
@@ -205,20 +167,72 @@ const Friends = ({ navigation }) => {
                     style={styles.pendingFriendPhoto}
                   />
                 </View>
-                <View style={[styles.friendName, { left: WIDTH / 5 }]}>
+                <View style={[styles.pendingFriendName, { left: WIDTH / 5 }]}>
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Friend Profile", item)}
                   >
-                    <Text style={styles.friendText}>
+                    <Text style={styles.pendingFriendNameText}>
                       {item.firstName + " " + item.lastName}
                     </Text>
                   </TouchableOpacity>
                 </View>
+                {currentUserUID === item.friend.senderId ? (
+                  <View style={styles.buttons}>
+                    <View style={styles.accept}>
+                      <TouchableOpacity onPress={() => acceptFriend(item.uid)}>
+                        <Feather
+                          name={"check-circle"}
+                          size={20}
+                          color={"blue"}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.reject}>
+                      <TouchableOpacity onPress={() => rejectFriend(item.uid)}>
+                        <Feather name={"x-circle"} size={20} color={"red"} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <Text style={styles.pending}>Pending</Text>
+                )}
               </View>
             )}
           />
         </View>
-      </View>
+        <View>
+          <View style={styles.pendingHeader}>
+            <Text style={styles.pendingHeaderText}>Friend List</Text>
+          </View>
+          <View>
+            <FlatList
+              data={friends}
+              keyExtractor={(friend) => friend.uid}
+              renderItem={({ item }) => (
+                <View style={styles.friendBox}>
+                  <View>
+                    <Image
+                      source={require("../../assets/profileMain.png")}
+                      style={styles.pendingFriendPhoto}
+                    />
+                  </View>
+                  <View style={[styles.friendName, { left: WIDTH / 5 }]}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("Friend Profile", item)
+                      }
+                    >
+                      <Text style={styles.friendText}>
+                        {item.firstName + " " + item.lastName}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -292,6 +306,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 15,
     paddingVertical: 5,
+    fontFamily: "Avenir-Book",
   },
   friendText: {
     fontSize: 20,
@@ -300,6 +315,7 @@ const styles = StyleSheet.create({
     color: "#f2f7f3",
     textAlign: "left",
     paddingLeft: 60,
+    fontFamily: "Avenir-Book",
   },
   friendName: {
     position: "absolute",
@@ -359,6 +375,7 @@ const styles = StyleSheet.create({
     color: "#363533",
     textAlign: "left",
     paddingLeft: 60,
+    fontFamily: "Avenir-Book",
   },
   pendingFriendPhoto: {
     transform: [{ scale: 0.3 }],
