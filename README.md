@@ -17,7 +17,7 @@ You will need to have Expo Go installed on your ios device
 After the app opens, sign up for a GRace account. You now have access to GRace!
 
 
-# Technologies
+## Technologies
 Our frontend was created with JavaScript, React Native, Expo, React Navigation, Redux, Firebase Authentication, Cloud FireStore, and Victory.js.
 
 
@@ -26,10 +26,10 @@ Our [backend](https://github.com/async-awaitress/grace-backend/) was created wit
 
 ## Authors
 
-* **Morganne Wray** - *Initial work* - [morgannewray](https://github.com/morgannewray)
-* **Katarzyna (Kasia) Gierat** - *Initial work* - [KasiaKinga](https://github.com/KasiaKinga)
-* **Tenzin Jamyang** - *Initial work* - [TenzinJam](https://github.com/TenzinJam)
-* **Ian Henry Walls** - *Initial work* - [Wow-Its-Ian](https://github.com/Wow-Its-Ian)
+* **Morganne Wray** - [morgannewray](https://github.com/morgannewray)
+* **Kasia Gierat** - [KasiaKinga](https://github.com/KasiaKinga)
+* **Tenzin Jamyang** - [TenzinJam](https://github.com/TenzinJam)
+* **Ian Henry Walls** - [Wow-Its-Ian](https://github.com/Wow-Its-Ian)
 
 
 ## Acknowledgments
