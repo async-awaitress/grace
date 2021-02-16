@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  Alert,
 } from "react-native";
 import * as firebase from "firebase";
 import axios from "axios";
@@ -85,9 +86,19 @@ const FriendList = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={(event) => {
                     onPressInviteForChallenge(item.uid);
-                    navigation.navigate("Home", {
-                      challengeId: route.params.challengeId,
-                    });
+                    Alert.alert(
+                      "Challenge Invite Sent",
+                      `to ${item.firstName}!`,
+                      [
+                        {
+                          text: "ok",
+                          onPress: () =>
+                            navigation.navigate("Home", {
+                              challengeId: route.params.challengeId,
+                            }),
+                        },
+                      ]
+                    );
                   }}
                 >
                   <Text style={styles.friendText}>
