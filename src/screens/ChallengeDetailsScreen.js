@@ -119,31 +119,17 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
             onPress={async () => {
               if (type === "personal") {
                 await addPersonalChallengeHandler(currentUserUID, id);
-              }
-              {
-                if (type === "personal") {
-                  Alert.alert("Challenge Accepted!", "You Got This!", [
-                    {
-                      text: "ok",
-                      onPress: () => navigation.navigate("Home"),
-                    },
-                  ]);
-                } else {
-                  Alert.alert(
-                    "Challenge Accepted!",
-                    "Choose friend on next page!",
-                    [
-                      {
-                        text: "ok",
-                        onPress: () =>
-                          navigation.navigate("Friend List", {
-                            challengeId: id,
-                            badge,
-                          }),
-                      },
-                    ]
-                  );
-                }
+                Alert.alert("Challenge Accepted!", "You Got This!", [
+                  {
+                    text: "ok",
+                    onPress: () => navigation.navigate("Home"),
+                  },
+                ]);
+              } else {
+                navigation.navigate("Friend List", {
+                  challengeId: id,
+                  badge,
+                });
               }
             }}
           >
