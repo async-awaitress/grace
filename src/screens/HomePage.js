@@ -63,27 +63,26 @@ export default function HomePage({ navigation }) {
     getUserInfo();
   }, []);
 
-  useEffect(() => {
-    async function fetchChallenges() {
-      try {
-        const res = await EXPRESS_ROOT_PATH.get(
-          `/challenges/${currentUserUID}`
-        );
-        const challenges = res.data;
-        const activeChallenges = challenges.filter(
-          (challenge) => challenge.personalChallenge.completionStatus === "open"
-        );
-        const dailyCompletionObjToSet = {};
-        activeChallenges.forEach((challenge) => {
-          dailyCompletionObjToSet[challenge.id] =
-            challenge.personalChallenge.dailyStatus;
-        });
-        setDailyCompletion(dailyCompletionObjToSet);
-        setChallenges(activeChallenges);
-      } catch (error) {
-        console.log("get request failed", error);
-      }
+  const fetchChallenges = async () => {
+    try {
+      const res = await EXPRESS_ROOT_PATH.get(`/challenges/${currentUserUID}`);
+      const challenges = res.data;
+      const activeChallenges = challenges.filter(
+        (challenge) => challenge.personalChallenge.completionStatus === "open"
+      );
+      const dailyCompletionObjToSet = {};
+      activeChallenges.forEach((challenge) => {
+        dailyCompletionObjToSet[challenge.id] =
+          challenge.personalChallenge.dailyStatus;
+      });
+      setDailyCompletion(dailyCompletionObjToSet);
+      setChallenges(activeChallenges);
+    } catch (error) {
+      console.log("get request failed", error);
     }
+  };
+
+  useEffect(() => {
     fetchChallenges();
   }, [isFocused]);
 
@@ -219,6 +218,7 @@ export default function HomePage({ navigation }) {
     } catch (error) {
       console.log("update request failed", error);
     }
+    fetchChallenges();
   };
 
   /////// PLACEHOLDER FOR CALLING EXPRESS ROUTES TO UPDATE DAILY FRIEND CHALLENGES
@@ -254,6 +254,7 @@ export default function HomePage({ navigation }) {
         });
       }
       fetchPoints();
+      fetchFriendChallenges(currentUserUID);
     } catch (error) {
       console.log("update request failed", error);
     }
@@ -293,38 +294,48 @@ export default function HomePage({ navigation }) {
     await updateChallengeInFirebase(docId, "declined");
   };
 
-      useEffect(() => {
-      const updateChallenge = async (userId, challengeId) => {
-        const currentChallenge = challenges.filter(challenge => challenge.challengeId === challengeId)
-        const now = new Date();
-        const today = now.getDate();
-        const lastUpdated = new Date (currentChallenge.updatedAt)
-        const updatedDate = lastUpdated.getDate();
-        // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
-        if (today === updatedDate + 1 && currentChallenge.personalChallenge.dailyStatus) {
-          console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
-          try {
-            const res = await EXPRESS_ROOT_PATH.put(
-              `/personalChallenges/resetPersonalChallenge/${challengeId}`,
-              { uid: userId }
-            );
-          } catch (err) {
-            console.log(err);
-          }
+  useEffect(() => {
+    const updateChallenge = async (userId, challengeId) => {
+      const currentChallenge = challenges.filter(
+        (challenge) => challenge.challengeId === challengeId
+      );
+      const now = new Date();
+      const today = now.getDate();
+      const lastUpdated = new Date(currentChallenge.updatedAt);
+      const updatedDate = lastUpdated.getDate();
+      // CHANGE BELOW LINE TO toady === updatedDate IF TESTING FOR SAME DAY
+      if (
+        today === updatedDate + 1 &&
+        currentChallenge.personalChallenge.dailyStatus
+      ) {
+        console.log("PAST MIDNIGHT, RESET COMPLETION TO FALSE");
+        try {
+          const res = await EXPRESS_ROOT_PATH.put(
+            `/personalChallenges/resetPersonalChallenge/${challengeId}`,
+            { uid: userId }
+          );
+        } catch (err) {
+          console.log(err);
         }
-        if (today >= updatedDate + 2 && !currentChallenge.personalChallenge.dailyStatus) {
-          try {
-            const res = await EXPRESS_ROOT_PATH.put(
-              `/personalChallenges/failPersonalChallenge/${challengeId}`,
-              { uid: userId }
-            );
-          } catch (err) {
-            console.log(err);
-          }
+      }
+      if (
+        today >= updatedDate + 2 &&
+        !currentChallenge.personalChallenge.dailyStatus
+      ) {
+        try {
+          const res = await EXPRESS_ROOT_PATH.put(
+            `/personalChallenges/failPersonalChallenge/${challengeId}`,
+            { uid: userId }
+          );
+        } catch (err) {
+          console.log(err);
         }
-      };
-      challenges.map((challenge) => updateChallenge(currentUserUID, challenge.id));
-    }, []);
+      }
+    };
+    challenges.map((challenge) =>
+      updateChallenge(currentUserUID, challenge.id)
+    );
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -519,19 +530,17 @@ export default function HomePage({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    fontFamily: "Avenir-Book",
     flex: 1,
     backgroundColor: "#f2f7f3",
     alignItems: "center",
-    justifyContent: "center",
-    justifyContent: "space-around",
   },
   header: {
     backgroundColor: "#689451",
     paddingTop: 35,
-    padding: 10,
     width: "100%",
     textAlign: "center",
+    alignItems: "center",
     height: 100,
   },
   headerText: {
@@ -551,7 +560,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignContent: "space-between",
-    width: 400,
+    width: 380,
     height: 175,
   },
   challengesContainer: {
@@ -559,7 +568,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "space-between",
     height: 175,
-    width: 400,
+    width: 380,
   },
   activeChallengesHeader: {
     fontSize: 25,
@@ -600,7 +609,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     paddingVertical: 8,
-    margin: 20,
+    margin: 8,
     backgroundColor: "#f4f7f2",
     borderWidth: 2,
     borderRadius: 40,

@@ -117,13 +117,9 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
 
           <TouchableOpacity
             onPress={async () => {
-              // "aaa" is temporary user uid (id), it will be replaced while we have logged user information
               if (type === "personal") {
                 await addPersonalChallengeHandler(currentUserUID, id);
               }
-              // else {
-              //   await addFriendChallengeHandler(currentUserUID, id)
-              // }
               {
                 if (type === "personal") {
                   Alert.alert("Challenge Accepted!", "You Got This!", [
@@ -154,7 +150,11 @@ const ChallengeDetailsScreen = ({ route, navigation }) => {
             <View
               style={[
                 styles.button,
-                { backgroundColor: bgColor, borderColor: headerColor },
+                {
+                  backgroundColor: bgColor,
+                  borderColor: headerColor,
+                  shadowColor: headerColor,
+                },
               ]}
             >
               <Text style={styles.buttonText}>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     backgroundColor: "white",
-    borderWidth: 3,
+    borderWidth: 2,
     marginTop: 20,
     padding: 10,
     borderRadius: 15,
@@ -240,11 +240,13 @@ const styles = StyleSheet.create({
   button: {
     display: "flex",
     margin: 20,
-    borderWidth: 3,
+    borderWidth: 2,
     borderRadius: 30,
     padding: 8,
     paddingHorizontal: 30,
     alignSelf: "center",
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 0.5,
   },
   buttonText: {
     fontFamily: "Avenir-Book",

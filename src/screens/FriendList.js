@@ -151,6 +151,8 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: "#f2f7f3",
     fontFamily: "Avenir-Book",
+    textAlign: "left",
+    paddingLeft: 60,
   },
   friendPhoto: {
     transform: [{ scale: 0.37 }],
