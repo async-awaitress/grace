@@ -38,6 +38,6 @@ Our [backend](https://github.com/async-awaitress/grace-backend/) was created wit
 
 ## App Screenshots
 
-![IMG_0936](https://user-images.githubusercontent.com/67336130/108128890-7029ad80-707b-11eb-8ac3-95ce71ffa797.PNG | width=100)
+![IMG_0936](https://user-images.githubusercontent.com/67336130/108128890-7029ad80-707b-11eb-8ac3-95ce71ffa797.PNG =100x20)
 
 
