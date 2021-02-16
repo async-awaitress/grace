@@ -2,58 +2,27 @@
 
 GRace is a social sustainability app that allows users to challenge themselves and their friends to sustainable challenges allowing them to earn points to increase their status and earn badges to show off to their friends. 
 
+### Prerequisites
+
+You will need to have Expo Go installed on your ios device 
+
 ## Getting started
 
 1. Fork and clone this repo.
-2. `npm install`.
-3. create db on local machine 
-4. `npm run seed`
-5. To start React Native run `npm start`
-6. To start express server run `npm run start-server`
+2. cd into grace
+3. Open project in code editor
+3. `npm install`.
+4. To start expo with React Native run `npm start-dev`
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-You will need to have expo installed 
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+After the app opens, sign up for a GRace account. You now have access to GRace!
 
 
-## Deployment
+# Technologies
+Our frontend was created with JavaScript, React Native, Expo, React Navigation, Redux, Firebase Authentication, Cloud FireStore, and Victory.js.
 
-Add additional notes about how to deploy this on a live system
 
-## Built With
+Our [backend](https://github.com/async-awaitress/grace-backend/) was created with Node.js, Express, PostgreSQL, and Sequelize, and deployed on Heroku.
 
-React Native
-Express
-PostgreSQL
-Expo
-
-## Contributing
-Example:
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-Example:
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
@@ -65,9 +34,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Shout out to Orlando, Tanveer and the rest of the team at Fullstack Academy 
+
+## App Screenshots
+
 
 
 
