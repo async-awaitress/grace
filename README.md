@@ -37,6 +37,6 @@ Our [backend](https://github.com/async-awaitress/grace-backend/) was created wit
 * Shout out to Orlando, Tanveer and the rest of the team at Fullstack Academy 
 
 ## App Screenshots
-<img src="https://user-images.githubusercontent.com/67336130/108128890-7029ad80-707b-11eb-8ac3-95ce71ffa797.PNG" width="100" />
+<img src="https://user-images.githubusercontent.com/67336130/108128890-7029ad80-707b-11eb-8ac3-95ce71ffa797.PNG" width="150" />
 
 
