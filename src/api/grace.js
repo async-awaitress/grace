@@ -22,7 +22,7 @@ if (process.env.ENV === "development") {
     baseURL = `http://${manifest.debuggerHost.split(":").shift()}:8080/api`;
   }
 } else {
-  baseURL = "https://sosus-app.herokuapp.com/api";
+  baseURL = "https://grace-mobile-app.herokuapp.com/api";
   console.log("heroku ");
 }
 
