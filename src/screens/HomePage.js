@@ -365,158 +365,163 @@ export default function HomePage({ navigation }) {
           <Text style={styles.linkViewText}>Challenge Your Friends</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ alignItems: "center" }}>
-        {challenges.length === 0 ? (
-          <Text style={styles.activeChallengesHeader}></Text>
-        ) : (
-          <Text style={styles.activeChallengesHeader}>
-            Active Personal Challenges
-          </Text>
-        )}
-
-        {challenges.length === 0 ? (
-          <Image
-            style={{ height: 80, width: 400 }}
-            source={{
-              uri:
-                "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
-            }}
-          />
-        ) : (
-          ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
-          <View style={styles.challengesContainer}>
-            <ScrollView
-              style={styles.activeChallengeContainer}
-              horizontal={true}
-            >
-              <FlatList
-                horizontal
-                data={challenges}
-                keyExtractor={(challenge) => challenge.id.toString()}
-                renderItem={({ item }) => (
-                  <View style={styles.activeChallengeInfo}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("Challenge Tracker", item)
-                      }
-                    >
-                      <Image
-                        source={icons[item.badge]}
-                        style={{ width: 60, height: 60, marginBottom: 16 }}
-                      />
-                    </TouchableOpacity>
-                    {dailyCompletion[item.id] ? (
-                      <Button
-                        mode="contained"
-                        compact
-                        disabled={dailyCompletion[item.id]}
-                        onPress={() => updateChallenge(currentUserUID, item.id)}
-                        color="#689451"
-                        style={{ marginVertical: 2, width: 85 }}
-                        labelStyle={{ fontSize: 11 }}
-                      >
-                        Done!
-                      </Button>
-                    ) : (
-                      <Button
-                        mode="contained"
-                        compact
-                        disabled={dailyCompletion[item.id]}
-                        onPress={() => updateChallenge(currentUserUID, item.id)}
-                        style={{ width: 85 }}
-                        color="lightgreen"
-                        style={{ marginVertical: 2, width: 85 }}
-                        labelStyle={{ fontSize: 11 }}
-                      >
-                        Complete
-                      </Button>
-                    )}
-                  </View>
-                )}
-              />
-            </ScrollView>
-          </View>
-        )}
-
-        {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
-        {activeFriendChallenges.length === 0 &&
-        pendingFriendChallenges.length === 0 ? (
-          <Text style={styles.activeChallengesHeader}></Text>
-        ) : (
-          <View style={{ marginTop: 20 }}>
-            <Text style={styles.activeChallengesHeaderLine2}>
-              Active Friend Challenges
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+          {challenges.length === 0 ? (
+            <Text style={styles.activeChallengesHeader}></Text>
+          ) : (
+            <Text style={styles.activeChallengesHeader}>
+              Active Personal Challenges
             </Text>
-          </View>
-        )}
+          )}
 
-        {activeFriendChallenges.length === 0 &&
-        pendingFriendChallenges.length === 0 ? (
-          <Image
-            style={{
-              height: 80,
-              width: 400,
-              transform: [{ rotateX: "180deg" }],
-            }}
-            source={{
-              uri:
-                "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
-            }}
-          />
-        ) : (
-          <View style={styles.challengesContainer}>
-            <ScrollView
-              style={styles.activeChallengeContainer}
-              horizontal={true}
-            >
-              <FlatList
-                horizontal
-                data={activeFriendChallenges}
-                keyExtractor={(friendChallenge) =>
-                  friendChallenge.id.toString()
-                }
-                renderItem={({ item }) => (
-                  <ActiveChallengeComponent
-                    badge={item.badge}
-                    isCompleted={dailyCompletionFriends[item.id]}
-                    onComplete={() =>
-                      updateFriendChallenge(
-                        currentUserUID,
-                        item.id,
-                        item.senderId,
-                        item.receiverId
-                      )
-                    }
-                    challenge={item}
-                    navigation={navigation}
-                  />
-                )}
-              />
-              <FlatList
-                horizontal
-                data={pendingFriendChallenges}
-                keyExtractor={(friendChallenge) => friendChallenge.docId}
-                renderItem={({ item }) => {
-                  if (item.senderId === currentUserUID) {
-                    return <PendingChallengeComponent badge={item.badge} />;
-                  } else {
-                    return (
-                      <ReceiveChallengeComponent
-                        badge={item.badge}
-                        onDecline={() => onDecline(item)}
-                        onAccept={() => {
-                          onAccept(item);
-                        }}
-                      />
-                    );
+          {challenges.length === 0 ? (
+            <Image
+              style={{ height: 80, width: 400 }}
+              source={{
+                uri:
+                  "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
+              }}
+            />
+          ) : (
+            ///////////// PERSONAL ACTIVE CHALLENGES CONTAINER //////////
+            <View style={styles.challengesContainer}>
+              <ScrollView
+                style={styles.activeChallengeContainer}
+                horizontal={true}
+              >
+                <FlatList
+                  horizontal
+                  data={challenges}
+                  keyExtractor={(challenge) => challenge.id.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.activeChallengeInfo}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate("Challenge Tracker", item)
+                        }
+                      >
+                        <Image
+                          source={icons[item.badge]}
+                          style={{ width: 60, height: 60, marginBottom: 16 }}
+                        />
+                      </TouchableOpacity>
+                      {dailyCompletion[item.id] ? (
+                        <Button
+                          mode="contained"
+                          compact
+                          disabled={dailyCompletion[item.id]}
+                          onPress={() =>
+                            updateChallenge(currentUserUID, item.id)
+                          }
+                          color="#689451"
+                          style={{ marginVertical: 2, width: 85 }}
+                          labelStyle={{ fontSize: 11 }}
+                        >
+                          Done!
+                        </Button>
+                      ) : (
+                        <Button
+                          mode="contained"
+                          compact
+                          disabled={dailyCompletion[item.id]}
+                          onPress={() =>
+                            updateChallenge(currentUserUID, item.id)
+                          }
+                          style={{ width: 85 }}
+                          color="lightgreen"
+                          style={{ marginVertical: 2, width: 85 }}
+                          labelStyle={{ fontSize: 11 }}
+                        >
+                          Complete
+                        </Button>
+                      )}
+                    </View>
+                  )}
+                />
+              </ScrollView>
+            </View>
+          )}
+
+          {/* ////// FRIEND ACTIVE CHALLENGES CONTAINER ///// */}
+          {activeFriendChallenges.length === 0 &&
+          pendingFriendChallenges.length === 0 ? (
+            <Text style={styles.activeChallengesHeader}></Text>
+          ) : (
+            <View style={{ marginTop: 20 }}>
+              <Text style={styles.activeChallengesHeaderLine2}>
+                Active Friend Challenges
+              </Text>
+            </View>
+          )}
+
+          {activeFriendChallenges.length === 0 &&
+          pendingFriendChallenges.length === 0 ? (
+            <Image
+              style={{
+                height: 80,
+                width: 400,
+                transform: [{ rotateX: "180deg" }],
+              }}
+              source={{
+                uri:
+                  "https://botanicalpaperworks.com/wp-content/uploads/2020/07/BotanicalPaperWorks_header_placeholder.jpg",
+              }}
+            />
+          ) : (
+            <View style={styles.challengesContainer}>
+              <ScrollView
+                style={styles.activeChallengeContainer}
+                horizontal={true}
+              >
+                <FlatList
+                  horizontal
+                  data={activeFriendChallenges}
+                  keyExtractor={(friendChallenge) =>
+                    friendChallenge.id.toString()
                   }
-                }}
-              />
-            </ScrollView>
-          </View>
-        )}
+                  renderItem={({ item }) => (
+                    <ActiveChallengeComponent
+                      badge={item.badge}
+                      isCompleted={dailyCompletionFriends[item.id]}
+                      onComplete={() =>
+                        updateFriendChallenge(
+                          currentUserUID,
+                          item.id,
+                          item.senderId,
+                          item.receiverId
+                        )
+                      }
+                      challenge={item}
+                      navigation={navigation}
+                    />
+                  )}
+                />
+                <FlatList
+                  horizontal
+                  data={pendingFriendChallenges}
+                  keyExtractor={(friendChallenge) => friendChallenge.docId}
+                  renderItem={({ item }) => {
+                    if (item.senderId === currentUserUID) {
+                      return <PendingChallengeComponent badge={item.badge} />;
+                    } else {
+                      return (
+                        <ReceiveChallengeComponent
+                          badge={item.badge}
+                          onDecline={() => onDecline(item)}
+                          onAccept={() => {
+                            onAccept(item);
+                          }}
+                        />
+                      );
+                    }
+                  }}
+                />
+              </ScrollView>
+            </View>
+          )}
+        </ScrollView>
       </View>
-
       {/* ///////////////// */}
 
       <StatusBar style="auto" />
